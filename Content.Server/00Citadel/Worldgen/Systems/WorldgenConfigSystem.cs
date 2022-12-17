@@ -21,7 +21,7 @@ public sealed class WorldgenConfigSystem : EntitySystem
     [Dependency] private readonly ISerializationManager _ser = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
 
-    private bool _enabled = false;
+    private bool _enabled;
     private string _worldgenConfig = default!;
 
     /// <inheritdoc/>

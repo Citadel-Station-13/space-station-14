@@ -7,14 +7,14 @@ public sealed class DeferredSpawnSystem : EntitySystem
 {
     private readonly Stopwatch _simulationStopwatch = new();
 
-    private Queue<(string, EntityCoordinates, DeferredSpawnDoneEvent?)> SpawnQueue = new();
+    private Queue<(string, EntityCoordinates, DeferredSpawnDoneEvent?)> _spawnQueue = new();
 
     public override void Update(float frameTime)
     {
         _simulationStopwatch.Restart();
-        while (SpawnQueue.Count > 0)
+        while (_spawnQueue.Count > 0)
         {
-            var dat = SpawnQueue.Dequeue();
+            var dat = _spawnQueue.Dequeue();
             var e = Spawn(dat.Item1, dat.Item2);
 
             if (dat.Item3 is not null)
@@ -30,7 +30,7 @@ public sealed class DeferredSpawnSystem : EntitySystem
 
     public void SpawnEntityDeferred(string prototype, EntityCoordinates position, DeferredSpawnDoneEvent? ev = null)
     {
-        SpawnQueue.Enqueue((prototype, position, ev));
+        _spawnQueue.Enqueue((prototype, position, ev));
     }
 }
 

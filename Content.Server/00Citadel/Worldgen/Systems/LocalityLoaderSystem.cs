@@ -35,4 +35,4 @@ public sealed class LocalityLoaderSystem : BaseWorldSystem
     }
 }
 
-public record struct LocalStructureLoadedEvent();
+public record struct LocalStructureLoadedEvent;

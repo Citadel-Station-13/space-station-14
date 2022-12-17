@@ -5,7 +5,6 @@ using Content.Server._00Citadel.Worldgen.Systems.GC;
 using Content.Server._00Citadel.Worldgen.Tools;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
-using Robust.Shared.Utility;
 
 namespace Content.Server._00Citadel.Worldgen.Systems.Debris;
 
@@ -35,7 +34,7 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         SubscribeLocalEvent<TieDebrisToFeaturePlacerEvent>(OnDeferredDone);
     }
 
-    private void OnDebrisMove(EntityUid uid, OwnedDebrisComponent component, MoveEvent args)
+    private void OnDebrisMove(EntityUid uid, OwnedDebrisComponent component, ref MoveEvent args)
     {
         if (!HasComp<WorldChunkComponent>(component.OwningController))
             return; // Redundant logic, prolly needs it's own handler for your custom system.
@@ -71,7 +70,7 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         placer.OwnedDebris[component.LastKey] = null;
     }
 
-    private void OnChunkUnloaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component, WorldChunkUnloadedEvent args)
+    private void OnChunkUnloaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component, ref WorldChunkUnloadedEvent args)
     {
         foreach (var (_, debris) in component.OwnedDebris)
         {
@@ -82,7 +81,7 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         component.DoSpawns = true;
     }
 
-    private void OnTryGetPlacableDebrisEvent(EntityUid uid, SimpleDebrisSelectorComponent component, TryGetPlaceableDebrisFeatureEvent args)
+    private void OnTryGetPlacableDebrisEvent(EntityUid uid, SimpleDebrisSelectorComponent component, ref TryGetPlaceableDebrisFeatureEvent args)
     {
         if (args.DebrisProto is not null)
             return;

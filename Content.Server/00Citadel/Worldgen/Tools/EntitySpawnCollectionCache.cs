@@ -11,10 +11,10 @@ public sealed class EntitySpawnCollectionCache
     private sealed class OrGroup
     {
         public List<EntitySpawnEntry> Entries { get; set; } = new();
-        public float CumulativeProbability { get; set; } = 0f;
+        public float CumulativeProbability { get; set; }
     }
 
-    private Dictionary<string, OrGroup> _orGroups = new();
+    private readonly Dictionary<string, OrGroup> _orGroups = new();
 
     public EntitySpawnCollectionCache(IEnumerable<EntitySpawnEntry> entries)
     {
@@ -29,7 +29,6 @@ public sealed class EntitySpawnCollectionCache
 
             orGroup.Entries.Add(entry);
             orGroup.CumulativeProbability += entry.SpawnProbability;
-            continue;
         }
     }
 

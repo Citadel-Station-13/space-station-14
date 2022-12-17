@@ -64,7 +64,12 @@ public sealed class GCQueueSystem : EntitySystem
             return;
         }
 
-        var queue = _queues[comp.Queue];
+        if (!_queues.TryGetValue(comp.Queue, out var queue))
+        {
+            queue = new Queue<EntityUid>();
+            _queues[comp.Queue] = queue;
+        }
+
         var proto = _proto.Index<GCQueuePrototype>(comp.Queue);
         if (queue.Count > proto.Depth)
         {
