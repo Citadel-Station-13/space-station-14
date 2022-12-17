@@ -19,7 +19,7 @@
       queue: SpaceDebris
     - type: IFF
       flags: HideLabel
-      color: "#795C34"
+      color: "#9A7B4F"
 
 - type: entity
   id: CitadelAsteroidDebrisSmall
