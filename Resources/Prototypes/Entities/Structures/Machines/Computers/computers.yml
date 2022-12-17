@@ -61,6 +61,9 @@
       color: "#43ccb5"
     - type: Rotatable
       rotateWhileAnchored: true
+    # CITADEL EDIT
+    - type: WorldLoader
+      radius: 256
 
 - type: entity
   parent: BaseComputerShuttle
@@ -96,6 +99,9 @@
       radius: 1.5
       energy: 1.6
       color: "#c94242"
+    # CITADEL EDIT
+    - type: WorldLoader
+      radius: 1536
 
 - type: entity
   parent: BaseComputerShuttle
@@ -569,6 +575,9 @@
       radius: 1.5
       energy: 1.6
       color: "#e6e227"
+    # CITADEL EDIT
+    - type: WorldLoader
+      radius: 256
 
 - type: entity
   id: ComputerCargoShuttle

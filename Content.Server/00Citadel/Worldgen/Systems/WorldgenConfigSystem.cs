@@ -1,6 +1,7 @@
 ﻿using Content.Server._00Citadel.Worldgen.Components;
 using Content.Server._00Citadel.Worldgen.Prototypes;
 using Content.Server.GameTicking;
+using Content.Server.GameTicking.Events;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -27,12 +28,12 @@ public sealed class WorldgenConfigSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
-        SubscribeLocalEvent<LoadingMapsEvent>(OnLoadingMaps);
+        SubscribeLocalEvent<RoundStartingEvent>(OnLoadingMaps);
         _cfg.OnValueChanged(WorldgenCVars.WorldgenEnabled, b => _enabled = b, true);
         _cfg.OnValueChanged(WorldgenCVars.WorldgenConfig, s => _worldgenConfig = s, true);
     }
 
-    private void OnLoadingMaps(LoadingMapsEvent ev)
+    private void OnLoadingMaps(RoundStartingEvent ev)
     {
         if (_enabled == false)
             return;

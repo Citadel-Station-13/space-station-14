@@ -8,7 +8,7 @@ namespace Content.Server._00Citadel.Worldgen.Prototypes;
 /// <summary>
 /// This is a prototype for...
 /// </summary>
-[Prototype("biome2")]
+[Prototype("biome")]
 public sealed class BiomePrototype : IPrototype, IInheritingPrototype
 {
     /// <inheritdoc/>

@@ -182,6 +182,8 @@ public sealed class WorldControllerSystem : EntitySystem
         }
 
         var loadedEnum = EntityQueryEnumerator<LoadedChunkComponent, TransformComponent>();
+        var chunksUnloaded = 0;
+
         // Make sure these chunks get unloaded at the end of the tick.
         while (loadedEnum.MoveNext(out var _, out var xform))
         {
@@ -189,6 +191,7 @@ public sealed class WorldControllerSystem : EntitySystem
             if (mapOrNull is null)
             {
                 RemCompDeferred<LoadedChunkComponent>(xform.Owner);
+                chunksUnloaded++;
                 continue;
             }
 
@@ -196,14 +199,21 @@ public sealed class WorldControllerSystem : EntitySystem
             if (!chunksToLoad.ContainsKey(map))
             {
                 RemCompDeferred<LoadedChunkComponent>(xform.Owner);
+                chunksUnloaded++;
                 continue;
             }
 
             var coords = WorldGen.WorldToChunkCoords(xform.Coordinates.ToVector2i(EntityManager, _mapManager));
 
             if (!chunksToLoad[map].ContainsKey(coords))
+            {
                 RemCompDeferred<LoadedChunkComponent>(xform.Owner);
+                chunksUnloaded++;
+            }
         }
+
+        if (chunksUnloaded > 0)
+            _sawmill.Debug($"Queued {chunksUnloaded} chunks for unload.");
 
         if (chunksToLoad.All(x => x.Value.Count == 0))
             return;
@@ -233,7 +243,7 @@ public sealed class WorldControllerSystem : EntitySystem
         if (count > 0)
         {
             var timeSpan = _gameTiming.RealTime - startTime;
-            _sawmill.Info($"Loaded {count} chunks in {timeSpan.TotalMilliseconds:N2}ms.");
+            _sawmill.Debug($"Loaded {count} chunks in {timeSpan.TotalMilliseconds:N2}ms.");
         }
     }
 
@@ -257,7 +267,7 @@ public sealed class WorldControllerSystem : EntitySystem
     private EntityUid CreateChunkEntity(Vector2i chunkCoords, EntityUid map)
     {
         var coords = new EntityCoordinates(map, WorldGen.ChunkToWorldCoords(chunkCoords));
-        var chunk =  Spawn("ORChunk", coords);
+        var chunk =  Spawn("CitadelChunk", coords);
         var md = MetaData(chunk);
         md.EntityName = $"S-{chunkCoords.X}/{chunkCoords.Y}";
         return chunk;
