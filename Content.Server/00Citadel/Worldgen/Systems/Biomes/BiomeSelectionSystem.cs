@@ -44,7 +44,7 @@ public sealed class BiomeSelectionSystem : BaseWorldSystem
         // surely this can't be THAAAAAAAAAAAAAAAT bad right????
         var sorted = component.Biomes
             .Select(x => (Id: x, _proto.Index<BiomePrototype>(x).Priority))
-            .OrderBy(x => x.Priority)
+            .OrderByDescending(x => x.Priority)
             .Select(x => x.Id)
             .ToList();
 

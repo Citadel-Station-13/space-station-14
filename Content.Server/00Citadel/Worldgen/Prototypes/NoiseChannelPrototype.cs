@@ -60,6 +60,12 @@ public class NoiseChannelConfig
     /// </summary>
     [DataField("noiseCoordinateProcess")]
     public NoiseCoordinateProcess? NoiseCoordinateProcess { get; } = null;
+
+    /// <summary>
+    /// The "center" of the range of values. Or the minimum if mapped 0 through 1.
+    /// </summary>
+    [DataField("minimum")]
+    public float Minimum { get; } = 0;
 }
 
 [Prototype("noiseChannel")]
@@ -123,7 +129,7 @@ public struct NoiseGenerator
         if (_config.NoisePostProcess is not null)
             value = _config.NoisePostProcess.Process(value);
         value *= _config.OutputMultiplier;
-        return value;
+        return value + _config.Minimum;
     }
 }
 

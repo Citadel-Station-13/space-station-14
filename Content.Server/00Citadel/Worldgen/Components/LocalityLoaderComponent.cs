@@ -7,5 +7,6 @@
 [RegisterComponent]
 public sealed class LocalityLoaderComponent : Component
 {
-    [DataField("loadingDistance")] public int LoadingDistance = 32;
+    [DataField("loadingDistance")]
+    public int LoadingDistance = 32;
 }

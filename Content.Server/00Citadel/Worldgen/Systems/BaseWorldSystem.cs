@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using Content.Server._00Citadel.Worldgen.Components;
+using JetBrains.Annotations;
 using Robust.Shared.Map;
 
 namespace Content.Server._00Citadel.Worldgen.Systems;
@@ -23,6 +24,9 @@ public abstract class BaseWorldSystem : EntitySystem
         if (!Resolve(ent, ref xform))
             throw new Exception("Failed to resolve transform, somehow.");
 
+        if (TryComp<WorldChunkComponent>(ent, out var chunk))
+            return chunk.Coordinates;
+
         return WorldGen.WorldToChunkCoords(xform.Coordinates.ToVector2i(EntityManager, _mapManager));
     }
 
@@ -37,6 +41,9 @@ public abstract class BaseWorldSystem : EntitySystem
     {
         if (!Resolve(ent, ref xform))
             throw new Exception("Failed to resolve transform, somehow.");
+
+        if (TryComp<WorldChunkComponent>(ent, out var chunk))
+            return chunk.Coordinates;
 
         return WorldGen.WorldToChunkCoords(xform.WorldPosition);
     }

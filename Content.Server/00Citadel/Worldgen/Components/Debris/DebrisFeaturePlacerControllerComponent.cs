@@ -33,5 +33,8 @@ public sealed class DebrisFeaturePlacerControllerComponent : Component
 
     public bool DoSpawns = true;
 
-
+    /// <summary>
+    /// Radius in which there should be no objects for debris to spawn.
+    /// </summary>
+    [DataField("safetyZoneRadius")] public float SafetyZoneRadius = 16.0f;
 }

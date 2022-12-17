@@ -4,6 +4,7 @@ using Content.Server._00Citadel.Worldgen.Components.Debris;
 using Content.Server._00Citadel.Worldgen.Systems.GC;
 using Content.Server._00Citadel.Worldgen.Tools;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Random;
 
 namespace Content.Server._00Citadel.Worldgen.Systems.Debris;
@@ -18,6 +19,7 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
     [Dependency] private readonly NoiseIndexSystem _noiseIndex = default!;
     [Dependency] private readonly PoissonDiskSampler _sampler = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
     private ISawmill _sawmill = default!;
@@ -117,11 +119,9 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 
         component.DoSpawns = false; // Don't repeat yourself if this crashes.
 
+        var chunk = Comp<WorldChunkComponent>(args.Chunk);
         var densityChannel = component.DensityNoiseChannel;
-        var xform = Transform(args.Chunk);
-        if (xform.MapUid is null)
-            return; // what.
-        var density = _noiseIndex.Evaluate(uid, densityChannel, GetFloatingChunkCoords(args.Chunk, xform) + new Vector2(0.5f, 0.5f));
+        var density = _noiseIndex.Evaluate(uid, densityChannel, chunk.Coordinates + new Vector2(0.5f, 0.5f));
         if (density == 0)
             return;
 
@@ -137,8 +137,9 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
                 .ToList();
         }
 
-        points ??= GeneratePointsInChunk(args.Chunk, density, xform);
+        points ??= GeneratePointsInChunk(args.Chunk, density, chunk.Coordinates);
 
+        var safetyBounds = Box2.UnitCentered.Enlarged(component.SafetyZoneRadius);
         var failures = 0; // Avoid severe log spam.
         foreach (var point in points)
         {
@@ -146,7 +147,11 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
             if (pointDensity == 0 || _random.Prob(component.RandomCancellationChance))
                 continue;
 
-            var coords = new EntityCoordinates(xform.MapUid.Value, point);
+            var coords = new EntityCoordinates(chunk.Map, point);
+            _sawmill.Debug($"Putting roid at {coords}");
+
+            if (_mapManager.FindGridsIntersecting(Comp<MapComponent>(chunk.Map).WorldMap, safetyBounds.Translated(point), false).Any())
+                continue; // Oops, gonna collide.
 
             var preEv = new PrePlaceDebrisFeatureEvent(coords, args.Chunk);
             RaiseLocalEvent(uid, ref preEv);
@@ -181,12 +186,8 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 
     }
 
-    private List<Vector2> GeneratePointsInChunk(EntityUid chunk, float density, TransformComponent? xform = null)
+    private List<Vector2> GeneratePointsInChunk(EntityUid chunk, float density, Vector2 coords)
     {
-        if (!Resolve(chunk, ref xform))
-            throw new Exception("Failed to resolve transform, somehow.");
-
-        var coords = GetChunkCoords(chunk, xform);
 
         var offs = (int)((WorldGen.ChunkSize - (density / 2)) / 2);
 
@@ -194,10 +195,10 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         var lowerRight = (offs, offs);
         var debrisPoints = _sampler.SampleRectangle(topLeft, lowerRight, density);
 
-
         for (var i = 0; i < debrisPoints.Count; i++)
         {
-            debrisPoints[i] += WorldGen.ChunkToWorldCoordsCentered(coords);
+            debrisPoints[i] += WorldGen.ChunkToWorldCoords(coords);
+
         }
 
         return debrisPoints;

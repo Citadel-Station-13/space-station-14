@@ -28,6 +28,13 @@ public static class WorldGen
     }
 
     [Pure]
+    public static Vector2 ChunkToWorldCoords(Vector2 inp)
+    {
+        return inp * ChunkSize;
+    }
+
+
+    [Pure]
     public static Vector2 ChunkToWorldCoordsCentered(Vector2i inp)
     {
         return inp * ChunkSize + Vector2i.One * (ChunkSize / 2);

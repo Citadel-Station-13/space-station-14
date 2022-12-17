@@ -9,5 +9,13 @@
   noiseRanges: {}
   chunkComponents:
     - type: DebrisFeaturePlacerController
-      densityNoiseChannel: DensityUnclipped
+      densityNoiseChannel: Density
+    - type: SimpleDebrisSelector
+      debrisTable:
+        - id: CitadelAsteroidDebrisSmall
+        - id: CitadelAsteroidDebrisMedium
+        - id: CitadelAsteroidDebrisLarge
+          prob: 0.7
+        - id: CitadelAsteroidDebrisLarger
+          prob: 0.4
 

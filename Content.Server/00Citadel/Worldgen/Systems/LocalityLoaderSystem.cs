@@ -29,6 +29,7 @@ public sealed class LocalityLoaderSystem : BaseWorldSystem
                     continue;
 
                 RaiseLocalEvent(loadable.Owner, new LocalStructureLoadedEvent());
+                RemCompDeferred<LocalityLoaderComponent>(loadable.Owner);
                 break;
             }
         }

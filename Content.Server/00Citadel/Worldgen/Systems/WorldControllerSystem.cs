@@ -21,7 +21,6 @@ public sealed class WorldControllerSystem : EntitySystem
     public override void Initialize()
     {
         _sawmill = _logManager.GetSawmill("world");
-        SubscribeLocalEvent<WorldChunkComponent, ComponentStartup>(OnChunkStartup);
         SubscribeLocalEvent<LoadedChunkComponent, ComponentStartup>(OnChunkLoadedCore);
         SubscribeLocalEvent<LoadedChunkComponent, ComponentShutdown>(OnChunkUnloadedCore);
     }
@@ -31,14 +30,12 @@ public sealed class WorldControllerSystem : EntitySystem
     /// </summary>
     private void OnChunkLoadedCore(EntityUid uid, LoadedChunkComponent component, ComponentStartup args)
     {
-        var xform = Transform(uid);
-        if (xform.MapUid is null)
+        if (!TryComp<WorldChunkComponent>(uid, out var chunk))
             return;
-        var coords = WorldGen.WorldToChunkCoords(xform.Coordinates.ToVector2i(EntityManager, _mapManager));
-        var ev = new WorldChunkLoadedEvent(uid, coords);
-        RaiseLocalEvent(xform.MapUid.Value, ref ev);
+        var ev = new WorldChunkLoadedEvent(uid, chunk.Coordinates);
+        RaiseLocalEvent(chunk.Map, ref ev);
         RaiseLocalEvent(uid, ref ev);
-        //_sawmill.Debug($"Loaded chunk {ToPrettyString(uid)} at {coords}");
+        //_sawmill.Debug($"Loaded chunk {ToPrettyString(uid)} at {chunk.Coordinates}");
     }
 
     /// <summary>
@@ -46,43 +43,12 @@ public sealed class WorldControllerSystem : EntitySystem
     /// </summary>
     private void OnChunkUnloadedCore(EntityUid uid, LoadedChunkComponent component, ComponentShutdown args)
     {
-        var xform = Transform(uid);
-        if (xform.MapUid is null)
+        if (!TryComp<WorldChunkComponent>(uid, out var chunk))
             return;
-        var coords = WorldGen.WorldToChunkCoords(xform.Coordinates.ToVector2i(EntityManager, _mapManager));
-        var ev = new WorldChunkUnloadedEvent(uid, coords);
-        RaiseLocalEvent(xform.MapUid.Value, ref ev);
+        var ev = new WorldChunkUnloadedEvent(uid, chunk.Coordinates);
+        RaiseLocalEvent(chunk.Map, ref ev);
         RaiseLocalEvent(uid, ref ev);
         //_sawmill.Debug($"Unloaded chunk {ToPrettyString(uid)} at {coords}");
-    }
-
-    /// <summary>
-    /// During setup, make sure the chunk gets attached to the WorldControllerComponent on the map.
-    /// </summary>
-    private void OnChunkStartup(EntityUid uid, WorldChunkComponent component, ComponentStartup args)
-    {
-        var xform = Transform(uid);
-        var parent = xform.Coordinates.EntityId;
-
-        if (!TryComp<WorldControllerComponent>(parent, out var worldController))
-        {
-            Logger.Error($"Badly initialized chunk {ToPrettyString(uid)}.");
-            return;
-        }
-
-        var coords = WorldGen.WorldToChunkCoords(xform.Coordinates.ToVector2i(EntityManager, _mapManager));
-        ref var chunks = ref worldController.Chunks;
-
-        if (chunks.ContainsKey(coords))
-        {
-            Logger.Error($"Tried to initialize chunk {ToPrettyString(uid)} on top of existing chunk {ToPrettyString(chunks[coords])}.");
-            return;
-        }
-
-        chunks[coords] = uid; // Add this entity to chunk index.
-
-        var ev = new WorldChunkAddedEvent(uid, coords);
-        RaiseLocalEvent(parent, ref ev);
     }
 
     private const int PlayerLoadRadius = 1;
@@ -94,7 +60,6 @@ public sealed class WorldControllerSystem : EntitySystem
     /// <param name="frameTime"></param>
     public override void Update(float frameTime)
     {
-        //TODO: Use struct enumerator for all entity queries here once available.
         //TODO: Maybe don't allocate a big collection every frame?
         var chunksToLoad = new Dictionary<EntityUid, Dictionary<Vector2i, List<EntityUid>>>();
 
@@ -132,9 +97,9 @@ public sealed class WorldControllerSystem : EntitySystem
             if (!chunksToLoad.ContainsKey(map))
                 continue;
 
-            var wc = xform.Coordinates.ToVector2i(EntityManager, _mapManager);
+            var wc = xform.WorldPosition;
             var coords = WorldGen.WorldToChunkCoords(wc);
-            var chunks = new GridPointsNearEnumerator(coords, (int)Math.Ceiling(worldLoader.Radius / (float)WorldGen.ChunkSize));
+            var chunks = new GridPointsNearEnumerator(coords.Floored(), (int)Math.Ceiling(worldLoader.Radius / (float)WorldGen.ChunkSize));
 
             var set = chunksToLoad[map];
 
@@ -165,9 +130,9 @@ public sealed class WorldControllerSystem : EntitySystem
             if (!chunksToLoad.ContainsKey(map))
                 continue;
 
-            var wc = xform.Coordinates.ToVector2i(EntityManager, _mapManager);
+            var wc = xform.WorldPosition;
             var coords = WorldGen.WorldToChunkCoords(wc);
-            var chunks = new GridPointsNearEnumerator(coords, PlayerLoadRadius);
+            var chunks = new GridPointsNearEnumerator(coords.Floored(), PlayerLoadRadius);
 
             var set = chunksToLoad[map];
 
@@ -181,33 +146,17 @@ public sealed class WorldControllerSystem : EntitySystem
             }
         }
 
-        var loadedEnum = EntityQueryEnumerator<LoadedChunkComponent, TransformComponent>();
+        var loadedEnum = EntityQueryEnumerator<LoadedChunkComponent, WorldChunkComponent>();
         var chunksUnloaded = 0;
 
         // Make sure these chunks get unloaded at the end of the tick.
-        while (loadedEnum.MoveNext(out var _, out var xform))
+        while (loadedEnum.MoveNext(out var _, out var chunk))
         {
-            var mapOrNull = xform.MapUid;
-            if (mapOrNull is null)
-            {
-                RemCompDeferred<LoadedChunkComponent>(xform.Owner);
-                chunksUnloaded++;
-                continue;
-            }
+            var coords = chunk.Coordinates;
 
-            var map = mapOrNull.Value;
-            if (!chunksToLoad.ContainsKey(map))
+            if (!chunksToLoad[chunk.Map].ContainsKey(coords))
             {
-                RemCompDeferred<LoadedChunkComponent>(xform.Owner);
-                chunksUnloaded++;
-                continue;
-            }
-
-            var coords = WorldGen.WorldToChunkCoords(xform.Coordinates.ToVector2i(EntityManager, _mapManager));
-
-            if (!chunksToLoad[map].ContainsKey(coords))
-            {
-                RemCompDeferred<LoadedChunkComponent>(xform.Owner);
+                RemCompDeferred<LoadedChunkComponent>(chunk.Owner);
                 chunksUnloaded++;
             }
         }
@@ -266,11 +215,36 @@ public sealed class WorldControllerSystem : EntitySystem
 
     private EntityUid CreateChunkEntity(Vector2i chunkCoords, EntityUid map)
     {
-        var coords = new EntityCoordinates(map, WorldGen.ChunkToWorldCoords(chunkCoords));
+        //var coords = new EntityCoordinates(map, WorldGen.ChunkToWorldCoordsCentered(chunkCoords));
+        var coords = MapCoordinates.Nullspace;
         var chunk =  Spawn("CitadelChunk", coords);
+        StartupChunkEntity(chunk, chunkCoords, map);
         var md = MetaData(chunk);
         md.EntityName = $"S-{chunkCoords.X}/{chunkCoords.Y}";
         return chunk;
+    }
+
+    private void StartupChunkEntity(EntityUid chunk, Vector2i coords, EntityUid map)
+    {
+        if (!TryComp<WorldControllerComponent>(map, out var worldController))
+        {
+            _sawmill.Error($"Badly initialized chunk {ToPrettyString(chunk)}.");
+            return;
+        }
+
+        if (!TryComp<WorldChunkComponent>(chunk, out var chunkComponent))
+        {
+            _sawmill.Error($"Chunk {chunk} is missing WorldChunkComponent.");
+            return;
+        }
+
+        ref var chunks = ref worldController.Chunks;
+
+        chunks[coords] = chunk; // Add this entity to chunk index.
+        chunkComponent.Coordinates = coords;
+        chunkComponent.Map = map;
+        var ev = new WorldChunkAddedEvent(chunk, coords);
+        RaiseLocalEvent(map, ref ev);
     }
 }
 
