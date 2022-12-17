@@ -24,7 +24,7 @@ public sealed class DeferredSpawnSystem : EntitySystem
             if (dat.Item3 is not null)
             {
                 dat.Item3.SpawnedEntity = e;
-                RaiseLocalEvent(dat.Item3);
+                QueueLocalEvent(dat.Item3);
             }
 
             if (_simulationStopwatch.Elapsed.Milliseconds > 5)

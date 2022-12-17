@@ -51,7 +51,6 @@
       flags: HideLabel
       color: "#88b0d1"
 
-
 - type: entity
   id: CitadelScrapDebrisSmall
   parent: CitadelBaseScrapDebris

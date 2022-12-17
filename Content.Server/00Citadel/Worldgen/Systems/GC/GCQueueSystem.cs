@@ -17,7 +17,9 @@ public sealed class GCQueueSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
+    [ViewVariables]
     private Dictionary<string, Queue<EntityUid>> _queues = new();
+    [ViewVariables]
     private TimeSpan _maximumProcessTime = TimeSpan.Zero;
 
     /// <inheritdoc/>

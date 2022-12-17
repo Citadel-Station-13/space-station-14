@@ -108,7 +108,7 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
     {
         var placer = Comp<DebrisFeaturePlacerControllerComponent>(ev.DebrisPlacer);
         placer.OwnedDebris.Add(ev.Pos, ev.SpawnedEntity);
-        var owned = EnsureComp<OwnedDebrisComponent>(ev.DebrisPlacer);
+        var owned = EnsureComp<OwnedDebrisComponent>(ev.SpawnedEntity);
         owned.OwningController = ev.DebrisPlacer;
         owned.LastKey = ev.Pos;
     }
