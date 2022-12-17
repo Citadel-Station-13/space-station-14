@@ -197,7 +197,7 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 
         for (var i = 0; i < debrisPoints.Count; i++)
         {
-            debrisPoints[i] += WorldGen.ChunkToWorldCoords(coords);
+            debrisPoints[i] += WorldGen.ChunkToWorldCoords(coords + (0.5f, 0.5f));
 
         }
 
