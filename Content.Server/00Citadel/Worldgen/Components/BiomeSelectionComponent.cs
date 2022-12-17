@@ -1,11 +1,13 @@
-﻿namespace Content.Server._00Citadel.Worldgen.Components;
+﻿using Content.Server._00Citadel.Worldgen.Systems.Biomes;
+
+namespace Content.Server._00Citadel.Worldgen.Components;
 
 /// <summary>
-/// This is used for...
+/// This is used for selecting the biome(s) to be used during world generation.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, Access(typeof(BiomeSelectionSystem))]
 public sealed class BiomeSelectionComponent : Component
 {
     [DataField("biomes", required: true)]
-    public List<string> Biomes = default!;
+    public List<string> Biomes = new();
 }

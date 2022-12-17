@@ -1,5 +1,6 @@
 ﻿- type: entity
   id: CitadelBaseAsteroidDebris
+  parent: CitadelBaseDebris
   name: Asteroid Debris
   abstract: true
   components:
@@ -14,12 +15,13 @@
       entries:
         FloorAsteroidCoarseSand0:
           - id: AsteroidRockMining
-    - type: LocalityLoader
     - type: GCAbleObject
       queue: SpaceDebris
     - type: IFF
       flags: HideLabel
       color: "#9A7B4F"
+
+# When making debris you may need to add it to PrototypeSaveTest for reasons(tm).
 
 - type: entity
   id: CitadelAsteroidDebrisSmall

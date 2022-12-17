@@ -1,4 +1,5 @@
-﻿using Content.Server._00Citadel.Worldgen.Tools;
+﻿using Content.Server._00Citadel.Worldgen.Systems.Debris;
+using Content.Server._00Citadel.Worldgen.Tools;
 using Content.Shared.Maps;
 using Content.Shared.Storage;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
@@ -8,7 +9,7 @@ namespace Content.Server._00Citadel.Worldgen.Components.Debris;
 /// <summary>
 /// This is used for constructing asteroid debris.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, Access(typeof(BlobFloorPlanBuilderSystem))]
 public sealed class BlobFloorPlanBuilderComponent : Component
 {
     [DataField("floorTileset", required: true, customTypeSerializer: typeof(PrototypeIdListSerializer<ContentTileDefinition>))]

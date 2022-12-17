@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Content.Server._00Citadel.Worldgen.Systems.Debris;
 using Content.Server._00Citadel.Worldgen.Tools;
 using Content.Shared.Maps;
 using Content.Shared.Storage;
@@ -7,9 +8,9 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Server._00Citadel.Worldgen.Components.Debris;
 
 /// <summary>
-/// This is used for...
+/// This is used for populating a grid with random entities automatically.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, Access(typeof(SimpleFloorPlanPopulatorSystem))]
 public sealed class SimpleFloorPlanPopulatorComponent : Component
 {
     [DataField("entries", required: true, customTypeSerializer:typeof(PrototypeIdDictionarySerializer<List<EntitySpawnEntry>, ContentTileDefinition>))]
