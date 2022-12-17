@@ -26,11 +26,13 @@
   remapTo0Through1: true
   inputMultiplier: 6
 
-
 - type: noiseChannel
   id: Wreck
   noiseType: Perlin
   fractalLacunarityByPi: 0.666666666
+  clippingRanges:
+    - 0.0, 0.4
+  clippedValue: 0
   remapTo0Through1: true
   inputMultiplier: 16 # Makes wreck concentration very low noise at scale.
 
