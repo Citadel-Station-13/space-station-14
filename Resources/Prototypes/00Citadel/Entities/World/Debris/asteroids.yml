@@ -19,7 +19,7 @@
       queue: SpaceDebris
     - type: IFF
       flags: HideLabel
-      color: "#9A7B4F"
+      color: "#ff6c40"
 
 # When making debris you may need to add it to PrototypeSaveTest for reasons(tm).
 

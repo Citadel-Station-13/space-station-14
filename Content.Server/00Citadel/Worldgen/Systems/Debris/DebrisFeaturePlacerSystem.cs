@@ -68,7 +68,8 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 
     private void OnDebrisShutdown(EntityUid uid, OwnedDebrisComponent component, ComponentShutdown args)
     {
-        var placer = Comp<DebrisFeaturePlacerControllerComponent>(component.OwningController);
+        if (!TryComp<DebrisFeaturePlacerControllerComponent>(component.OwningController, out var placer))
+            return;
         placer.OwnedDebris[component.LastKey] = null;
     }
 
@@ -144,11 +145,10 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         foreach (var point in points)
         {
             var pointDensity = _noiseIndex.Evaluate(uid, densityChannel, WorldGen.WorldToChunkCoords(point));
-            if (pointDensity == 0 || _random.Prob(component.RandomCancellationChance))
+            if ((pointDensity == 0 && component.DensityClip) || _random.Prob(component.RandomCancellationChance))
                 continue;
 
             var coords = new EntityCoordinates(chunk.Map, point);
-            _sawmill.Debug($"Putting roid at {coords}");
 
             if (_mapManager.FindGridsIntersecting(Comp<MapComponent>(chunk.Map).WorldMap, safetyBounds.Translated(point), false).Any())
                 continue; // Oops, gonna collide.

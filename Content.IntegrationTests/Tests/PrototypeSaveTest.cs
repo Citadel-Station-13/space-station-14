@@ -70,15 +70,7 @@ public sealed class PrototypeSaveTest
         "HyperchargedLightning",
         "BaseSubstationWall",
         "SubstationWallBasic",
-        "BaseSubstationWallFrame",
-
-        //CITADEL EDITS
-        "CitadelChunk", // Wow this thing is really just not built to be saved yet, future PR's problem.
-        "CitadelAsteroidDebrisSmall",
-        "CitadelAsteroidDebrisMedium",
-        "CitadelAsteroidDebrisLarge",
-        "CitadelAsteroidDebrisLarger",
-        //END CITADEL EDITS
+        "BaseSubstationWallFrame"
     };
 
     [Test]
@@ -150,6 +142,11 @@ public sealed class PrototypeSaveTest
                 //Iterate list of prototypes to spawn
                 foreach (var prototype in prototypes)
                 {
+                    // CITADEL EDIT
+                    if (prototype.Components.ContainsKey("MapGrid")) // Yea this test just doesn't work, it parents a grid to another grid and causes game logic to explode.
+                        continue;
+                    // END CITADEL EDIT
+
                     uid = entityMan.SpawnEntity(prototype.ID, testLocation);
                     server.RunTicks(1);
 

@@ -120,7 +120,6 @@ namespace Content.IntegrationTests.Tests
                 "Actor", // We aren't testing actor components, those need their player session set.
 
                 //CITADEL EDIT
-                "OwnedDebris", // Needs to have a configured parent.
                 "BlobFloorPlanBuilder", // Flat does not work without configuration.
                 "DebrisFeaturePlacerController", // Above.
                 "LoadedChunk",
@@ -223,7 +222,6 @@ namespace Content.IntegrationTests.Tests
                 "Actor", // We aren't testing actor components, those need their player session set.
 
                 //CITADEL EDIT
-                "OwnedDebris", // Needs to have a configured parent.
                 "BlobFloorPlanBuilder", // Flat does not work without configuration.
                 "DebrisFeaturePlacerController", // Above.
                 "LoadedChunk",
