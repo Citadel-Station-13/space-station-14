@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 
-namespace Content.Server._00OuterRim.Worldgen2;
+namespace Content.Server._00Citadel.Worldgen;
 
 public static class WorldGen
 {

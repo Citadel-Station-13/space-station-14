@@ -1,6 +1,6 @@
 ﻿using Content.Shared.Storage;
 
-namespace Content.Server._00OuterRim.Worldgen2.Components;
+namespace Content.Server._00Citadel.Worldgen.Components;
 
 /// <summary>
 /// This is used for constructing asteroid debris.

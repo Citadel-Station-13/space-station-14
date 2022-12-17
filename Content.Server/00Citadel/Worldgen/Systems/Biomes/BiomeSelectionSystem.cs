@@ -1,10 +1,10 @@
 ﻿using System.Linq;
-using Content.Server._00OuterRim.Worldgen2.Components;
-using Content.Server._00OuterRim.Worldgen2.Prototypes;
+using Content.Server._00Citadel.Worldgen.Components;
+using Content.Server._00Citadel.Worldgen.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
 
-namespace Content.Server._00OuterRim.Worldgen2.Systems.Biomes;
+namespace Content.Server._00Citadel.Worldgen.Systems.Biomes;
 
 /// <summary>
 /// This handles...

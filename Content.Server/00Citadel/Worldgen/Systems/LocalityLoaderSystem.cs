@@ -1,6 +1,6 @@
-﻿using Content.Server._00OuterRim.Worldgen2.Components;
+﻿using Content.Server._00Citadel.Worldgen.Components;
 
-namespace Content.Server._00OuterRim.Worldgen2.Systems;
+namespace Content.Server._00Citadel.Worldgen.Systems;
 
 /// <summary>
 /// This handles loading in objects based on distance from player, using some metadata on chunks.

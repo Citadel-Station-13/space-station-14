@@ -1,4 +1,4 @@
-﻿namespace Content.Server._00OuterRim.Worldgen2.Systems.Debris;
+﻿namespace Content.Server._00Citadel.Worldgen.Systems.Debris;
 
 /// <summary>
 /// This handles...
@@ -8,6 +8,6 @@ public sealed class AsteroidBuilderSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
-        
+
     }
 }

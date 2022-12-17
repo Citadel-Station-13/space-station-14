@@ -3,7 +3,7 @@ using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 
-namespace Content.Server._00OuterRim.Worldgen2.Prototypes;
+namespace Content.Server._00Citadel.Worldgen.Prototypes;
 
 /// <summary>
 /// This is a prototype for...
@@ -50,19 +50,11 @@ public sealed class BiomePrototype : IPrototype, IInheritingPrototype
     public void Apply(EntityUid target, ISerializationManager serialization, IEntityManager entityManager, IComponentFactory componentFactory)
     {
         // Add all components required by the prototype. Engine update for this whenst.
-        foreach (var (name, data) in ChunkComponents)
+        foreach (var data in ChunkComponents.Values)
         {
-            if (!componentFactory.TryGetRegistration(name, out var registration))
-                continue;
-
-            if (componentFactory.GetComponent(registration.Type) is not Component component)
-                continue;
-
-            component.Owner = target;
-
-            var temp = (object) component;
-            serialization.Copy(data.Component, ref temp);
-            entityManager.AddComponent(target, (Component)temp!);
+            var comp = (Component) serialization.CreateCopy(data.Component, notNullableOverride: true);
+            comp.Owner = target;
+            entityManager.AddComponent(target, comp);
         }
     }
 }

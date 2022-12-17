@@ -1,8 +1,8 @@
-﻿using Content.Server._00OuterRim.Worldgen2.Prototypes;
-using Content.Server._00OuterRim.Worldgen2.Systems.Debris;
+﻿using Content.Server._00Citadel.Worldgen.Prototypes;
+using Content.Server._00Citadel.Worldgen.Systems.Debris;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
-namespace Content.Server._00OuterRim.Worldgen2.Components.Debris;
+namespace Content.Server._00Citadel.Worldgen.Components.Debris;
 
 /// <summary>
 /// This is used for controlling the debris feature placer.

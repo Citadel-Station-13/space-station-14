@@ -1,7 +1,7 @@
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.Server._00OuterRim;
+namespace Content.Server._00Citadel.Worldgen.Systems;
 
 public sealed class DeferredSpawnSystem : EntitySystem
 {

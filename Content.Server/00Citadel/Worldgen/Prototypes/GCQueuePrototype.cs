@@ -1,6 +1,6 @@
 ﻿using Robust.Shared.Prototypes;
 
-namespace Content.Server._00OuterRim.Worldgen2.Prototypes;
+namespace Content.Server._00Citadel.Worldgen.Prototypes;
 
 /// <summary>
 /// This is a prototype for a GC queue.

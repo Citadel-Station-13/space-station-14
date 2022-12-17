@@ -1,4 +1,4 @@
-﻿namespace Content.Server._00OuterRim.Worldgen2.Components;
+﻿namespace Content.Server._00Citadel.Worldgen.Components;
 
 /// <summary>
 /// This is used for allowing some objects to load the game world.

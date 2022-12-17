@@ -1,8 +1,8 @@
-﻿using Content.Server._00OuterRim.Worldgen2.Tools;
+﻿using Content.Server._00Citadel.Worldgen.Tools;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 
-namespace Content.Server._00OuterRim.Worldgen2.Prototypes;
+namespace Content.Server._00Citadel.Worldgen.Prototypes;
 
 /// <summary>
 /// This is a config for noise channels, used by worldgen.

@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Robust.Shared.Map;
 
-namespace Content.Server._00OuterRim.Worldgen2.Systems;
+namespace Content.Server._00Citadel.Worldgen.Systems;
 
 /// <summary>
 /// This handles...

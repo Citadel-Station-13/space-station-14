@@ -1,5 +1,5 @@
-﻿using Content.Server._00OuterRim.Worldgen2.Components;
-using Content.Server._00OuterRim.Worldgen2.Prototypes;
+﻿using Content.Server._00Citadel.Worldgen.Components;
+using Content.Server._00Citadel.Worldgen.Prototypes;
 using Content.Server.GameTicking;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -7,7 +7,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Utility;
 
-namespace Content.Server._00OuterRim.Worldgen2.Systems;
+namespace Content.Server._00Citadel.Worldgen.Systems;
 
 /// <summary>
 /// This handles...
@@ -27,12 +27,12 @@ public sealed class WorldgenConfigSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
-        SubscribeLocalEvent<LoadedMapsEvent>(OnLoadingMaps);
+        SubscribeLocalEvent<LoadingMapsEvent>(OnLoadingMaps);
         _cfg.OnValueChanged(WorldgenCVars.WorldgenEnabled, b => _enabled = b, true);
         _cfg.OnValueChanged(WorldgenCVars.WorldgenConfig, s => _worldgenConfig = s, true);
     }
 
-    private void OnLoadingMaps(LoadedMapsEvent ev)
+    private void OnLoadingMaps(LoadingMapsEvent ev)
     {
         if (_enabled == false)
             return;

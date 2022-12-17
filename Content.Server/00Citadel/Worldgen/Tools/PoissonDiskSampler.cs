@@ -1,6 +1,6 @@
 ﻿using Robust.Shared.Random;
 
-namespace Content.Server._00OuterRim.Worldgen2.Tools;
+namespace Content.Server._00Citadel.Worldgen.Tools;
 
 public sealed class PoissonDiskSampler
 {

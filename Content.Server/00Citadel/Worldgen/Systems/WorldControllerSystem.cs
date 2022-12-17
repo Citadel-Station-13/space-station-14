@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using Content.Server._00OuterRim.Worldgen2.Components;
+using Content.Server._00Citadel.Worldgen.Components;
 using Content.Server.Ghost.Components;
 using Content.Server.Mind.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.Server._00OuterRim.Worldgen2.Systems;
+namespace Content.Server._00Citadel.Worldgen.Systems;
 
 /// <summary>
 /// This handles putting together chunk entities and notifying them about important changes.

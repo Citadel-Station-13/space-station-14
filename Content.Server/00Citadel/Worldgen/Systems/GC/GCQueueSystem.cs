@@ -1,12 +1,12 @@
 ﻿using System.Linq;
-using Content.Server._00OuterRim.Worldgen2.Components.GC;
-using Content.Server._00OuterRim.Worldgen2.Prototypes;
+using Content.Server._00Citadel.Worldgen.Components.GC;
+using Content.Server._00Citadel.Worldgen.Prototypes;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server._00OuterRim.Worldgen2.Systems.GC;
+namespace Content.Server._00Citadel.Worldgen.Systems.GC;
 
 /// <summary>
 /// This handles...

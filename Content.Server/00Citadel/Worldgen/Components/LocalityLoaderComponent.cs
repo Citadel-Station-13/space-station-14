@@ -1,4 +1,4 @@
-﻿namespace Content.Server._00OuterRim.Worldgen2.Components;
+﻿namespace Content.Server._00Citadel.Worldgen.Components;
 
 /// <summary>
 /// This is used for sending a signal to the entity it's on to load contents whenever a loader gets close enough.

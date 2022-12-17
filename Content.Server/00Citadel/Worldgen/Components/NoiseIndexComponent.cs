@@ -1,7 +1,7 @@
-﻿using Content.Server._00OuterRim.Worldgen2.Prototypes;
-using Content.Server._00OuterRim.Worldgen2.Systems;
+﻿using Content.Server._00Citadel.Worldgen.Prototypes;
+using Content.Server._00Citadel.Worldgen.Systems;
 
-namespace Content.Server._00OuterRim.Worldgen2.Components;
+namespace Content.Server._00Citadel.Worldgen.Components;
 
 /// <summary>
 /// This is used for containing configured noise generators.

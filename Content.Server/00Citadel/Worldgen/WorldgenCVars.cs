@@ -1,6 +1,6 @@
 ﻿using Robust.Shared.Configuration;
 
-namespace Content.Server._00OuterRim.Worldgen2;
+namespace Content.Server._00Citadel.Worldgen;
 
 [CVarDefs]
 public sealed class WorldgenCVars

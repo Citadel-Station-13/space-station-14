@@ -38,7 +38,7 @@ using FN_DECIMAL = System.Single;
 #endif
 using System.Runtime.CompilerServices;
 
-namespace Content.Server._00OuterRim.Worldgen2.Tools;
+namespace Content.Server._00Citadel.Worldgen.Tools;
 
 public class FastNoise
 {

@@ -1,13 +1,13 @@
 ﻿using System.Linq;
-using Content.Server._00OuterRim.Worldgen2.Components;
-using Content.Server._00OuterRim.Worldgen2.Components.Debris;
-using Content.Server._00OuterRim.Worldgen2.Systems.GC;
-using Content.Server._00OuterRim.Worldgen2.Tools;
+using Content.Server._00Citadel.Worldgen.Components;
+using Content.Server._00Citadel.Worldgen.Components.Debris;
+using Content.Server._00Citadel.Worldgen.Systems.GC;
+using Content.Server._00Citadel.Worldgen.Tools;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
-namespace Content.Server._00OuterRim.Worldgen2.Systems.Debris;
+namespace Content.Server._00Citadel.Worldgen.Systems.Debris;
 
 /// <summary>
 /// This handles...
