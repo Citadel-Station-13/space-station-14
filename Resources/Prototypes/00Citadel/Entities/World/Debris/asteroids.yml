@@ -10,6 +10,11 @@
       blobDrawProb: 0.5
       radius: 6
       floorPlacements: 16
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorAsteroidCoarseSand0:
+          - id: AsteroidRockMining
+    - type: LocalityLoader
 
 - type: entity
   id: CitadelAsteroidDebrisSmall

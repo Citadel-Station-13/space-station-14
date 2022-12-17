@@ -23,13 +23,14 @@ public sealed class BlobFloorPlanBuilderSystem : EntitySystem
     private void OnBlobFloorPlanBuilderStartup(EntityUid uid, BlobFloorPlanBuilderComponent component, ComponentStartup args)
     {
         PlaceFloorplanTiles(component, Comp<MapGridComponent>(uid));
+        RaiseLocalEvent(uid, new FloorPlanBuiltEvent());
     }
 
     private void PlaceFloorplanTiles(BlobFloorPlanBuilderComponent comp, MapGridComponent grid)
     {
         // NO MORE THAN TWO ALLOCATIONS THANK YOU VERY MUCH.
-        var spawnPoints = new HashSet<Vector2i>(comp.FloorPlacements * 4);
-        var taken = new Dictionary<Vector2i, Tile>(comp.FloorPlacements);
+        var spawnPoints = new HashSet<Vector2i>(comp.FloorPlacements * 6);
+        var taken = new Dictionary<Vector2i, Tile>(comp.FloorPlacements * 5);
 
         void PlaceTile(Vector2i point)
         {
@@ -79,3 +80,5 @@ public sealed class BlobFloorPlanBuilderSystem : EntitySystem
         grid.SetTiles(taken.Select(x => (x.Key, x.Value)).ToList());
     }
 }
+
+public record struct FloorPlanBuiltEvent;
