@@ -9,7 +9,7 @@ using Robust.Shared.Timing;
 namespace Content.Server._00Citadel.Worldgen.Systems.GC;
 
 /// <summary>
-/// This handles...
+/// This handles delayed garbage collection of entities, to avoid overloading the tick in particularly expensive cases.
 /// </summary>
 public sealed class GCQueueSystem : EntitySystem
 {
@@ -26,6 +26,7 @@ public sealed class GCQueueSystem : EntitySystem
         _cfg.OnValueChanged(WorldgenCVars.GCMaximumTimeMs, s => _maximumProcessTime = TimeSpan.FromMilliseconds(s), true);
     }
 
+    /// <inheritdoc/>
     public override void Update(float frameTime)
     {
         var overallWatch = new Stopwatch();
@@ -92,6 +93,9 @@ public sealed class GCQueueSystem : EntitySystem
     }
 }
 
-
+/// <summary>
+/// Fired by GCQueueSystem to check if it can simply immediately GC an entity, for example if it was never fully loaded.
+/// </summary>
+/// <param name="Cancelled">Whether or not the immediate deletion attempt was cancelled.</param>
 [ByRefEvent]
 public record struct TryGCImmediately(bool Cancelled = false);

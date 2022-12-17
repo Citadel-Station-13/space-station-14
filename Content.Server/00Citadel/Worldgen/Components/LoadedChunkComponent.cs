@@ -8,6 +8,9 @@ namespace Content.Server._00Citadel.Worldgen.Components;
 [RegisterComponent, Access(typeof(WorldControllerSystem))]
 public sealed class LoadedChunkComponent : Component
 {
+    /// <summary>
+    /// The current list of entities loading this chunk.
+    /// </summary>
     [ViewVariables]
     public List<EntityUid>? Loaders = null;
 }

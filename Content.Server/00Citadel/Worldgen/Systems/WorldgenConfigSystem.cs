@@ -11,7 +11,7 @@ using Robust.Shared.Utility;
 namespace Content.Server._00Citadel.Worldgen.Systems;
 
 /// <summary>
-/// This handles...
+/// This handles configuring world generation during round start.
 /// </summary>
 public sealed class WorldgenConfigSystem : EntitySystem
 {

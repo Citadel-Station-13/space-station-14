@@ -9,7 +9,7 @@ namespace Content.Server._00Citadel.Worldgen.Systems.Debris;
 /// <summary>
 /// This handles populating simple structures, simply using a loot table for each tile.
 /// </summary>
-public sealed class SimpleFloorPlanPopulatorSystem : EntitySystem
+public sealed class SimpleFloorPlanPopulatorSystem : BaseWorldSystem
 {
     [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
     [Dependency] private readonly IRobustRandom _random = default!;

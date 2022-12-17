@@ -71,6 +71,7 @@ public class NoiseChannelConfig
 [Prototype("noiseChannel")]
 public sealed class NoiseChannelPrototype : NoiseChannelConfig, IPrototype, IInheritingPrototype
 {
+    /// <inheritdoc/>
     [IdDataField]
     public string ID { get; } = default!;
 
@@ -85,6 +86,9 @@ public sealed class NoiseChannelPrototype : NoiseChannelConfig, IPrototype, IInh
 
 }
 
+/// <summary>
+/// A wrapper around FastNoise's noise generation, using noise channel configs.
+/// </summary>
 public struct NoiseGenerator
 {
     private readonly NoiseChannelConfig _config;
@@ -133,13 +137,18 @@ public struct NoiseGenerator
     }
 }
 
+/// <summary>
+/// A processing class that adjusts the input coordinate space to a noise channel.
+/// </summary>
 [ImplicitDataDefinitionForInheritors]
 public abstract class NoiseCoordinateProcess
 {
     public abstract Vector2 Process(Vector2 inp);
 }
 
-
+/// <summary>
+/// A processing class that adjusts the final result of the noise channel.
+/// </summary>
 [ImplicitDataDefinitionForInheritors]
 public abstract class NoisePostProcess
 {

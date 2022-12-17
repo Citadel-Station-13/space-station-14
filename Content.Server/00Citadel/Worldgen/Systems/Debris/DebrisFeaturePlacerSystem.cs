@@ -10,7 +10,7 @@ using Robust.Shared.Random;
 namespace Content.Server._00Citadel.Worldgen.Systems.Debris;
 
 /// <summary>
-/// This handles...
+/// This handles placing debris within the world evenly with rng, primarily for structures like asteroid fields.
 /// </summary>
 public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 {
@@ -203,6 +203,18 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 
         return debrisPoints;
     }
+
+    private sealed class TieDebrisToFeaturePlacerEvent : DeferredSpawnDoneEvent
+    {
+        public EntityUid DebrisPlacer;
+        public Vector2 Pos;
+
+        public TieDebrisToFeaturePlacerEvent(EntityUid debrisPlacer, Vector2 pos)
+        {
+            DebrisPlacer = debrisPlacer;
+            Pos = pos;
+        }
+    }
 }
 
 /// <summary>
@@ -210,18 +222,6 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 /// </summary>
 [ByRefEvent]
 public record struct PrePlaceDebrisFeatureEvent(EntityCoordinates Coords, EntityUid Chunk, bool Cancelled = false);
-
-public sealed class TieDebrisToFeaturePlacerEvent : DeferredSpawnDoneEvent
-{
-    public EntityUid DebrisPlacer;
-    public Vector2 Pos;
-
-    public TieDebrisToFeaturePlacerEvent(EntityUid debrisPlacer, Vector2 pos)
-    {
-        DebrisPlacer = debrisPlacer;
-        Pos = pos;
-    }
-}
 
 [ByRefEvent]
 public record struct TryGetPlaceableDebrisFeatureEvent(EntityCoordinates Coords, EntityUid Chunk, string? DebrisProto = null);

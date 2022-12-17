@@ -4,7 +4,8 @@ using Robust.Shared.Serialization.Manager;
 namespace Content.Server._00Citadel.Worldgen.Prototypes;
 
 /// <summary>
-/// This is a prototype for...
+/// This is a prototype for controlling overall world generation.
+/// The components included are applied to the map that world generation is configured on.
 /// </summary>
 [Prototype("worldgenConfig")]
 public sealed class WorldgenConfigPrototype : IPrototype

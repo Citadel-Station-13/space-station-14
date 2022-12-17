@@ -5,7 +5,8 @@ using Robust.Shared.Map;
 namespace Content.Server._00Citadel.Worldgen.Systems;
 
 /// <summary>
-/// This handles...
+/// This provides some additional functions for world generation systems.
+/// Exists primarily for convenience and to avoid code duplication.
 /// </summary>
 public abstract class BaseWorldSystem : EntitySystem
 {

@@ -10,6 +10,9 @@ namespace Content.Server._00Citadel.Worldgen.Components.GC;
 [RegisterComponent, Access(typeof(GCQueueSystem))]
 public sealed class GCAbleObjectComponent : Component
 {
+    /// <summary>
+    /// Which queue to insert this object into when GCing
+    /// </summary>
     [DataField("queue", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<GCQueuePrototype>))]
     public string Queue = default!;
 }

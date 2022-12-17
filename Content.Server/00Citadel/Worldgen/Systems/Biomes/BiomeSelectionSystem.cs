@@ -7,7 +7,7 @@ using Robust.Shared.Serialization.Manager;
 namespace Content.Server._00Citadel.Worldgen.Systems.Biomes;
 
 /// <summary>
-/// This handles...
+/// This handles biome selection, evaluating which biome to apply to a chunk based on noise channels.
 /// </summary>
 public sealed class BiomeSelectionSystem : BaseWorldSystem
 {

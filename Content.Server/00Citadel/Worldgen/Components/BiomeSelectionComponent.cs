@@ -8,6 +8,10 @@ namespace Content.Server._00Citadel.Worldgen.Components;
 [RegisterComponent, Access(typeof(BiomeSelectionSystem))]
 public sealed class BiomeSelectionComponent : Component
 {
+    /// <summary>
+    /// The list of biomes available to this selector.
+    /// </summary>
+    /// <remarks>This is always sorted by priority after ComponentStartup.</remarks>
     [DataField("biomes", required: true)]
     public List<string> Biomes = new();
 }

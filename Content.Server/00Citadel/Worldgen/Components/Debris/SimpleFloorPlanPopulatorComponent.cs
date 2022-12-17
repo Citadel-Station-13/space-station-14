@@ -18,6 +18,9 @@ public sealed class SimpleFloorPlanPopulatorComponent : Component
 
     private Dictionary<string, EntitySpawnCollectionCache>? _caches = null;
 
+    /// <summary>
+    /// The spawn collections used to place entities on different tile types.
+    /// </summary>
     [ViewVariables]
     public Dictionary<string, EntitySpawnCollectionCache> Caches
     {

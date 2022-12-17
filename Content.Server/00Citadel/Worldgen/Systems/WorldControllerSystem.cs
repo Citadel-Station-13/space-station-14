@@ -13,7 +13,6 @@ namespace Content.Server._00Citadel.Worldgen.Systems;
 public sealed class WorldControllerSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;

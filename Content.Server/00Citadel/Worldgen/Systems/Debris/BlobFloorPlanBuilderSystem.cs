@@ -9,7 +9,7 @@ namespace Content.Server._00Citadel.Worldgen.Systems.Debris;
 /// <summary>
 /// This handles building the floor plans for "blobby" debris.
 /// </summary>
-public sealed class BlobFloorPlanBuilderSystem : EntitySystem
+public sealed class BlobFloorPlanBuilderSystem : BaseWorldSystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;

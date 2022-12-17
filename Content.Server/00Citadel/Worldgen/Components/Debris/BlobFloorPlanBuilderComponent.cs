@@ -12,6 +12,9 @@ namespace Content.Server._00Citadel.Worldgen.Components.Debris;
 [RegisterComponent, Access(typeof(BlobFloorPlanBuilderSystem))]
 public sealed class BlobFloorPlanBuilderComponent : Component
 {
+    /// <summary>
+    /// The tiles to be used for the floor plan.
+    /// </summary>
     [DataField("floorTileset", required: true, customTypeSerializer: typeof(PrototypeIdListSerializer<ContentTileDefinition>))]
     public List<string> FloorTileset { get; } = default!;
 

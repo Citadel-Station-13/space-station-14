@@ -9,9 +9,15 @@ namespace Content.Server._00Citadel.Worldgen.Components.Debris;
 [RegisterComponent, Access(typeof(DebrisFeaturePlacerSystem))]
 public sealed class OwnedDebrisComponent : Component
 {
+    /// <summary>
+    /// The DebrisFeaturePlacerController-having entity that owns this.
+    /// </summary>
     [DataField("owningController")]
     public EntityUid OwningController;
 
+    /// <summary>
+    /// The last location in the controller's internal structure for this debris.
+    /// </summary>
     [DataField("lastKey")]
     public Vector2 LastKey;
 }

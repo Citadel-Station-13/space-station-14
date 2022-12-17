@@ -6,7 +6,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Server._00Citadel.Worldgen.Prototypes;
 
 /// <summary>
-/// This is a prototype for...
+/// This is a prototype for biome selection, allowing the component list of a chunk to be amended based on the output of noise channels at that location.
 /// </summary>
 [Prototype("biome")]
 public sealed class BiomePrototype : IPrototype, IInheritingPrototype

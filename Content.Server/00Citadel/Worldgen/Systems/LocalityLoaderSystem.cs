@@ -7,6 +7,7 @@ namespace Content.Server._00Citadel.Worldgen.Systems;
 /// </summary>
 public sealed class LocalityLoaderSystem : BaseWorldSystem
 {
+    /// <inheritdoc/>
     public override void Update(float frameTime)
     {
         var e = EntityQueryEnumerator<LocalityLoaderComponent, TransformComponent>();

@@ -3,6 +3,9 @@ using System.Diagnostics.Contracts;
 
 namespace Content.Server._00Citadel.Worldgen;
 
+/// <summary>
+/// A struct enumerator of points on a grid within the given radius.
+/// </summary>
 public struct GridPointsNearEnumerator
 {
     private int _radius;
@@ -18,6 +21,11 @@ public struct GridPointsNearEnumerator
         _y = -_radius;
     }
 
+    /// <summary>
+    /// Gets the next point in the enumeration.
+    /// </summary>
+    /// <param name="chunk">The computed point, if any</param>
+    /// <returns>Success</returns>
     [Pure]
     public bool MoveNext([NotNullWhen(true)] out Vector2i? chunk)
     {
@@ -43,22 +51,4 @@ public struct GridPointsNearEnumerator
         _x++;
         return true;
     }
-
-    /*
-    public IEnumerable<Vector2i> ChunksNear(EntityUid ent)
-    {
-        var offs = Transform(ent).WorldPosition.Floored() / ChunkSize;
-        const int division = (WorldLoadRadius / ChunkSize) + 1;
-        for (var x = -division; x <= division; x+=1)
-        {
-            for (var y = -division; y <= division; y+=1)
-            {
-                if (x * x + y * y <= division * division)
-                {
-                    yield return offs + (x, y);
-                }
-            }
-        }
-    }
-    */
 }

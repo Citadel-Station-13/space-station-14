@@ -2,32 +2,50 @@
 
 namespace Content.Server._00Citadel.Worldgen.Tools;
 
+/// <summary>
+/// An implementation of Poisson Disk Sampling, for evenly spreading points across a given area.
+/// </summary>
 public sealed class PoissonDiskSampler
 {
     [Dependency] private readonly IRobustRandom _random = default!;
 
     public const int DefaultPointsPerIteration = 30;
 
-    public List<Vector2> SampleCircle(Vector2 center, float radius, float minimumDistance)
-    {
-        return SampleCircle(center, radius, minimumDistance, DefaultPointsPerIteration);
-    }
-
-    public List<Vector2> SampleCircle(Vector2 center, float radius, float minimumDistance, int pointsPerIteration)
+    /// <summary>
+    /// Samples for points within the given circle.
+    /// </summary>
+    /// <param name="center">Center of the sample</param>
+    /// <param name="radius">Radius of the sample</param>
+    /// <param name="minimumDistance">Minimum distance between points</param>
+    /// <param name="pointsPerIteration">The number of points placed per iteration of the algorithm</param>
+    /// <returns>A list of points</returns>
+    public List<Vector2> SampleCircle(Vector2 center, float radius, float minimumDistance, int pointsPerIteration = DefaultPointsPerIteration)
     {
         return Sample(center - new Vector2(radius, radius), center + new Vector2(radius, radius), radius, minimumDistance, pointsPerIteration);
     }
 
-    public List<Vector2> SampleRectangle(Vector2 topLeft, Vector2 lowerRight, float minimumDistance)
-    {
-        return SampleRectangle(topLeft, lowerRight, minimumDistance, DefaultPointsPerIteration);
-    }
-
-    public List<Vector2> SampleRectangle(Vector2 topLeft, Vector2 lowerRight, float minimumDistance, int pointsPerIteration)
+    /// <summary>
+    /// Samples for points within the given rectangle.
+    /// </summary>
+    /// <param name="topLeft">The top left of the rectangle</param>
+    /// <param name="lowerRight">The bottom right of the rectangle</param>
+    /// <param name="minimumDistance">Minimum distance between points</param>
+    /// <param name="pointsPerIteration">The number of points placed per iteration of the algorithm</param>
+    /// <returns>A list of points</returns>
+    public List<Vector2> SampleRectangle(Vector2 topLeft, Vector2 lowerRight, float minimumDistance, int pointsPerIteration = DefaultPointsPerIteration)
     {
         return Sample(topLeft, lowerRight, null, minimumDistance, pointsPerIteration);
     }
 
+    /// <summary>
+    /// Samples for points within the given rectangle, with an optional rejection distance.
+    /// </summary>
+    /// <param name="topLeft">The top left of the rectangle</param>
+    /// <param name="lowerRight">The bottom right of the rectangle</param>
+    /// <param name="rejectionDistance">The distance at which points will be discarded, if any</param>
+    /// <param name="minimumDistance">Minimum distance between points</param>
+    /// <param name="pointsPerIteration">The number of points placed per iteration of the algorithm</param>
+    /// <returns>A list of points</returns>
     public List<Vector2> Sample(Vector2 topLeft, Vector2 lowerRight, float? rejectionDistance,
         float minimumDistance, int pointsPerIteration)
     {

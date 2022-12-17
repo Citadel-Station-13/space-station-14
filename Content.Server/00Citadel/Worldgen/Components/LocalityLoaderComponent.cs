@@ -9,6 +9,10 @@ namespace Content.Server._00Citadel.Worldgen.Components;
 [RegisterComponent, Access(typeof(LocalityLoaderSystem))]
 public sealed class LocalityLoaderComponent : Component
 {
+    /// <summary>
+    /// The maximum distance an entity can be from the loader for it to not load.
+    /// Once a loader is closer than this, the event is fired and this component removed.
+    /// </summary>
     [DataField("loadingDistance")]
     public int LoadingDistance = 32;
 }

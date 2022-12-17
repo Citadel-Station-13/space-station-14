@@ -15,6 +15,9 @@ public sealed class SimpleDebrisSelectorComponent : Component
 
     private EntitySpawnCollectionCache? _cache;
 
+    /// <summary>
+    /// The debris entity spawn collection.
+    /// </summary>
     public EntitySpawnCollectionCache CachedDebrisTable
     {
         get
