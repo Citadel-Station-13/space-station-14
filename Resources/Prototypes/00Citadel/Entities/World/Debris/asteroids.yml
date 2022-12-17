@@ -15,6 +15,11 @@
         FloorAsteroidCoarseSand0:
           - id: AsteroidRockMining
     - type: LocalityLoader
+    - type: GCAbleObject
+      queue: SpaceDebris
+    - type: IFF
+      flags: HideLabel
+      color: "#795C34"
 
 - type: entity
   id: CitadelAsteroidDebrisSmall

@@ -1,4 +1,5 @@
-﻿using Content.Shared.Storage;
+﻿using System.Linq;
+using Content.Shared.Storage;
 using Robust.Shared.Random;
 
 namespace Content.Server._00Citadel.Worldgen.Tools;
@@ -10,10 +11,13 @@ public sealed class EntitySpawnCollectionCache
 {
     private sealed class OrGroup
     {
+        [ViewVariables]
         public List<EntitySpawnEntry> Entries { get; set; } = new();
+        [ViewVariables]
         public float CumulativeProbability { get; set; }
     }
 
+    [ViewVariables]
     private readonly Dictionary<string, OrGroup> _orGroups = new();
 
     public EntitySpawnCollectionCache(IEnumerable<EntitySpawnEntry> entries)
@@ -48,8 +52,25 @@ public sealed class EntitySpawnCollectionCache
         // handle orgroup spawns
         foreach (var spawnValue in _orGroups.Values)
         {
+            //HACK: This doesn't seem to work without this if there's only a single orgroup entry. Not sure how to fix the original math properly, but it works in every other case.
+            if (spawnValue.Entries.Count == 1)
+            {
+                var entry = spawnValue.Entries.First();
+                var amount = entry.Amount;
+
+                if (entry.MaxAmount > amount)
+                    amount = random.Next(amount, entry.MaxAmount);
+
+                for (var index = 0; index < amount; index++)
+                {
+                    spawned.Add(entry.PrototypeId);
+                }
+
+                continue;
+            }
+
             // For each group use the added cumulative probability to roll a double in that range
-            double diceRoll = random.NextDouble() * spawnValue.CumulativeProbability;
+            var diceRoll = random.NextDouble() * spawnValue.CumulativeProbability;
             // Add the entry's spawn probability to this value, if equals or lower, spawn item, otherwise continue to next item.
             var cumulative = 0.0;
             foreach (var entry in spawnValue.Entries)

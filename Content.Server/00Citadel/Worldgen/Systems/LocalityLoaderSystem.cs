@@ -16,21 +16,29 @@ public sealed class LocalityLoaderSystem : BaseWorldSystem
         while (e.MoveNext(out var loadable, out var xform))
         {
             var coords = GetChunkCoords(xform.Owner, xform);
-            var chunk = GetOrCreateChunk(coords, xform.MapUid!.Value);
-            if (!loadedQuery.TryGetComponent(chunk, out var loaded) || loaded.Loaders is null)
-                continue;
-
-            foreach (var loader in loaded.Loaders)
+            var done = false;
+            for (var i = -1; i < 2 && !done; i++)
             {
-                if (!xformQuery.TryGetComponent(loader, out var loaderXform))
-                    continue;
+                for (var j = -1; j < 2 && !done; j++)
+                {
+                    var chunk = GetOrCreateChunk(coords + (i, j), xform.MapUid!.Value);
+                    if (!loadedQuery.TryGetComponent(chunk, out var loaded) || loaded.Loaders is null)
+                        continue;
 
-                if ((loaderXform.WorldPosition - xform.WorldPosition).Length > loadable.LoadingDistance)
-                    continue;
+                    foreach (var loader in loaded.Loaders)
+                    {
+                        if (!xformQuery.TryGetComponent(loader, out var loaderXform))
+                            continue;
 
-                RaiseLocalEvent(loadable.Owner, new LocalStructureLoadedEvent());
-                RemCompDeferred<LocalityLoaderComponent>(loadable.Owner);
-                break;
+                        if ((loaderXform.WorldPosition - xform.WorldPosition).Length > loadable.LoadingDistance)
+                            continue;
+
+                        RaiseLocalEvent(loadable.Owner, new LocalStructureLoadedEvent());
+                        RemCompDeferred<LocalityLoaderComponent>(loadable.Owner);
+                        done = true;
+                        break;
+                    }
+                }
             }
         }
     }

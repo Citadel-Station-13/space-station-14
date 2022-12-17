@@ -7,7 +7,7 @@ using Robust.Shared.Random;
 namespace Content.Server._00Citadel.Worldgen.Systems.Debris;
 
 /// <summary>
-/// This handles...
+/// This handles populating simple structures, simply using a loot table for each tile.
 /// </summary>
 public sealed class SimpleFloorPlanPopulatorSystem : EntitySystem
 {

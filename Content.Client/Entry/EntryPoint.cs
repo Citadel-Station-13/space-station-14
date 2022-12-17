@@ -137,6 +137,7 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("noiseChannel");
             _prototypeManager.RegisterIgnore("worldgenConfig");
             _prototypeManager.RegisterIgnore("biome");
+            _prototypeManager.RegisterIgnore("gcQueue");
             // END CITADEL EDITS
 
             _componentFactory.GenerateNetIds();

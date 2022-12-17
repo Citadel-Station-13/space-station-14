@@ -51,7 +51,7 @@ public sealed class WorldControllerSystem : EntitySystem
         //_sawmill.Debug($"Unloaded chunk {ToPrettyString(uid)} at {coords}");
     }
 
-    private const int PlayerLoadRadius = 1;
+    private const int PlayerLoadRadius = 2;
 
     //TODO: This should be time-shared by an MC.
     /// <summary>
