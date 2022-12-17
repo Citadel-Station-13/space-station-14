@@ -1,0 +1,227 @@
+﻿using System.Linq;
+using Content.Server._00OuterRim.Worldgen2.Components;
+using Content.Server._00OuterRim.Worldgen2.Components.Debris;
+using Content.Server._00OuterRim.Worldgen2.Systems.GC;
+using Content.Server._00OuterRim.Worldgen2.Tools;
+using Robust.Shared.Map;
+using Robust.Shared.Random;
+using Robust.Shared.Utility;
+
+namespace Content.Server._00OuterRim.Worldgen2.Systems.Debris;
+
+/// <summary>
+/// This handles...
+/// </summary>
+public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
+{
+    [Dependency] private readonly DeferredSpawnSystem _deferred = default!;
+    [Dependency] private readonly GCQueueSystem _gc = default!;
+    [Dependency] private readonly NoiseIndexSystem _noiseIndex = default!;
+    [Dependency] private readonly PoissonDiskSampler _sampler = default!;
+    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+
+    private ISawmill _sawmill = default!;
+
+    /// <inheritdoc/>
+    public override void Initialize()
+    {
+        _sawmill = _logManager.GetSawmill("world.debris.feature_placer");
+        SubscribeLocalEvent<DebrisFeaturePlacerControllerComponent, WorldChunkLoadedEvent>(OnChunkLoaded);
+        SubscribeLocalEvent<DebrisFeaturePlacerControllerComponent, WorldChunkUnloadedEvent>(OnChunkUnloaded);
+        SubscribeLocalEvent<OwnedDebrisComponent, ComponentShutdown>(OnDebrisShutdown);
+        SubscribeLocalEvent<OwnedDebrisComponent, MoveEvent>(OnDebrisMove);
+        SubscribeLocalEvent<SimpleDebrisSelectorComponent, TryGetPlaceableDebrisFeatureEvent>(OnTryGetPlacableDebrisEvent);
+        SubscribeLocalEvent<TieDebrisToFeaturePlacerEvent>(OnDeferredDone);
+    }
+
+    private void OnDebrisMove(EntityUid uid, OwnedDebrisComponent component, MoveEvent args)
+    {
+        if (!HasComp<WorldChunkComponent>(component.OwningController))
+            return; // Redundant logic, prolly needs it's own handler for your custom system.
+
+        var placer = Comp<DebrisFeaturePlacerControllerComponent>(component.OwningController);
+        var xform = Transform(uid);
+        var ownerXform = Transform(component.OwningController);
+        if (xform.MapUid != ownerXform.MapUid)
+        {
+            _sawmill.Error($"Somehow debris {uid} left it's expected map! Unparenting it to avoid issues.");
+            RemCompDeferred<OwnedDebrisComponent>(uid);
+            placer.OwnedDebris.Remove(component.LastKey);
+            return;
+        }
+
+        placer.OwnedDebris.Remove(component.LastKey);
+
+        var newChunk = GetOrCreateChunk(GetChunkCoords(uid), xform.MapUid!.Value);
+        if (newChunk is null || !TryComp<DebrisFeaturePlacerControllerComponent>(newChunk, out var newPlacer))
+        {
+            // Whelp.
+            RemCompDeferred<OwnedDebrisComponent>(uid);
+            return;
+        }
+
+        newPlacer.OwnedDebris[xform.WorldPosition] = uid; // Change our owner.
+        component.OwningController = newChunk.Value;
+    }
+
+    private void OnDebrisShutdown(EntityUid uid, OwnedDebrisComponent component, ComponentShutdown args)
+    {
+        var placer = Comp<DebrisFeaturePlacerControllerComponent>(component.OwningController);
+        placer.OwnedDebris[component.LastKey] = null;
+    }
+
+    private void OnChunkUnloaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component, WorldChunkUnloadedEvent args)
+    {
+        foreach (var (_, debris) in component.OwnedDebris)
+        {
+            if (debris is not null)
+                _gc.TryGCEntity(debris.Value); // gonb.
+        }
+
+        component.DoSpawns = true;
+    }
+
+    private void OnTryGetPlacableDebrisEvent(EntityUid uid, SimpleDebrisSelectorComponent component, TryGetPlaceableDebrisFeatureEvent args)
+    {
+        if (args.DebrisProto is not null)
+            return;
+
+        var l = new List<string?>(1);
+        component.CachedDebrisTable.GetSpawns(_random, ref l);
+
+        switch (l.Count)
+        {
+            case 0:
+                return;
+            case > 1:
+                _sawmill.Warning($"Got more than one possible debris type from {uid}. List: {string.Join(", ", l)}");
+                break;
+        }
+
+        args.DebrisProto = l[0];
+    }
+
+    private void OnDeferredDone(TieDebrisToFeaturePlacerEvent ev)
+    {
+        var placer = Comp<DebrisFeaturePlacerControllerComponent>(ev.DebrisPlacer);
+        placer.OwnedDebris.Add(ev.Pos, ev.SpawnedEntity);
+        var owned = EnsureComp<OwnedDebrisComponent>(ev.DebrisPlacer);
+        owned.OwningController = ev.DebrisPlacer;
+        owned.LastKey = ev.Pos;
+    }
+
+    private void OnChunkLoaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component, ref WorldChunkLoadedEvent args)
+    {
+        if (component.DoSpawns == false)
+            return;
+
+        component.DoSpawns = false; // Don't repeat yourself if this crashes.
+
+        var densityChannel = component.DensityNoiseChannel;
+        var xform = Transform(args.Chunk);
+        if (xform.MapUid is null)
+            return; // what.
+        var density = _noiseIndex.Evaluate(uid, densityChannel, GetFloatingChunkCoords(args.Chunk, xform) + new Vector2(0.5f, 0.5f));
+        if (density == 0)
+            return;
+
+        List<Vector2>? points = null;
+
+        // If we've been loaded before, reuse the same coordinates.
+        if (component.OwnedDebris.Count != 0)
+        {
+            //TODO: Remove LINQ.
+            points = component.OwnedDebris
+                .Where(x => !Deleted(x.Value))
+                .Select(static x => x.Key)
+                .ToList();
+        }
+
+        points ??= GeneratePointsInChunk(args.Chunk, density, xform);
+
+        var failures = 0; // Avoid severe log spam.
+        foreach (var point in points)
+        {
+            var pointDensity = _noiseIndex.Evaluate(uid, densityChannel, WorldGen.WorldToChunkCoords(point));
+            if (pointDensity == 0 || _random.Prob(component.RandomCancellationChance))
+                continue;
+
+            var coords = new EntityCoordinates(xform.MapUid.Value, point);
+
+            var preEv = new PrePlaceDebrisFeatureEvent(coords, args.Chunk);
+            RaiseLocalEvent(uid, ref preEv);
+            if (uid != args.Chunk)
+                RaiseLocalEvent(args.Chunk, ref preEv);
+
+            if (preEv.Cancelled)
+                continue;
+
+            var debrisFeatureEv = new TryGetPlaceableDebrisFeatureEvent(coords, args.Chunk);
+            RaiseLocalEvent(uid, ref debrisFeatureEv);
+
+            if (debrisFeatureEv.DebrisProto == null)
+            {
+                // Try on the chunk...?
+                if (uid != args.Chunk)
+                    RaiseLocalEvent(args.Chunk, ref debrisFeatureEv);
+
+                if (debrisFeatureEv.DebrisProto == null)
+                {
+                    // Nope.
+                    failures++;
+                    continue;
+                }
+            }
+
+            _deferred.SpawnEntityDeferred(debrisFeatureEv.DebrisProto, coords, new TieDebrisToFeaturePlacerEvent(args.Chunk, point));
+        }
+
+        if (failures > 0)
+            _sawmill.Error($"Failed to place {failures} debris at chunk {args.Chunk}");
+
+    }
+
+    private List<Vector2> GeneratePointsInChunk(EntityUid chunk, float density, TransformComponent? xform = null)
+    {
+        if (!Resolve(chunk, ref xform))
+            throw new Exception("Failed to resolve transform, somehow.");
+
+        var coords = GetChunkCoords(chunk, xform);
+
+        var offs = (int)((WorldGen.ChunkSize - (density / 2)) / 2);
+
+        var topLeft = (-offs, -offs);
+        var lowerRight = (offs, offs);
+        var debrisPoints = _sampler.SampleRectangle(topLeft, lowerRight, density);
+
+
+        for (var i = 0; i < debrisPoints.Count; i++)
+        {
+            debrisPoints[i] += WorldGen.ChunkToWorldCoordsCentered(coords);
+        }
+
+        return debrisPoints;
+    }
+}
+
+/// <summary>
+/// Fired on the debris feature placer controller and the chunk, ahead of placing a debris piece.
+/// </summary>
+[ByRefEvent]
+public record struct PrePlaceDebrisFeatureEvent(EntityCoordinates Coords, EntityUid Chunk, bool Cancelled = false);
+
+public sealed class TieDebrisToFeaturePlacerEvent : DeferredSpawnDoneEvent
+{
+    public EntityUid DebrisPlacer;
+    public Vector2 Pos;
+
+    public TieDebrisToFeaturePlacerEvent(EntityUid debrisPlacer, Vector2 pos)
+    {
+        DebrisPlacer = debrisPlacer;
+        Pos = pos;
+    }
+}
+
+[ByRefEvent]
+public record struct TryGetPlaceableDebrisFeatureEvent(EntityCoordinates Coords, EntityUid Chunk, string? DebrisProto = null);
