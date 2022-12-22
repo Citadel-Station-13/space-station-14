@@ -17,6 +17,7 @@ using Content.Shared.CCVar;
 using NUnit.Framework;
 using Robust.Client;
 using Robust.Server;
+using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Exceptions;
@@ -239,6 +240,10 @@ public static class PoolManager
         {
             options.CVarOverrides[CCVars.GameMap.Name] = poolSettings.Map;
         }
+
+        // This breaks some tests.
+        // TODO: Figure out which tests this breaks.
+        options.CVarOverrides[CVars.NetBufferSize.Name] = "0";
     }
 
     /// <summary>
