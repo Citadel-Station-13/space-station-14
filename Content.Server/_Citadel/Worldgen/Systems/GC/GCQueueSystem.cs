@@ -38,7 +38,7 @@ public sealed class GCQueueSystem : EntitySystem
         overallWatch.Start();
         foreach (var (pId, queue) in queues)
         {
-            if (overallWatch.Elapsed < _maximumProcessTime)
+            if (overallWatch.Elapsed > _maximumProcessTime)
                 return;
 
             var proto = _proto.Index<GCQueuePrototype>(pId);
