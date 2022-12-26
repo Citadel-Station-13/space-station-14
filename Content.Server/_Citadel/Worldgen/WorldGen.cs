@@ -21,7 +21,7 @@ public static class WorldGen
     [Pure]
     public static Vector2i WorldToChunkCoords(Vector2i inp)
     {
-        return inp / ChunkSize;
+        return ((Vector2)inp * (1.0f/ChunkSize, 1.0f/ChunkSize)).Floored();
     }
     /// <summary>
     /// Converts world coordinates to chunk coordinates.
@@ -31,7 +31,7 @@ public static class WorldGen
     [Pure]
     public static Vector2 WorldToChunkCoords(Vector2 inp)
     {
-        return inp / ChunkSize;
+        return inp * (1.0f/ChunkSize, 1.0f/ChunkSize);
     }
 
     /// <summary>
