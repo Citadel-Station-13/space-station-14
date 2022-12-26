@@ -44,6 +44,9 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         var placer = Comp<DebrisFeaturePlacerControllerComponent>(component.OwningController);
         var xform = Transform(uid);
         var ownerXform = Transform(component.OwningController);
+        if (xform.MapUid is null || ownerXform.MapUid is null)
+            return; // not our problem
+
         if (xform.MapUid != ownerXform.MapUid)
         {
             _sawmill.Error($"Somehow debris {uid} left it's expected map! Unparenting it to avoid issues.");
@@ -53,7 +56,6 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         }
 
         placer.OwnedDebris.Remove(component.LastKey);
-
         var newChunk = GetOrCreateChunk(GetChunkCoords(uid), xform.MapUid!.Value);
         if (newChunk is null || !TryComp<DebrisFeaturePlacerControllerComponent>(newChunk, out var newPlacer))
         {
@@ -111,6 +113,14 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         var owned = EnsureComp<OwnedDebrisComponent>(ev.SpawnedEntity);
         owned.OwningController = ev.DebrisPlacer;
         owned.LastKey = ev.Pos;
+
+        var xform = Transform(ev.SpawnedEntity);
+        var realchunk = GetOrCreateChunk(GetChunkCoords(ev.SpawnedEntity), xform.MapUid!.Value);
+        if (realchunk != ev.DebrisPlacer)
+        {
+            var chunk = Comp<WorldChunkComponent>(realchunk!.Value);
+            _sawmill.Error($"Debris thinks it's in chunk {GetChunkCoords(ev.DebrisPlacer)} when it's actually in {GetChunkCoords(realchunk!.Value)}. {ev.Pos} vs {xform.WorldPosition - WorldGen.ChunkToWorldCoords(chunk.Coordinates)}");
+        }
     }
 
     private void OnChunkLoaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component, ref WorldChunkLoadedEvent args)
@@ -138,7 +148,7 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
                 .ToList();
         }
 
-        points ??= GeneratePointsInChunk(args.Chunk, density, chunk.Coordinates);
+        points ??= GeneratePointsInChunk(args.Chunk, density, chunk.Coordinates, chunk.Map);
 
         var safetyBounds = Box2.UnitCentered.Enlarged(component.SafetyZoneRadius);
         var failures = 0; // Avoid severe log spam.
@@ -186,19 +196,18 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 
     }
 
-    private List<Vector2> GeneratePointsInChunk(EntityUid chunk, float density, Vector2 coords)
+    private List<Vector2> GeneratePointsInChunk(EntityUid chunk, float density, Vector2 coords, EntityUid map)
     {
-
-        var offs = (int)((WorldGen.ChunkSize - (density / 2)) / 2);
-
+        var offs = (int)((WorldGen.ChunkSize - (WorldGen.ChunkSize / 8)) / 2);
         var topLeft = (-offs, -offs);
         var lowerRight = (offs, offs);
         var debrisPoints = _sampler.SampleRectangle(topLeft, lowerRight, density);
 
+        var realCenter = WorldGen.ChunkToWorldCoordsCentered(coords.Floored());
+
         for (var i = 0; i < debrisPoints.Count; i++)
         {
-            debrisPoints[i] = WorldGen.ChunkToWorldCoords(coords + WorldGen.WorldToChunkCoords(debrisPoints[i]));
-
+            debrisPoints[i] = realCenter + debrisPoints[i];
         }
 
         return debrisPoints;
