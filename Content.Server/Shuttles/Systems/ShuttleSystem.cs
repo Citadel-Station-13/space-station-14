@@ -39,6 +39,7 @@ namespace Content.Server.Shuttles.Systems
             InitializeFTL();
             InitializeIFF();
             InitializeImpact();
+            InitializeShipyard();
 
             SubscribeLocalEvent<ShuttleComponent, ComponentAdd>(OnShuttleAdd);
             SubscribeLocalEvent<ShuttleComponent, ComponentStartup>(OnShuttleStartup);
@@ -62,6 +63,7 @@ namespace Content.Server.Shuttles.Systems
             CleanupEmergencyConsole();
             CleanupEmergencyShuttle();
             CleanupHyperspace();
+            CleanupShipyard();
         }
 
         public override void Shutdown()
