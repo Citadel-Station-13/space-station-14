@@ -118,8 +118,8 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         var realchunk = GetOrCreateChunk(GetChunkCoords(ev.SpawnedEntity), xform.MapUid!.Value);
         if (realchunk != ev.DebrisPlacer)
         {
-            var ccomp = Comp<WorldChunkComponent>(realchunk!.Value);
-            _sawmill.Error($"Debris thinks it's in chunk {GetChunkCoords(ev.DebrisPlacer)} when it's actually in {GetChunkCoords(realchunk!.Value)}. {ev.Pos} vs {xform.WorldPosition - WorldGen.ChunkToWorldCoords(ccomp.Coordinates)}");
+            var chunk = Comp<WorldChunkComponent>(realchunk!.Value);
+            _sawmill.Error($"Debris thinks it's in chunk {GetChunkCoords(ev.DebrisPlacer)} when it's actually in {GetChunkCoords(realchunk!.Value)}. {ev.Pos} vs {xform.WorldPosition - WorldGen.ChunkToWorldCoords(chunk.Coordinates)}");
         }
     }
 
@@ -207,11 +207,7 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 
         for (var i = 0; i < debrisPoints.Count; i++)
         {
-            var unoffset = debrisPoints[i];
             debrisPoints[i] = realCenter + debrisPoints[i];
-            var realChunk = GetOrCreateChunk(WorldGen.WorldToChunkCoords(debrisPoints[i]).Floored(), map);
-            if (realChunk != chunk)
-                _sawmill.Error($"ERR: {debrisPoints[i]} in {GetChunkCoords(chunk)} should be in {GetChunkCoords(realChunk!.Value)}, input coords were {coords} in {map} with center {realCenter}. Offset within chunk is {unoffset}.");
         }
 
         return debrisPoints;
