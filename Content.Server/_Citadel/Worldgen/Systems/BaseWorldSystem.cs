@@ -28,7 +28,7 @@ public abstract class BaseWorldSystem : EntitySystem
         if (TryComp<WorldChunkComponent>(ent, out var chunk))
             return chunk.Coordinates;
 
-        return WorldGen.WorldToChunkCoords(xform.Coordinates.ToVector2i(EntityManager, _mapManager));
+        return WorldGen.WorldToChunkCoords(xform.WorldPosition).Floored();
     }
 
     /// <summary>
