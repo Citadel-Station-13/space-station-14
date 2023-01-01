@@ -1,4 +1,5 @@
 ﻿using Content.Server._Citadel.Worldgen.Tools;
+using Robust.Shared.Noise;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 
