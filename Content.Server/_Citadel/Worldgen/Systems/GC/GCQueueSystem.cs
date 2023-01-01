@@ -42,11 +42,11 @@ public sealed class GCQueueSystem : EntitySystem
                 return;
 
             var proto = _proto.Index<GCQueuePrototype>(pId);
-            if (queue.Count <= proto.MinDepthToProcess)
+            if (queue.Count < proto.MinDepthToProcess)
                 continue;
 
             queueWatch.Restart();
-            while (queueWatch.Elapsed < proto.MaximumTickTime && queue.Count > proto.MinDepthToProcess && overallWatch.Elapsed < _maximumProcessTime)
+            while (queueWatch.Elapsed < proto.MaximumTickTime && queue.Count >= proto.MinDepthToProcess && overallWatch.Elapsed < _maximumProcessTime)
             {
                 var e = queue.Dequeue();
                 if (!Deleted(e))

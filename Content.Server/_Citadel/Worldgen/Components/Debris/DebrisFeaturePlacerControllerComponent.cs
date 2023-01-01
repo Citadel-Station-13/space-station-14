@@ -31,6 +31,7 @@ public sealed class DebrisFeaturePlacerControllerComponent : Component
     [DataField("ownedDebris")]
     public Dictionary<Vector2, EntityUid?> OwnedDebris = new();
 
+
     /// <summary>
     /// Whether or not entities are already spawned.
     /// </summary>

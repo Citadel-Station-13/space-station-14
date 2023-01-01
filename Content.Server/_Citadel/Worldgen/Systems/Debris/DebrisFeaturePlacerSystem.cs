@@ -14,7 +14,6 @@ namespace Content.Server._Citadel.Worldgen.Systems.Debris;
 /// </summary>
 public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 {
-    [Dependency] private readonly DeferredSpawnSystem _deferred = default!;
     [Dependency] private readonly GCQueueSystem _gc = default!;
     [Dependency] private readonly NoiseIndexSystem _noiseIndex = default!;
     [Dependency] private readonly PoissonDiskSampler _sampler = default!;
@@ -34,7 +33,6 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         SubscribeLocalEvent<OwnedDebrisComponent, MoveEvent>(OnDebrisMove);
         SubscribeLocalEvent<OwnedDebrisComponent, TryCancelGC>(OnTryCancelGC);
         SubscribeLocalEvent<SimpleDebrisSelectorComponent, TryGetPlaceableDebrisFeatureEvent>(OnTryGetPlacableDebrisEvent);
-        SubscribeLocalEvent<TieDebrisToFeaturePlacerEvent>(OnDeferredDone);
     }
 
     private void OnTryCancelGC(EntityUid uid, OwnedDebrisComponent component, TryCancelGC args)
@@ -78,6 +76,7 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
     {
         if (!TryComp<DebrisFeaturePlacerControllerComponent>(component.OwningController, out var placer))
             return;
+
         placer.OwnedDebris[component.LastKey] = null;
     }
 
@@ -110,23 +109,6 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         }
 
         args.DebrisProto = l[0];
-    }
-
-    private void OnDeferredDone(TieDebrisToFeaturePlacerEvent ev)
-    {
-        var placer = Comp<DebrisFeaturePlacerControllerComponent>(ev.DebrisPlacer);
-        placer.OwnedDebris.Add(ev.Pos, ev.SpawnedEntity);
-        var owned = EnsureComp<OwnedDebrisComponent>(ev.SpawnedEntity);
-        owned.OwningController = ev.DebrisPlacer;
-        owned.LastKey = ev.Pos;
-
-        var xform = Transform(ev.SpawnedEntity);
-        var realchunk = GetOrCreateChunk(GetChunkCoords(ev.SpawnedEntity), xform.MapUid!.Value);
-        if (realchunk != ev.DebrisPlacer)
-        {
-            var chunk = Comp<WorldChunkComponent>(realchunk!.Value);
-            _sawmill.Error($"Debris thinks it's in chunk {GetChunkCoords(ev.DebrisPlacer)} when it's actually in {GetChunkCoords(realchunk!.Value)}. {ev.Pos} vs {xform.WorldPosition - WorldGen.ChunkToWorldCoords(chunk.Coordinates)}");
-        }
     }
 
     private void OnChunkLoaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component, ref WorldChunkLoadedEvent args)
@@ -194,7 +176,12 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
                 }
             }
 
-            _deferred.SpawnEntityDeferred(debrisFeatureEv.DebrisProto, coords, new TieDebrisToFeaturePlacerEvent(args.Chunk, point));
+            var ent = Spawn(debrisFeatureEv.DebrisProto, coords);
+            component.OwnedDebris.Add(point, ent);
+
+            var owned = EnsureComp<OwnedDebrisComponent>(ent);
+            owned.OwningController = uid;
+            owned.LastKey = point;
         }
 
         if (failures > 0)
@@ -217,18 +204,6 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         }
 
         return debrisPoints;
-    }
-
-    private sealed class TieDebrisToFeaturePlacerEvent : DeferredSpawnDoneEvent
-    {
-        public EntityUid DebrisPlacer;
-        public Vector2 Pos;
-
-        public TieDebrisToFeaturePlacerEvent(EntityUid debrisPlacer, Vector2 pos)
-        {
-            DebrisPlacer = debrisPlacer;
-            Pos = pos;
-        }
     }
 }
 
