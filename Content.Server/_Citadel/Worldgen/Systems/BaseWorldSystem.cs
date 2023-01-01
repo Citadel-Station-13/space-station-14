@@ -1,12 +1,11 @@
 ﻿using Content.Server._Citadel.Worldgen.Components;
 using JetBrains.Annotations;
-using Robust.Shared.Map;
 
 namespace Content.Server._Citadel.Worldgen.Systems;
 
 /// <summary>
-/// This provides some additional functions for world generation systems.
-/// Exists primarily for convenience and to avoid code duplication.
+///     This provides some additional functions for world generation systems.
+///     Exists primarily for convenience and to avoid code duplication.
 /// </summary>
 [PublicAPI]
 public abstract class BaseWorldSystem : EntitySystem
@@ -14,7 +13,7 @@ public abstract class BaseWorldSystem : EntitySystem
     [Dependency] private readonly WorldControllerSystem _worldController = default!;
 
     /// <summary>
-    /// Gets a chunk's coordinates in chunk space as an integer value.
+    ///     Gets a chunk's coordinates in chunk space as an integer value.
     /// </summary>
     /// <param name="ent"></param>
     /// <param name="xform"></param>
@@ -29,7 +28,7 @@ public abstract class BaseWorldSystem : EntitySystem
     }
 
     /// <summary>
-    /// Gets a chunk's coordinates in chunk space as a floating point value.
+    ///     Gets a chunk's coordinates in chunk space as a floating point value.
     /// </summary>
     /// <param name="ent"></param>
     /// <param name="xform"></param>
@@ -44,7 +43,7 @@ public abstract class BaseWorldSystem : EntitySystem
     }
 
     /// <summary>
-    /// Attempts to get a chunk, creating it if it doesn't exist.
+    ///     Attempts to get a chunk, creating it if it doesn't exist.
     /// </summary>
     /// <param name="chunk">Chunk coordinates to get the chunk entity for.</param>
     /// <param name="map">Map the chunk is in.</param>
@@ -56,3 +55,4 @@ public abstract class BaseWorldSystem : EntitySystem
         return _worldController.GetOrCreateChunk(chunk, map, controller);
     }
 }
+

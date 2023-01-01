@@ -9,16 +9,17 @@ using Robust.Shared.Timing;
 namespace Content.Server._Citadel.Worldgen.Systems;
 
 /// <summary>
-/// This handles putting together chunk entities and notifying them about important changes.
+///     This handles putting together chunk entities and notifying them about important changes.
 /// </summary>
 public sealed class WorldControllerSystem : EntitySystem
 {
+    private const int PlayerLoadRadius = 2;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Initialize()
     {
         _sawmill = _logManager.GetSawmill("world");
@@ -28,11 +29,10 @@ public sealed class WorldControllerSystem : EntitySystem
     }
 
     /// <summary>
-    /// Handles deleting chunks properly.
+    ///     Handles deleting chunks properly.
     /// </summary>
     private void OnChunkShutdown(EntityUid uid, WorldChunkComponent component, ComponentShutdown args)
     {
-
         if (!TryComp<WorldControllerComponent>(component.Map, out var controller))
             return;
 
@@ -47,7 +47,7 @@ public sealed class WorldControllerSystem : EntitySystem
     }
 
     /// <summary>
-    /// Handles the inner logic of loading a chunk, i.e. events.
+    ///     Handles the inner logic of loading a chunk, i.e. events.
     /// </summary>
     private void OnChunkLoadedCore(EntityUid uid, LoadedChunkComponent component, ComponentStartup args)
     {
@@ -61,7 +61,7 @@ public sealed class WorldControllerSystem : EntitySystem
     }
 
     /// <summary>
-    /// Handles the inner logic of unloading a chunk, i.e. events.
+    ///     Handles the inner logic of unloading a chunk, i.e. events.
     /// </summary>
     private void OnChunkUnloadedCore(EntityUid uid, LoadedChunkComponent component, ComponentShutdown args)
     {
@@ -77,9 +77,7 @@ public sealed class WorldControllerSystem : EntitySystem
         //_sawmill.Debug($"Unloaded chunk {ToPrettyString(uid)} at {coords}");
     }
 
-    private const int PlayerLoadRadius = 2;
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Update(float frameTime)
     {
         //there was a to-do here about every frame alloc but it turns out it's a nothing burger here.
@@ -87,7 +85,7 @@ public sealed class WorldControllerSystem : EntitySystem
 
         foreach (var controller in EntityQuery<WorldControllerComponent>())
         {
-            chunksToLoad[controller.Owner] = new();
+            chunksToLoad[controller.Owner] = new Dictionary<Vector2i, List<EntityUid>>();
         }
 
         var loaderEnum = EntityQueryEnumerator<WorldLoaderComponent, TransformComponent>();
@@ -103,16 +101,15 @@ public sealed class WorldControllerSystem : EntitySystem
 
             var wc = xform.WorldPosition;
             var coords = WorldGen.WorldToChunkCoords(wc);
-            var chunks = new GridPointsNearEnumerator(coords.Floored(), (int)Math.Ceiling(worldLoader.Radius / (float)WorldGen.ChunkSize) + 1);
+            var chunks = new GridPointsNearEnumerator(coords.Floored(),
+                (int) Math.Ceiling(worldLoader.Radius / (float) WorldGen.ChunkSize) + 1);
 
             var set = chunksToLoad[map];
 
             while (chunks.MoveNext(out var chunk))
             {
                 if (!set.TryGetValue(chunk.Value, out _))
-                {
-                    set[chunk.Value] = new(4);
-                }
+                    set[chunk.Value] = new List<EntityUid>(4);
                 set[chunk.Value].Add(worldLoader.Owner);
             }
         }
@@ -143,9 +140,7 @@ public sealed class WorldControllerSystem : EntitySystem
             while (chunks.MoveNext(out var chunk))
             {
                 if (!set.TryGetValue(chunk.Value, out _))
-                {
-                    set[chunk.Value] = new(4);
-                }
+                    set[chunk.Value] = new List<EntityUid>(4);
                 set[chunk.Value].Add(mind.Owner);
             }
         }
@@ -201,7 +196,7 @@ public sealed class WorldControllerSystem : EntitySystem
     }
 
     /// <summary>
-    /// Attempts to get a chunk, creating it if it doesn't exist.
+    ///     Attempts to get a chunk, creating it if it doesn't exist.
     /// </summary>
     /// <param name="chunk">Chunk coordinates to get the chunk entity for.</param>
     /// <param name="map">Map the chunk is in.</param>
@@ -211,22 +206,15 @@ public sealed class WorldControllerSystem : EntitySystem
     public EntityUid? GetOrCreateChunk(Vector2i chunk, EntityUid map, WorldControllerComponent? controller = null)
     {
         if (!Resolve(map, ref controller))
-        {
             throw new Exception($"Tried to use {ToPrettyString(map)} as a world map, without actually being one.");
-        }
 
         if (controller.Chunks.TryGetValue(chunk, out var ent))
-        {
             return ent;
-        }
-        else
-        {
-            return CreateChunkEntity(chunk, map, controller);
-        }
+        return CreateChunkEntity(chunk, map, controller);
     }
 
     /// <summary>
-    /// Constructs a new chunk entity, attaching it to the map.
+    ///     Constructs a new chunk entity, attaching it to the map.
     /// </summary>
     /// <param name="chunkCoords">The coordinates the new chunk should be initialized for.</param>
     /// <param name="map"></param>
@@ -234,14 +222,15 @@ public sealed class WorldControllerSystem : EntitySystem
     /// <returns></returns>
     private EntityUid CreateChunkEntity(Vector2i chunkCoords, EntityUid map, WorldControllerComponent controller)
     {
-        var chunk =  Spawn(controller.ChunkProto, MapCoordinates.Nullspace);
+        var chunk = Spawn(controller.ChunkProto, MapCoordinates.Nullspace);
         StartupChunkEntity(chunk, chunkCoords, map, controller);
         var md = MetaData(chunk);
         md.EntityName = $"Chunk {chunkCoords.X}/{chunkCoords.Y}";
         return chunk;
     }
 
-    private void StartupChunkEntity(EntityUid chunk, Vector2i coords, EntityUid map, WorldControllerComponent controller)
+    private void StartupChunkEntity(EntityUid chunk, Vector2i coords, EntityUid map,
+        WorldControllerComponent controller)
     {
         if (!TryComp<WorldChunkComponent>(chunk, out var chunkComponent))
         {
@@ -259,11 +248,15 @@ public sealed class WorldControllerSystem : EntitySystem
     }
 }
 
-[ByRefEvent, PublicAPI]
+[ByRefEvent]
+[PublicAPI]
 public readonly record struct WorldChunkAddedEvent(EntityUid Chunk, Vector2i Coords);
 
-[ByRefEvent, PublicAPI]
+[ByRefEvent]
+[PublicAPI]
 public readonly record struct WorldChunkLoadedEvent(EntityUid Chunk, Vector2i Coords);
 
-[ByRefEvent, PublicAPI]
+[ByRefEvent]
+[PublicAPI]
 public readonly record struct WorldChunkUnloadedEvent(EntityUid Chunk, Vector2i Coords);
+

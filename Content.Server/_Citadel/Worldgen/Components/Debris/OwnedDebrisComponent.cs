@@ -3,21 +3,21 @@
 namespace Content.Server._Citadel.Worldgen.Components.Debris;
 
 /// <summary>
-/// This is used for attaching a piece of debris to it's owning controller.
-/// Mostly just syncs deletion.
+///     This is used for attaching a piece of debris to it's owning controller.
+///     Mostly just syncs deletion.
 /// </summary>
-[RegisterComponent, Access(typeof(DebrisFeaturePlacerSystem))]
+[RegisterComponent]
+[Access(typeof(DebrisFeaturePlacerSystem))]
 public sealed class OwnedDebrisComponent : Component
 {
     /// <summary>
-    /// The DebrisFeaturePlacerController-having entity that owns this.
+    ///     The last location in the controller's internal structure for this debris.
     /// </summary>
-    [DataField("owningController")]
-    public EntityUid OwningController;
+    [DataField("lastKey")] public Vector2 LastKey;
 
     /// <summary>
-    /// The last location in the controller's internal structure for this debris.
+    ///     The DebrisFeaturePlacerController-having entity that owns this.
     /// </summary>
-    [DataField("lastKey")]
-    public Vector2 LastKey;
+    [DataField("owningController")] public EntityUid OwningController;
 }
+

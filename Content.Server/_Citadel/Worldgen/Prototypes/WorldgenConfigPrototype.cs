@@ -4,13 +4,13 @@ using Robust.Shared.Serialization.Manager;
 namespace Content.Server._Citadel.Worldgen.Prototypes;
 
 /// <summary>
-/// This is a prototype for controlling overall world generation.
-/// The components included are applied to the map that world generation is configured on.
+///     This is a prototype for controlling overall world generation.
+///     The components included are applied to the map that world generation is configured on.
 /// </summary>
 [Prototype("worldgenConfig")]
 public sealed class WorldgenConfigPrototype : IPrototype
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     [IdDataField]
     public string ID { get; } = default!;
 
@@ -22,9 +22,9 @@ public sealed class WorldgenConfigPrototype : IPrototype
 
     //TODO: Get someone to make this a method on componentregistry that does it Correctly.
     /// <summary>
-    /// Applies the worldgen config to the given target (presumably a map.)
+    ///     Applies the worldgen config to the given target (presumably a map.)
     /// </summary>
-    public void Apply(EntityUid target, ISerializationManager serialization, IEntityManager entityManager, IComponentFactory componentFactory)
+    public void Apply(EntityUid target, ISerializationManager serialization, IEntityManager entityManager)
     {
         // Add all components required by the prototype. Engine update for this whenst.
         foreach (var data in Components.Values)
@@ -35,3 +35,4 @@ public sealed class WorldgenConfigPrototype : IPrototype
         }
     }
 }
+

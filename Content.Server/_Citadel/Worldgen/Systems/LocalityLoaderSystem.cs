@@ -3,11 +3,11 @@
 namespace Content.Server._Citadel.Worldgen.Systems;
 
 /// <summary>
-/// This handles loading in objects based on distance from player, using some metadata on chunks.
+///     This handles loading in objects based on distance from player, using some metadata on chunks.
 /// </summary>
 public sealed class LocalityLoaderSystem : BaseWorldSystem
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Update(float frameTime)
     {
         var e = EntityQueryEnumerator<LocalityLoaderComponent, TransformComponent>();
@@ -50,3 +50,4 @@ public sealed class LocalityLoaderSystem : BaseWorldSystem
 }
 
 public record struct LocalStructureLoadedEvent;
+

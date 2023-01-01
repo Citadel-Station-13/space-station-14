@@ -5,14 +5,17 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Server._Citadel.Worldgen.Components.GC;
 
 /// <summary>
-/// This is used for whether or not a GCable object is "dirty". Firing GCDirtyEvent on the object is the correct way to set this up.
+///     This is used for whether or not a GCable object is "dirty". Firing GCDirtyEvent on the object is the correct way to
+///     set this up.
 /// </summary>
-[RegisterComponent, Access(typeof(GCQueueSystem))]
+[RegisterComponent]
+[Access(typeof(GCQueueSystem))]
 public sealed class GCAbleObjectComponent : Component
 {
     /// <summary>
-    /// Which queue to insert this object into when GCing
+    ///     Which queue to insert this object into when GCing
     /// </summary>
     [DataField("queue", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<GCQueuePrototype>))]
     public string Queue = default!;
 }
+
