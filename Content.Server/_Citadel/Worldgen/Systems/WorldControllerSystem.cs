@@ -2,6 +2,7 @@
 using Content.Server._Citadel.Worldgen.Components;
 using Content.Server.Ghost.Components;
 using Content.Server.Mind.Components;
+using JetBrains.Annotations;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
@@ -16,6 +17,7 @@ public sealed class WorldControllerSystem : EntitySystem
     [Dependency] private readonly ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
+
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -25,9 +27,14 @@ public sealed class WorldControllerSystem : EntitySystem
         SubscribeLocalEvent<WorldChunkComponent, ComponentShutdown>(OnChunkShutdown);
     }
 
+    /// <summary>
+    /// Handles deleting chunks properly.
+    /// </summary>
     private void OnChunkShutdown(EntityUid uid, WorldChunkComponent component, ComponentShutdown args)
     {
-        var controller = Comp<WorldControllerComponent>(component.Map);
+
+        if (!TryComp<WorldControllerComponent>(component.Map, out var controller))
+            return;
 
         if (HasComp<LoadedChunkComponent>(uid))
         {
@@ -72,11 +79,7 @@ public sealed class WorldControllerSystem : EntitySystem
 
     private const int PlayerLoadRadius = 2;
 
-    //TODO: This should be time-shared by an MC.
-    /// <summary>
-    /// Handles various tasks core to world generation, like chunk loading.
-    /// </summary>
-    /// <param name="frameTime"></param>
+    /// <inheritdoc/>
     public override void Update(float frameTime)
     {
         //there was a to-do here about every frame alloc but it turns out it's a nothing burger here.
@@ -197,6 +200,14 @@ public sealed class WorldControllerSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Attempts to get a chunk, creating it if it doesn't exist.
+    /// </summary>
+    /// <param name="chunk">Chunk coordinates to get the chunk entity for.</param>
+    /// <param name="map">Map the chunk is in.</param>
+    /// <param name="controller">The controller this chunk belongs to.</param>
+    /// <returns>A chunk, if available.</returns>
+    [Pure]
     public EntityUid? GetOrCreateChunk(Vector2i chunk, EntityUid map, WorldControllerComponent? controller = null)
     {
         if (!Resolve(map, ref controller))
@@ -210,36 +221,35 @@ public sealed class WorldControllerSystem : EntitySystem
         }
         else
         {
-            return CreateChunkEntity(chunk, map);
+            return CreateChunkEntity(chunk, map, controller);
         }
     }
 
-    private EntityUid CreateChunkEntity(Vector2i chunkCoords, EntityUid map)
+    /// <summary>
+    /// Constructs a new chunk entity, attaching it to the map.
+    /// </summary>
+    /// <param name="chunkCoords">The coordinates the new chunk should be initialized for.</param>
+    /// <param name="map"></param>
+    /// <param name="controller"></param>
+    /// <returns></returns>
+    private EntityUid CreateChunkEntity(Vector2i chunkCoords, EntityUid map, WorldControllerComponent controller)
     {
-        //var coords = new EntityCoordinates(map, WorldGen.ChunkToWorldCoordsCentered(chunkCoords));
-        var coords = MapCoordinates.Nullspace;
-        var chunk =  Spawn("CitadelChunk", coords);
-        StartupChunkEntity(chunk, chunkCoords, map);
+        var chunk =  Spawn(controller.ChunkProto, MapCoordinates.Nullspace);
+        StartupChunkEntity(chunk, chunkCoords, map, controller);
         var md = MetaData(chunk);
-        md.EntityName = $"S-{chunkCoords.X}/{chunkCoords.Y}";
+        md.EntityName = $"Chunk {chunkCoords.X}/{chunkCoords.Y}";
         return chunk;
     }
 
-    private void StartupChunkEntity(EntityUid chunk, Vector2i coords, EntityUid map)
+    private void StartupChunkEntity(EntityUid chunk, Vector2i coords, EntityUid map, WorldControllerComponent controller)
     {
-        if (!TryComp<WorldControllerComponent>(map, out var worldController))
-        {
-            _sawmill.Error($"Badly initialized chunk {ToPrettyString(chunk)}.");
-            return;
-        }
-
         if (!TryComp<WorldChunkComponent>(chunk, out var chunkComponent))
         {
-            _sawmill.Error($"Chunk {chunk} is missing WorldChunkComponent.");
+            _sawmill.Error($"Chunk {ToPrettyString(chunk)} is missing WorldChunkComponent.");
             return;
         }
 
-        ref var chunks = ref worldController.Chunks;
+        ref var chunks = ref controller.Chunks;
 
         chunks[coords] = chunk; // Add this entity to chunk index.
         chunkComponent.Coordinates = coords;
@@ -249,11 +259,11 @@ public sealed class WorldControllerSystem : EntitySystem
     }
 }
 
-[ByRefEvent]
+[ByRefEvent, PublicAPI]
 public readonly record struct WorldChunkAddedEvent(EntityUid Chunk, Vector2i Coords);
 
-[ByRefEvent]
+[ByRefEvent, PublicAPI]
 public readonly record struct WorldChunkLoadedEvent(EntityUid Chunk, Vector2i Coords);
 
-[ByRefEvent]
+[ByRefEvent, PublicAPI]
 public readonly record struct WorldChunkUnloadedEvent(EntityUid Chunk, Vector2i Coords);

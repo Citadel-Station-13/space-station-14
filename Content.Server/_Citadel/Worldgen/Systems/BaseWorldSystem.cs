@@ -8,9 +8,9 @@ namespace Content.Server._Citadel.Worldgen.Systems;
 /// This provides some additional functions for world generation systems.
 /// Exists primarily for convenience and to avoid code duplication.
 /// </summary>
+[PublicAPI]
 public abstract class BaseWorldSystem : EntitySystem
 {
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly WorldControllerSystem _worldController = default!;
 
     /// <summary>
@@ -48,6 +48,7 @@ public abstract class BaseWorldSystem : EntitySystem
     /// </summary>
     /// <param name="chunk">Chunk coordinates to get the chunk entity for.</param>
     /// <param name="map">Map the chunk is in.</param>
+    /// <param name="controller">The controller this chunk belongs to.</param>
     /// <returns>A chunk, if available.</returns>
     [Pure]
     public EntityUid? GetOrCreateChunk(Vector2i chunk, EntityUid map, WorldControllerComponent? controller = null)

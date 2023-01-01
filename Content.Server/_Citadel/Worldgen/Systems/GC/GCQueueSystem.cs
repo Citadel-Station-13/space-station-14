@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Content.Server._Citadel.Worldgen.Components.GC;
 using Content.Server._Citadel.Worldgen.Prototypes;
+using JetBrains.Annotations;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -105,11 +106,12 @@ public sealed class GCQueueSystem : EntitySystem
 /// Fired by GCQueueSystem to check if it can simply immediately GC an entity, for example if it was never fully loaded.
 /// </summary>
 /// <param name="Cancelled">Whether or not the immediate deletion attempt was cancelled.</param>
-[ByRefEvent]
+[ByRefEvent, PublicAPI]
 public record struct TryGCImmediately(bool Cancelled = false);
 
 /// <summary>
 /// Fired by GCQueueSystem to check if the collection of the given entity should be cancelled, for example it's chunk being loaded again.
 /// </summary>
 /// <param name="Cancelled">Whether or not the deletion attempt was cancelled.</param>
+[ByRefEvent, PublicAPI]
 public record struct TryCancelGC(bool Cancelled = false);

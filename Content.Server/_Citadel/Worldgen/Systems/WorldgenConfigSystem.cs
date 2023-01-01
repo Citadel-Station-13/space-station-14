@@ -33,6 +33,9 @@ public sealed class WorldgenConfigSystem : EntitySystem
         _cfg.OnValueChanged(WorldgenCVars.WorldgenConfig, s => _worldgenConfig = s, true);
     }
 
+    /// <summary>
+    /// Applies the world config to the default map if enabled.
+    /// </summary>
     private void OnLoadingMaps(RoundStartingEvent ev)
     {
         if (_enabled == false)

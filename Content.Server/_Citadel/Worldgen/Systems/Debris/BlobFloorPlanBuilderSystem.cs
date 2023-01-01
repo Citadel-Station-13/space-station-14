@@ -23,7 +23,6 @@ public sealed class BlobFloorPlanBuilderSystem : BaseWorldSystem
     private void OnBlobFloorPlanBuilderStartup(EntityUid uid, BlobFloorPlanBuilderComponent component, ComponentStartup args)
     {
         PlaceFloorplanTiles(component, Comp<MapGridComponent>(uid));
-        RaiseLocalEvent(uid, new FloorPlanBuiltEvent());
     }
 
     private void PlaceFloorplanTiles(BlobFloorPlanBuilderComponent comp, MapGridComponent grid)
@@ -80,5 +79,3 @@ public sealed class BlobFloorPlanBuilderSystem : BaseWorldSystem
         grid.SetTiles(taken.Select(x => (x.Key, x.Value)).ToList());
     }
 }
-
-public record struct FloorPlanBuiltEvent;

@@ -26,7 +26,7 @@ public sealed class NoiseRangeCarverSystem : EntitySystem
             if (low > val || high < val)
                 continue;
 
-            args.Cancelled = true;
+            args.Handled = true;
             return;
         }
     }

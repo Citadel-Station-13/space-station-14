@@ -1,4 +1,6 @@
 ﻿using Content.Server._Citadel.Worldgen.Systems;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Server._Citadel.Worldgen.Components;
 
@@ -13,4 +15,7 @@ public sealed class WorldControllerComponent : Component
     /// </summary>
     [DataField("chunks")]
     public Dictionary<Vector2i, EntityUid> Chunks = new();
+
+    [DataField("chunkProto", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string ChunkProto = "CitadelChunk";
 }
