@@ -6,14 +6,16 @@ using Robust.Shared.Console;
 namespace Content.Server.Shipyard.Commands;
 
 /// <summary>
-/// sells a shuttle.
+/// Sells a shuttle docked to a station.
 /// </summary>
 [AdminCommand(AdminFlags.Fun)]
 public sealed class SellShuttleCommand : IConsoleCommand
 {
+    [Dependency] private readonly IEntitySystemManager _entityManager = default!;
+
     public string Command => "sellshuttle";
-    public string Description => "appraises and sells a selected grid connected to selected station";
-    public string Help => $"{Command}";
+    public string Description => "Appraises and sells a selected grid connected to selected station";
+    public string Help => $"{Command} <station ID> <shuttle ID>";
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (!EntityUid.TryParse(args[0], out var stationId))
@@ -21,12 +23,14 @@ public sealed class SellShuttleCommand : IConsoleCommand
             shell.WriteError($"{args[0]} is not a valid entity uid.");
             return;
         }
+
         if (!EntityUid.TryParse(args[1], out var shuttleId))
         {
             shell.WriteError($"{args[0]} is not a valid entity uid.");
             return;
         };
-        var system = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ShipyardSystem>();
+
+        var system = _entityManager.GetEntitySystem<ShipyardSystem>();
         system.SellShuttle(stationId, shuttleId);
     }
 
@@ -39,6 +43,7 @@ public sealed class SellShuttleCommand : IConsoleCommand
             case 2:
                 return CompletionResult.FromHint(Loc.GetString("shuttle-id"));
         }
+
         return CompletionResult.Empty;
     }
 }

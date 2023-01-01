@@ -7,14 +7,15 @@ using Robust.Shared.Console;
 namespace Content.Server.Shipyard.Commands;
 
 /// <summary>
-/// purchases a shuttle.
+/// Purchases a shuttle and docks it to a station.
 /// </summary>
 [AdminCommand(AdminFlags.Fun)]
 public sealed class PurchaseShuttleCommand : IConsoleCommand
 {
+    [Dependency] private readonly IEntitySystemManager _entityManager = default!;
     public string Command => "purchaseshuttle";
-    public string Description => "spawns and docks a specified shuttle from a grid file";
-    public string Help => $"{Command}";
+    public string Description => "Spawns and docks a specified shuttle from a grid file";
+    public string Help => $"{Command} <station ID> <gridfile path>";
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (!int.TryParse(args[0], out var stationId))
@@ -24,7 +25,7 @@ public sealed class PurchaseShuttleCommand : IConsoleCommand
         }
 
         var shuttlePath = args[1];
-        var system = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ShipyardSystem>();
+        var system = _entityManager.GetEntitySystem<ShipyardSystem>();
         var station = new EntityUid(stationId);
         system.PurchaseShuttle(station, shuttlePath);
     }
@@ -39,6 +40,7 @@ public sealed class PurchaseShuttleCommand : IConsoleCommand
                 var opts = CompletionHelper.PrototypeIDs<GameMapPrototype>();
                 return CompletionResult.FromHintOptions(opts, Loc.GetString("cmd-hint-savemap-path"));
         }
+
         return CompletionResult.Empty;
     }
 }

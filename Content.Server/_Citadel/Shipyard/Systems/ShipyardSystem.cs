@@ -10,29 +10,27 @@ using Robust.Server.GameObjects;
 using Robust.Server.Maps;
 using Robust.Shared.Map;
 using Robust.Shared.GameObjects;
+using static Content.Server.Power.Pow3r.PowerState;
 
 namespace Content.Server.Shipyard.Systems
 {
 
     public sealed partial class ShipyardSystem : EntitySystem
     {
-        public MapId? ShipyardMap { get; private set; }
-
-        private float _shuttleIndex;
-
-        private const float ShuttleSpawnBuffer = 1f;
-
         [Dependency] private readonly IMapManager _mapManager = default!;
         [Dependency] private readonly PricingSystem _pricing = default!;
         [Dependency] private readonly ShuttleSystem _shuttle = default!;
         [Dependency] private readonly StationSystem _station = default!;
         [Dependency] private readonly CargoSystem _cargo = default!;
         [Dependency] private readonly MapLoaderSystem _map = default!;
+
+        public MapId? ShipyardMap { get; private set; }
+        private float _shuttleIndex;
+        private const float ShuttleSpawnBuffer = 1f;
         private ISawmill _sawmill = default!;
 
         public override void Initialize()
         {
-            base.Initialize();
             _sawmill = Logger.GetSawmill("shipyard");
             SubscribeLocalEvent<BecomesStationComponent, ComponentStartup>(OnShipyardStartup);
             SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
@@ -42,20 +40,26 @@ namespace Content.Server.Shipyard.Systems
         {
             SetupShipyard();
         }
+
         private void OnRoundRestart(RoundRestartCleanupEvent ev)
         {
             CleanupShipyard();
         }
+
         /// <summary>
         /// Adds a ship to the shipyard, calculates its price, and attempts to ftl-dock it to the given station
         /// </summary>
+        /// <param name="Station ID"></param>
+        /// <param name="Shuttle Path"></param>
         public void PurchaseShuttle(EntityUid? stationUid, string shuttlePath)
         {
-            if (!TryComp<StationDataComponent>(stationUid, out var stationData) || !TryComp<ShuttleComponent>(AddShuttle(shuttlePath), out var shuttle)) return;
+            if (!TryComp<StationDataComponent>(stationUid, out var stationData) || !TryComp<ShuttleComponent>(AddShuttle(shuttlePath), out var shuttle))
+                return;
 
             var targetGrid = _station.GetLargestGrid(stationData);
 
-            if (targetGrid == null) return;
+            if (targetGrid == null)
+                return;
 
             var price = _pricing.AppraiseGrid(shuttle.Owner, null);
 
@@ -63,16 +67,26 @@ namespace Content.Server.Shipyard.Systems
             _shuttle.TryFTLDock(shuttle, targetGrid.Value);
 
             _sawmill.Info($"Shuttle {shuttlePath} was purchased at {targetGrid} for {price} spacebucks");
-    }
+        }
+
         /// <summary>
-        /// loads a paused shuttle into the ShipyardMap from a file path
+        /// Loads a paused shuttle into the ShipyardMap from a file path
         /// </summary>
+        /// <param name="Shuttle Path"></param>
+        /// <returns></returns>
         private EntityUid? AddShuttle(string shuttlePath)
         {
-            if (ShipyardMap == null) return null;
+            if (ShipyardMap == null)
+                return null;
 
             //only dealing with a single grid at a time for now
-            var shuttle = _map.LoadGrid(ShipyardMap.Value, shuttlePath.ToString(), new MapLoadOptions() {Offset = new Vector2(500f + _shuttleIndex, 0f)});
+
+            var loadOptions = new MapLoadOptions()
+            {
+                Offset = (500f + _shuttleIndex, 0f)
+            };
+
+            var shuttle = _map.LoadGrid(ShipyardMap.Value, shuttlePath.ToString(), loadOptions);
 
             if (shuttle == null)
             {
@@ -82,15 +96,23 @@ namespace Content.Server.Shipyard.Systems
 
             _shuttleIndex += _mapManager.GetGrid(shuttle.Value).LocalAABB.Width + ShuttleSpawnBuffer;
 
-            return (EntityUid) shuttle;
+            return shuttle.Value;
     }
+
+        /// <summary>
+        /// Checks a shuttle to make sure that it is docked to the given station, and that there are no lifeforms aboard. Then it appraises the grid, outputs to the server log, and deletes the grid
+        /// </summary>
+        /// <param name="Station ID"></param>
+        /// <param name="Shuttle ID"></param>
         public void SellShuttle(EntityUid stationUid, EntityUid shuttleUid)
         {
-            if (!TryComp<StationDataComponent>(stationUid, out var stationGrid) || !HasComp<ShuttleComponent>(shuttleUid) || !TryComp<TransformComponent>(shuttleUid, out var xform) || ShipyardMap == null) return;
+            if (!TryComp<StationDataComponent>(stationUid, out var stationGrid) || !HasComp<ShuttleComponent>(shuttleUid) || !TryComp<TransformComponent>(shuttleUid, out var xform) || ShipyardMap == null)
+                return;
 
             var targetGrid = _station.GetLargestGrid(stationGrid);
 
-            if (targetGrid == null) return;
+            if (targetGrid == null)
+                return;
 
             var gridDocks = _shuttle.GetDocks((EntityUid) targetGrid);
             var shuttleDocks = _shuttle.GetDocks(shuttleUid);
@@ -106,7 +128,8 @@ namespace Content.Server.Shipyard.Systems
                         break;
                     };
                 };
-                if (isDocked) break;
+                if (isDocked)
+                    break;
             };
 
             if (!isDocked)
@@ -129,6 +152,7 @@ namespace Content.Server.Shipyard.Systems
             _mapManager.DeleteGrid(shuttleUid);
             _sawmill.Info($"Sold shuttle {shuttleUid} for {price}");
         }
+
         private void CleanupShipyard()
         {
             if (ShipyardMap == null || !_mapManager.MapExists(ShipyardMap.Value))
@@ -139,9 +163,11 @@ namespace Content.Server.Shipyard.Systems
 
             _mapManager.DeleteMap(ShipyardMap.Value);
         }
+
         private void SetupShipyard()
         {
-            if (ShipyardMap != null && _mapManager.MapExists(ShipyardMap.Value)) return;
+            if (ShipyardMap != null && _mapManager.MapExists(ShipyardMap.Value))
+                return;
 
             ShipyardMap = _mapManager.CreateMap();
 
