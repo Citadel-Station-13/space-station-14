@@ -119,6 +119,14 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         var owned = EnsureComp<OwnedDebrisComponent>(ev.SpawnedEntity);
         owned.OwningController = ev.DebrisPlacer;
         owned.LastKey = ev.Pos;
+
+        var xform = Transform(ev.SpawnedEntity);
+        var realchunk = GetOrCreateChunk(GetChunkCoords(ev.SpawnedEntity), xform.MapUid!.Value);
+        if (realchunk != ev.DebrisPlacer)
+        {
+            var chunk = Comp<WorldChunkComponent>(realchunk!.Value);
+            _sawmill.Error($"Debris thinks it's in chunk {GetChunkCoords(ev.DebrisPlacer)} when it's actually in {GetChunkCoords(realchunk!.Value)}. {ev.Pos} vs {xform.WorldPosition - WorldGen.ChunkToWorldCoords(chunk.Coordinates)}");
+        }
     }
 
     private void OnChunkLoaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component, ref WorldChunkLoadedEvent args)
