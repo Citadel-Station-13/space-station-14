@@ -32,8 +32,14 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         SubscribeLocalEvent<DebrisFeaturePlacerControllerComponent, WorldChunkUnloadedEvent>(OnChunkUnloaded);
         SubscribeLocalEvent<OwnedDebrisComponent, ComponentShutdown>(OnDebrisShutdown);
         SubscribeLocalEvent<OwnedDebrisComponent, MoveEvent>(OnDebrisMove);
+        SubscribeLocalEvent<OwnedDebrisComponent, TryCancelGC>(OnTryCancelGC);
         SubscribeLocalEvent<SimpleDebrisSelectorComponent, TryGetPlaceableDebrisFeatureEvent>(OnTryGetPlacableDebrisEvent);
         SubscribeLocalEvent<TieDebrisToFeaturePlacerEvent>(OnDeferredDone);
+    }
+
+    private void OnTryCancelGC(EntityUid uid, OwnedDebrisComponent component, TryCancelGC args)
+    {
+        args.Cancelled |= HasComp<LoadedChunkComponent>(component.OwningController);
     }
 
     private void OnDebrisMove(EntityUid uid, OwnedDebrisComponent component, ref MoveEvent args)
@@ -113,14 +119,6 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         var owned = EnsureComp<OwnedDebrisComponent>(ev.SpawnedEntity);
         owned.OwningController = ev.DebrisPlacer;
         owned.LastKey = ev.Pos;
-
-        var xform = Transform(ev.SpawnedEntity);
-        var realchunk = GetOrCreateChunk(GetChunkCoords(ev.SpawnedEntity), xform.MapUid!.Value);
-        if (realchunk != ev.DebrisPlacer)
-        {
-            var chunk = Comp<WorldChunkComponent>(realchunk!.Value);
-            _sawmill.Error($"Debris thinks it's in chunk {GetChunkCoords(ev.DebrisPlacer)} when it's actually in {GetChunkCoords(realchunk!.Value)}. {ev.Pos} vs {xform.WorldPosition - WorldGen.ChunkToWorldCoords(chunk.Coordinates)}");
-        }
     }
 
     private void OnChunkLoaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component, ref WorldChunkLoadedEvent args)

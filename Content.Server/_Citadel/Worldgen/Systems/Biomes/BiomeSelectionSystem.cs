@@ -25,7 +25,7 @@ public sealed class BiomeSelectionSystem : BaseWorldSystem
 
     private void OnWorldChunkAdded(EntityUid uid, BiomeSelectionComponent component, ref WorldChunkAddedEvent args)
     {
-        var coords = GetChunkCoords(args.Chunk);
+        var coords = args.Coords;
         foreach (var biomeId in component.Biomes)
         {
             var biome = _proto.Index<BiomePrototype>(biomeId);

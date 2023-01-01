@@ -25,9 +25,6 @@ public abstract class BaseWorldSystem : EntitySystem
         if (!Resolve(ent, ref xform))
             throw new Exception("Failed to resolve transform, somehow.");
 
-        if (TryComp<WorldChunkComponent>(ent, out var chunk))
-            return chunk.Coordinates;
-
         return WorldGen.WorldToChunkCoords(xform.WorldPosition).Floored();
     }
 
@@ -43,9 +40,6 @@ public abstract class BaseWorldSystem : EntitySystem
         if (!Resolve(ent, ref xform))
             throw new Exception("Failed to resolve transform, somehow.");
 
-        if (TryComp<WorldChunkComponent>(ent, out var chunk))
-            return chunk.Coordinates;
-
         return WorldGen.WorldToChunkCoords(xform.WorldPosition);
     }
 
@@ -56,8 +50,8 @@ public abstract class BaseWorldSystem : EntitySystem
     /// <param name="map">Map the chunk is in.</param>
     /// <returns>A chunk, if available.</returns>
     [Pure]
-    public EntityUid? GetOrCreateChunk(Vector2i chunk, EntityUid map)
+    public EntityUid? GetOrCreateChunk(Vector2i chunk, EntityUid map, WorldControllerComponent? controller = null)
     {
-        return _worldController.GetOrCreateChunk(chunk, map);
+        return _worldController.GetOrCreateChunk(chunk, map, controller);
     }
 }

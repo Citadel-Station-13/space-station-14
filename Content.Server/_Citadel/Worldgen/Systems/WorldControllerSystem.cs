@@ -22,6 +22,21 @@ public sealed class WorldControllerSystem : EntitySystem
         _sawmill = _logManager.GetSawmill("world");
         SubscribeLocalEvent<LoadedChunkComponent, ComponentStartup>(OnChunkLoadedCore);
         SubscribeLocalEvent<LoadedChunkComponent, ComponentShutdown>(OnChunkUnloadedCore);
+        SubscribeLocalEvent<WorldChunkComponent, ComponentShutdown>(OnChunkShutdown);
+    }
+
+    private void OnChunkShutdown(EntityUid uid, WorldChunkComponent component, ComponentShutdown args)
+    {
+        var controller = Comp<WorldControllerComponent>(component.Map);
+
+        if (HasComp<LoadedChunkComponent>(uid))
+        {
+            var ev = new WorldChunkUnloadedEvent(uid, component.Coordinates);
+            RaiseLocalEvent(component.Map, ref ev);
+            RaiseLocalEvent(uid, ref ev);
+        }
+
+        controller.Chunks.Remove(component.Coordinates);
     }
 
     /// <summary>
@@ -31,6 +46,7 @@ public sealed class WorldControllerSystem : EntitySystem
     {
         if (!TryComp<WorldChunkComponent>(uid, out var chunk))
             return;
+
         var ev = new WorldChunkLoadedEvent(uid, chunk.Coordinates);
         RaiseLocalEvent(chunk.Map, ref ev);
         RaiseLocalEvent(uid, ref ev);
@@ -44,6 +60,10 @@ public sealed class WorldControllerSystem : EntitySystem
     {
         if (!TryComp<WorldChunkComponent>(uid, out var chunk))
             return;
+
+        if (Terminating(uid))
+            return; // SAFETY: This is in case a loaded chunk gets deleted, to avoid double unload.
+
         var ev = new WorldChunkUnloadedEvent(uid, chunk.Coordinates);
         RaiseLocalEvent(chunk.Map, ref ev);
         RaiseLocalEvent(uid, ref ev);
@@ -59,30 +79,12 @@ public sealed class WorldControllerSystem : EntitySystem
     /// <param name="frameTime"></param>
     public override void Update(float frameTime)
     {
-        //TODO: Maybe don't allocate a big collection every frame?
+        //there was a to-do here about every frame alloc but it turns out it's a nothing burger here.
         var chunksToLoad = new Dictionary<EntityUid, Dictionary<Vector2i, List<EntityUid>>>();
 
         foreach (var controller in EntityQuery<WorldControllerComponent>())
         {
             chunksToLoad[controller.Owner] = new();
-
-            List<Vector2i>? chunksToRemove = null;
-            foreach (var (idx, chunk) in controller.Chunks)
-            {
-                if (!Deleted(chunk) && !Terminating(chunk))
-                    continue;
-
-                chunksToRemove ??= new(8);
-                chunksToRemove.Add(idx);
-            }
-
-            if (chunksToRemove is not null)
-            {
-                foreach (var chunk in chunksToRemove)
-                {
-                    controller.Chunks.Remove(chunk);
-                }
-            }
         }
 
         var loaderEnum = EntityQueryEnumerator<WorldLoaderComponent, TransformComponent>();
@@ -98,7 +100,7 @@ public sealed class WorldControllerSystem : EntitySystem
 
             var wc = xform.WorldPosition;
             var coords = WorldGen.WorldToChunkCoords(wc);
-            var chunks = new GridPointsNearEnumerator(coords.Floored(), (int)Math.Ceiling(worldLoader.Radius / (float)WorldGen.ChunkSize));
+            var chunks = new GridPointsNearEnumerator(coords.Floored(), (int)Math.Ceiling(worldLoader.Radius / (float)WorldGen.ChunkSize) + 1);
 
             var set = chunksToLoad[map];
 

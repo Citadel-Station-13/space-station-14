@@ -38,7 +38,7 @@ public sealed class GCQueueSystem : EntitySystem
         overallWatch.Start();
         foreach (var (pId, queue) in queues)
         {
-            if (overallWatch.Elapsed < _maximumProcessTime)
+            if (overallWatch.Elapsed > _maximumProcessTime)
                 return;
 
             var proto = _proto.Index<GCQueuePrototype>(pId);
@@ -46,11 +46,17 @@ public sealed class GCQueueSystem : EntitySystem
                 continue;
 
             queueWatch.Restart();
-            while (queueWatch.Elapsed < proto.MaximumTickTime && queue.Count > proto.MinDepthToProcess && queue.Count != 0 && overallWatch.Elapsed < _maximumProcessTime)
+            while (queueWatch.Elapsed < proto.MaximumTickTime && queue.Count > proto.MinDepthToProcess && overallWatch.Elapsed < _maximumProcessTime)
             {
                 var e = queue.Dequeue();
                 if (!Deleted(e))
-                    Del(e);
+                {
+                    var ev = new TryCancelGC();
+                    RaiseLocalEvent(e, ref ev);
+
+                    if (!ev.Cancelled)
+                        Del(e);
+                }
             }
         }
     }
@@ -101,3 +107,9 @@ public sealed class GCQueueSystem : EntitySystem
 /// <param name="Cancelled">Whether or not the immediate deletion attempt was cancelled.</param>
 [ByRefEvent]
 public record struct TryGCImmediately(bool Cancelled = false);
+
+/// <summary>
+/// Fired by GCQueueSystem to check if the collection of the given entity should be cancelled, for example it's chunk being loaded again.
+/// </summary>
+/// <param name="Cancelled">Whether or not the deletion attempt was cancelled.</param>
+public record struct TryCancelGC(bool Cancelled = false);
