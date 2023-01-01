@@ -1,10 +1,10 @@
 using Content.Server.Administration;
 using Content.Server.Maps;
-using Content.Server.Shuttles.Systems;
+using Content.Server.Shipyard.Systems;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server.Shuttles.Commands;
+namespace Content.Server.Shipyard.Commands;
 
 /// <summary>
 /// purchases a shuttle.
@@ -24,7 +24,7 @@ public sealed class PurchaseShuttleCommand : IConsoleCommand
         }
 
         var shuttlePath = args[1];
-        var system = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ShuttleSystem>();
+        var system = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ShipyardSystem>();
         var station = new EntityUid(stationId);
         system.PurchaseShuttle(station, shuttlePath);
     }

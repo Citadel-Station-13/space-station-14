@@ -1,9 +1,9 @@
 using Content.Server.Administration;
-using Content.Server.Shuttles.Systems;
+using Content.Server.Shipyard.Systems;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server.Shuttles.Commands;
+namespace Content.Server.Shipyard.Commands;
 
 /// <summary>
 /// sells a shuttle.
@@ -26,7 +26,7 @@ public sealed class SellShuttleCommand : IConsoleCommand
             shell.WriteError($"{args[0]} is not a valid entity uid.");
             return;
         };
-        var system = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ShuttleSystem>();
+        var system = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ShipyardSystem>();
         system.SellShuttle(stationId, shuttleId);
     }
 
