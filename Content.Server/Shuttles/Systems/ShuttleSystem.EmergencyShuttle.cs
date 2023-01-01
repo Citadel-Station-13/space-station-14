@@ -378,7 +378,7 @@ public sealed partial class ShuttleSystem
        _commsConsole.UpdateCommsConsoleInterface();
    }
 
-   public List<DockingComponent> GetDocks(EntityUid uid)
+   private List<DockingComponent> GetDocks(EntityUid uid)
    {
        var result = new List<DockingComponent>();
 
