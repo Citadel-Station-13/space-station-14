@@ -611,7 +611,7 @@ namespace Content.Server.Construction
             Completed,
 
             /// <summary>
-            ///     If Handled, this is the second (and last) time we're seeing this event, and
+            ///     If Cancelled, this is the second (and last) time we're seeing this event, and
             ///     the doAfter that was called the first time was cancelled. Handle cleanup logic now.
             /// </summary>
             Cancelled
