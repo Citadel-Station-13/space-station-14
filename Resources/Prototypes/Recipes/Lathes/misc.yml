@@ -30,14 +30,7 @@
 
 - type: latheRecipe
   id: FlashlightLantern
-<<<<<<< HEAD
-  icon:
-    sprite: Objects/Tools/flashlight.rsi
-    state: flashlight
-  result: FlashlightLantern
-=======
   result: EmptyFlashlightLantern
->>>>>>> 69971272e (lathe recipes no longer specify textures (#12944))
   completetime: 2
   materials:
     Steel: 100
