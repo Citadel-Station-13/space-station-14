@@ -5,20 +5,11 @@ using Robust.Shared.Random;
 namespace Content.Server._Citadel.Worldgen.Tools;
 
 /// <summary>
-/// A faster version of EntitySpawnCollection that requires caching to work.
+///     A faster version of EntitySpawnCollection that requires caching to work.
 /// </summary>
 public sealed class EntitySpawnCollectionCache
 {
-    private sealed class OrGroup
-    {
-        [ViewVariables]
-        public List<EntitySpawnEntry> Entries { get; set; } = new();
-        [ViewVariables]
-        public float CumulativeProbability { get; set; }
-    }
-
-    [ViewVariables]
-    private readonly Dictionary<string, OrGroup> _orGroups = new();
+    [ViewVariables] private readonly Dictionary<string, OrGroup> _orGroups = new();
 
     public EntitySpawnCollectionCache(IEnumerable<EntitySpawnEntry> entries)
     {
@@ -27,7 +18,7 @@ public sealed class EntitySpawnCollectionCache
         {
             if (!_orGroups.TryGetValue(entry.GroupId ?? string.Empty, out var orGroup))
             {
-                orGroup = new();
+                orGroup = new OrGroup();
                 _orGroups.Add(entry.GroupId ?? string.Empty, orGroup);
             }
 
@@ -94,4 +85,12 @@ public sealed class EntitySpawnCollectionCache
             }
         }
     }
+
+    private sealed class OrGroup
+    {
+        [ViewVariables] public List<EntitySpawnEntry> Entries { get; } = new();
+
+        [ViewVariables] public float CumulativeProbability { get; set; }
+    }
 }
+

@@ -4,12 +4,12 @@ using System.Diagnostics.Contracts;
 namespace Content.Server._Citadel.Worldgen;
 
 /// <summary>
-/// A struct enumerator of points on a grid within the given radius.
+///     A struct enumerator of points on a grid within the given radius.
 /// </summary>
 public struct GridPointsNearEnumerator
 {
-    private int _radius;
-    private Vector2i _center;
+    private readonly int _radius;
+    private readonly Vector2i _center;
     private int _x;
     private int _y;
 
@@ -22,7 +22,7 @@ public struct GridPointsNearEnumerator
     }
 
     /// <summary>
-    /// Gets the next point in the enumeration.
+    ///     Gets the next point in the enumeration.
     /// </summary>
     /// <param name="chunk">The computed point, if any</param>
     /// <returns>Success</returns>
@@ -36,6 +36,7 @@ public struct GridPointsNearEnumerator
                 chunk = null;
                 return false;
             }
+
             if (_x > _radius)
             {
                 _x = -_radius;
@@ -52,3 +53,4 @@ public struct GridPointsNearEnumerator
         return true;
     }
 }
+
