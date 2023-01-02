@@ -6,15 +6,15 @@ using Robust.Shared.Random;
 namespace Content.Server._Citadel.Worldgen.Systems;
 
 /// <summary>
-/// This handles the noise index.
+///     This handles the noise index.
 /// </summary>
 public sealed class NoiseIndexSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     /// <summary>
-    /// Gets a particular noise channel from the index on the given entity.
+    ///     Gets a particular noise channel from the index on the given entity.
     /// </summary>
     /// <param name="holder">The holder of the index</param>
     /// <param name="protoId">The channel prototype ID</param>
@@ -23,20 +23,15 @@ public sealed class NoiseIndexSystem : EntitySystem
     {
         var idx = EnsureComp<NoiseIndexComponent>(holder);
         if (idx.Generators.TryGetValue(protoId, out var generator))
-        {
             return generator;
-        }
-        else
-        {
-            var proto = _prototype.Index<NoiseChannelPrototype>(protoId);
-            var gen = new NoiseGenerator(proto, _random.Next());
-            idx.Generators[protoId] = gen;
-            return gen;
-        }
+        var proto = _prototype.Index<NoiseChannelPrototype>(protoId);
+        var gen = new NoiseGenerator(proto, _random.Next());
+        idx.Generators[protoId] = gen;
+        return gen;
     }
 
     /// <summary>
-    /// Attempts to evaluate the given noise channel using the generator on the given entity.
+    ///     Attempts to evaluate the given noise channel using the generator on the given entity.
     /// </summary>
     /// <param name="holder">The holder of the index</param>
     /// <param name="protoId">The channel prototype ID</param>
@@ -48,3 +43,4 @@ public sealed class NoiseIndexSystem : EntitySystem
         return gen.Evaluate(coords);
     }
 }
+

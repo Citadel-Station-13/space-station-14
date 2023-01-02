@@ -3,39 +3,40 @@
 namespace Content.Server._Citadel.Worldgen;
 
 /// <summary>
-/// Contains a few world-generation related constants and static functions.
+///     Contains a few world-generation related constants and static functions.
 /// </summary>
 public static class WorldGen
 {
     /// <summary>
-    /// The size of each chunk (isn't that self-explanatory.)
-    /// Be careful about how small you make this.
+    ///     The size of each chunk (isn't that self-explanatory.)
+    ///     Be careful about how small you make this.
     /// </summary>
     public const int ChunkSize = 128;
 
     /// <summary>
-    /// Converts world coordinates to chunk coordinates.
+    ///     Converts world coordinates to chunk coordinates.
     /// </summary>
     /// <param name="inp">World coordinates</param>
     /// <returns>Chunk coordinates</returns>
     [Pure]
     public static Vector2i WorldToChunkCoords(Vector2i inp)
     {
-        return ((Vector2)inp * (1.0f/ChunkSize, 1.0f/ChunkSize)).Floored();
+        return ((Vector2) inp * (1.0f / ChunkSize, 1.0f / ChunkSize)).Floored();
     }
+
     /// <summary>
-    /// Converts world coordinates to chunk coordinates.
+    ///     Converts world coordinates to chunk coordinates.
     /// </summary>
     /// <param name="inp">World coordinates</param>
     /// <returns>Chunk coordinates</returns>
     [Pure]
     public static Vector2 WorldToChunkCoords(Vector2 inp)
     {
-        return inp * (1.0f/ChunkSize, 1.0f/ChunkSize);
+        return inp * (1.0f / ChunkSize, 1.0f / ChunkSize);
     }
 
     /// <summary>
-    /// Converts chunk coordinates to world coordinates.
+    ///     Converts chunk coordinates to world coordinates.
     /// </summary>
     /// <param name="inp">Chunk coordinates</param>
     /// <returns>World coordinates</returns>
@@ -46,7 +47,7 @@ public static class WorldGen
     }
 
     /// <summary>
-    /// Converts chunk coordinates to world coordinates.
+    ///     Converts chunk coordinates to world coordinates.
     /// </summary>
     /// <param name="inp">Chunk coordinates</param>
     /// <returns>World coordinates</returns>
@@ -57,7 +58,7 @@ public static class WorldGen
     }
 
     /// <summary>
-    /// Converts chunk coordinates to world coordinates, getting the center of the chunk.
+    ///     Converts chunk coordinates to world coordinates, getting the center of the chunk.
     /// </summary>
     /// <param name="inp">Chunk coordinates</param>
     /// <returns>World coordinates</returns>
@@ -67,3 +68,4 @@ public static class WorldGen
         return inp * ChunkSize + Vector2i.One * (ChunkSize / 2);
     }
 }
+

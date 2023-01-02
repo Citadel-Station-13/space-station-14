@@ -11,21 +11,20 @@ using Robust.Shared.Utility;
 namespace Content.Server._Citadel.Worldgen.Systems;
 
 /// <summary>
-/// This handles configuring world generation during round start.
+///     This handles configuring world generation during round start.
 /// </summary>
 public sealed class WorldgenConfigSystem : EntitySystem
 {
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly IMapManager _map = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly ISerializationManager _ser = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
 
     private bool _enabled;
     private string _worldgenConfig = default!;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Initialize()
     {
         SubscribeLocalEvent<RoundStartingEvent>(OnLoadingMaps);
@@ -33,6 +32,9 @@ public sealed class WorldgenConfigSystem : EntitySystem
         _cfg.OnValueChanged(WorldgenCVars.WorldgenConfig, s => _worldgenConfig = s, true);
     }
 
+    /// <summary>
+    ///     Applies the world config to the default map if enabled.
+    /// </summary>
     private void OnLoadingMaps(RoundStartingEvent ev)
     {
         if (_enabled == false)
@@ -42,8 +44,9 @@ public sealed class WorldgenConfigSystem : EntitySystem
         Logger.Debug($"Trying to configure {_gameTicker.DefaultMap}, aka {ToPrettyString(target)} aka {target}");
         var cfg = _proto.Index<WorldgenConfigPrototype>(_worldgenConfig);
 
-        cfg.Apply(target, _ser, EntityManager, _componentFactory); // Apply the config to the map.
+        cfg.Apply(target, _ser, EntityManager); // Apply the config to the map.
 
         DebugTools.Assert(HasComp<WorldControllerComponent>(target));
     }
 }
+

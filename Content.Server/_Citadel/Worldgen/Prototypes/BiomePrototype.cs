@@ -5,35 +5,36 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Server._Citadel.Worldgen.Prototypes;
 
 /// <summary>
-/// This is a prototype for biome selection, allowing the component list of a chunk to be amended based on the output of noise channels at that location.
+///     This is a prototype for biome selection, allowing the component list of a chunk to be amended based on the output
+///     of noise channels at that location.
 /// </summary>
 [Prototype("biome")]
 public sealed class BiomePrototype : IPrototype, IInheritingPrototype
 {
-    /// <inheritdoc/>
-    [IdDataField]
-    public string ID { get; } = default!;
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<EntityPrototype>))]
     public string[]? Parents { get; }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     [NeverPushInheritance]
     [AbstractDataField]
     public bool Abstract { get; }
 
-    /// <summary>
-    /// Higher priority biomes get picked before lower priority ones.
-    /// </summary>
-    [DataField("priority", required: true)]
-    public int Priority { get; }
+    /// <inheritdoc />
+    [IdDataField]
+    public string ID { get; } = default!;
 
     /// <summary>
-    /// The valid ranges of noise values under which this biome can be picked.
+    ///     The valid ranges of noise values under which this biome can be picked.
     /// </summary>
     [DataField("noiseRanges", required: true)]
     public Dictionary<string, List<Vector2>> NoiseRanges = default!;
+
+    /// <summary>
+    ///     Higher priority biomes get picked before lower priority ones.
+    /// </summary>
+    [DataField("priority", required: true)]
+    public int Priority { get; }
 
     /// <summary>
     ///     The components that get added to the target map.
@@ -44,9 +45,9 @@ public sealed class BiomePrototype : IPrototype, IInheritingPrototype
 
     //TODO: Get someone to make this a method on componentregistry that does it Correctly.
     /// <summary>
-    /// Applies the worldgen config to the given target (presumably a map.)
+    ///     Applies the worldgen config to the given target (presumably a map.)
     /// </summary>
-    public void Apply(EntityUid target, ISerializationManager serialization, IEntityManager entityManager, IComponentFactory componentFactory)
+    public void Apply(EntityUid target, ISerializationManager serialization, IEntityManager entityManager)
     {
         // Add all components required by the prototype. Engine update for this whenst.
         foreach (var data in ChunkComponents.Values)
@@ -57,3 +58,4 @@ public sealed class BiomePrototype : IPrototype, IInheritingPrototype
         }
     }
 }
+
