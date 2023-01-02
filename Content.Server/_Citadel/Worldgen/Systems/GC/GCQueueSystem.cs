@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Content.Server._Citadel.Worldgen.Components.GC;
 using Content.Server._Citadel.Worldgen.Prototypes;
+using JetBrains.Annotations;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -9,7 +10,7 @@ using Robust.Shared.Timing;
 namespace Content.Server._Citadel.Worldgen.Systems.GC;
 
 /// <summary>
-/// This handles delayed garbage collection of entities, to avoid overloading the tick in particularly expensive cases.
+///     This handles delayed garbage collection of entities, to avoid overloading the tick in particularly expensive cases.
 /// </summary>
 public sealed class GCQueueSystem : EntitySystem
 {
@@ -17,18 +18,18 @@ public sealed class GCQueueSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
-    [ViewVariables]
-    private Dictionary<string, Queue<EntityUid>> _queues = new();
-    [ViewVariables]
-    private TimeSpan _maximumProcessTime = TimeSpan.Zero;
+    [ViewVariables] private TimeSpan _maximumProcessTime = TimeSpan.Zero;
 
-    /// <inheritdoc/>
+    [ViewVariables] private readonly Dictionary<string, Queue<EntityUid>> _queues = new();
+
+    /// <inheritdoc />
     public override void Initialize()
     {
-        _cfg.OnValueChanged(WorldgenCVars.GCMaximumTimeMs, s => _maximumProcessTime = TimeSpan.FromMilliseconds(s), true);
+        _cfg.OnValueChanged(WorldgenCVars.GCMaximumTimeMs, s => _maximumProcessTime = TimeSpan.FromMilliseconds(s),
+            true);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Update(float frameTime)
     {
         var overallWatch = new Stopwatch();
@@ -42,21 +43,28 @@ public sealed class GCQueueSystem : EntitySystem
                 return;
 
             var proto = _proto.Index<GCQueuePrototype>(pId);
-            if (queue.Count <= proto.MinDepthToProcess)
+            if (queue.Count < proto.MinDepthToProcess)
                 continue;
 
             queueWatch.Restart();
-            while (queueWatch.Elapsed < proto.MaximumTickTime && queue.Count > proto.MinDepthToProcess && queue.Count != 0 && overallWatch.Elapsed < _maximumProcessTime)
+            while (queueWatch.Elapsed < proto.MaximumTickTime && queue.Count >= proto.MinDepthToProcess &&
+                   overallWatch.Elapsed < _maximumProcessTime)
             {
                 var e = queue.Dequeue();
                 if (!Deleted(e))
-                    Del(e);
+                {
+                    var ev = new TryCancelGC();
+                    RaiseLocalEvent(e, ref ev);
+
+                    if (!ev.Cancelled)
+                        Del(e);
+                }
             }
         }
     }
 
     /// <summary>
-    /// Attempts to GC an entity. This functions as QueueDel if it can't.
+    ///     Attempts to GC an entity. This functions as QueueDel if it can't.
     /// </summary>
     /// <param name="e">Entity to GC.</param>
     public void TryGCEntity(EntityUid e)
@@ -96,8 +104,20 @@ public sealed class GCQueueSystem : EntitySystem
 }
 
 /// <summary>
-/// Fired by GCQueueSystem to check if it can simply immediately GC an entity, for example if it was never fully loaded.
+///     Fired by GCQueueSystem to check if it can simply immediately GC an entity, for example if it was never fully
+///     loaded.
 /// </summary>
 /// <param name="Cancelled">Whether or not the immediate deletion attempt was cancelled.</param>
 [ByRefEvent]
+[PublicAPI]
 public record struct TryGCImmediately(bool Cancelled = false);
+
+/// <summary>
+///     Fired by GCQueueSystem to check if the collection of the given entity should be cancelled, for example it's chunk
+///     being loaded again.
+/// </summary>
+/// <param name="Cancelled">Whether or not the deletion attempt was cancelled.</param>
+[ByRefEvent]
+[PublicAPI]
+public record struct TryCancelGC(bool Cancelled = false);
+

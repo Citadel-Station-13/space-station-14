@@ -7,16 +7,15 @@ using Robust.Shared.Serialization.Manager;
 namespace Content.Server._Citadel.Worldgen.Systems.Biomes;
 
 /// <summary>
-/// This handles biome selection, evaluating which biome to apply to a chunk based on noise channels.
+///     This handles biome selection, evaluating which biome to apply to a chunk based on noise channels.
 /// </summary>
 public sealed class BiomeSelectionSystem : BaseWorldSystem
 {
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
+    [Dependency] private readonly NoiseIndexSystem _noiseIdx = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly ISerializationManager _ser = default!;
-    [Dependency] private readonly NoiseIndexSystem _noiseIdx = default!;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Initialize()
     {
         SubscribeLocalEvent<BiomeSelectionComponent, ComponentStartup>(OnBiomeSelectionStartup);
@@ -25,14 +24,14 @@ public sealed class BiomeSelectionSystem : BaseWorldSystem
 
     private void OnWorldChunkAdded(EntityUid uid, BiomeSelectionComponent component, ref WorldChunkAddedEvent args)
     {
-        var coords = GetChunkCoords(args.Chunk);
+        var coords = args.Coords;
         foreach (var biomeId in component.Biomes)
         {
             var biome = _proto.Index<BiomePrototype>(biomeId);
             if (!CheckBiomeValidity(args.Chunk, biome, coords))
                 continue;
 
-            biome.Apply(args.Chunk, _ser, EntityManager, _compFactory);
+            biome.Apply(args.Chunk, _ser, EntityManager);
             return;
         }
 
@@ -73,3 +72,4 @@ public sealed class BiomeSelectionSystem : BaseWorldSystem
         return true;
     }
 }
+

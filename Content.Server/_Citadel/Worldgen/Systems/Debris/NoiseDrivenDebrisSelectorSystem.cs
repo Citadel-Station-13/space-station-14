@@ -4,7 +4,7 @@ using Robust.Shared.Random;
 namespace Content.Server._Citadel.Worldgen.Systems.Debris;
 
 /// <summary>
-/// This handles selecting debris with probability decided by a noise channel.
+///     This handles selecting debris with probability decided by a noise channel.
 /// </summary>
 public sealed class NoiseDrivenDebrisSelectorSystem : BaseWorldSystem
 {
@@ -14,22 +14,25 @@ public sealed class NoiseDrivenDebrisSelectorSystem : BaseWorldSystem
 
     private ISawmill _sawmill = default!;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Initialize()
     {
         _sawmill = _logManager.GetSawmill("world.debris.noise_debris_selector");
         // Event is forcibly ordered to always be handled after the simple selector.
-        SubscribeLocalEvent<NoiseDrivenDebrisSelectorComponent, TryGetPlaceableDebrisFeatureEvent>(OnSelectDebrisKind, after: new []{ typeof(DebrisFeaturePlacerSystem) });
+        SubscribeLocalEvent<NoiseDrivenDebrisSelectorComponent, TryGetPlaceableDebrisFeatureEvent>(OnSelectDebrisKind,
+            after: new[] {typeof(DebrisFeaturePlacerSystem)});
     }
 
-    private void OnSelectDebrisKind(EntityUid uid, NoiseDrivenDebrisSelectorComponent component, ref TryGetPlaceableDebrisFeatureEvent args)
+    private void OnSelectDebrisKind(EntityUid uid, NoiseDrivenDebrisSelectorComponent component,
+        ref TryGetPlaceableDebrisFeatureEvent args)
     {
         var coords = WorldGen.WorldToChunkCoords(args.Coords.ToMapPos(EntityManager));
         var prob = _index.Evaluate(uid, component.NoiseChannel, coords);
 
         if (prob is < 0 or > 1)
         {
-            _sawmill.Error($"Sampled a probability of {prob}, which is outside the [0, 1] range, at {coords} aka {args.Coords}.");
+            _sawmill.Error(
+                $"Sampled a probability of {prob}, which is outside the [0, 1] range, at {coords} aka {args.Coords}.");
             return;
         }
 
@@ -51,3 +54,4 @@ public sealed class NoiseDrivenDebrisSelectorSystem : BaseWorldSystem
         args.DebrisProto = l[0];
     }
 }
+

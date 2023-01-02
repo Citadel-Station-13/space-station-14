@@ -3,6 +3,7 @@ using Content.Server._Citadel.Worldgen.Components;
 using Content.Server._Citadel.Worldgen.Components.Debris;
 using Content.Server._Citadel.Worldgen.Systems.GC;
 using Content.Server._Citadel.Worldgen.Tools;
+using JetBrains.Annotations;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Random;
@@ -10,21 +11,20 @@ using Robust.Shared.Random;
 namespace Content.Server._Citadel.Worldgen.Systems.Debris;
 
 /// <summary>
-/// This handles placing debris within the world evenly with rng, primarily for structures like asteroid fields.
+///     This handles placing debris within the world evenly with rng, primarily for structures like asteroid fields.
 /// </summary>
 public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 {
-    [Dependency] private readonly DeferredSpawnSystem _deferred = default!;
     [Dependency] private readonly GCQueueSystem _gc = default!;
-    [Dependency] private readonly NoiseIndexSystem _noiseIndex = default!;
-    [Dependency] private readonly PoissonDiskSampler _sampler = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly NoiseIndexSystem _noiseIndex = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly PoissonDiskSampler _sampler = default!;
 
     private ISawmill _sawmill = default!;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Initialize()
     {
         _sawmill = _logManager.GetSawmill("world.debris.feature_placer");
@@ -32,10 +32,22 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         SubscribeLocalEvent<DebrisFeaturePlacerControllerComponent, WorldChunkUnloadedEvent>(OnChunkUnloaded);
         SubscribeLocalEvent<OwnedDebrisComponent, ComponentShutdown>(OnDebrisShutdown);
         SubscribeLocalEvent<OwnedDebrisComponent, MoveEvent>(OnDebrisMove);
-        SubscribeLocalEvent<SimpleDebrisSelectorComponent, TryGetPlaceableDebrisFeatureEvent>(OnTryGetPlacableDebrisEvent);
-        SubscribeLocalEvent<TieDebrisToFeaturePlacerEvent>(OnDeferredDone);
+        SubscribeLocalEvent<OwnedDebrisComponent, TryCancelGC>(OnTryCancelGC);
+        SubscribeLocalEvent<SimpleDebrisSelectorComponent, TryGetPlaceableDebrisFeatureEvent>(
+            OnTryGetPlacableDebrisEvent);
     }
 
+    /// <summary>
+    ///     Handles GC cancellation in case the chunk is still loaded.
+    /// </summary>
+    private void OnTryCancelGC(EntityUid uid, OwnedDebrisComponent component, ref TryCancelGC args)
+    {
+        args.Cancelled |= HasComp<LoadedChunkComponent>(component.OwningController);
+    }
+
+    /// <summary>
+    ///     Handles debris moving, and making sure it stays parented to a chunk for loading purposes.
+    /// </summary>
     private void OnDebrisMove(EntityUid uid, OwnedDebrisComponent component, ref MoveEvent args)
     {
         if (!HasComp<WorldChunkComponent>(component.OwningController))
@@ -68,14 +80,24 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         component.OwningController = newChunk.Value;
     }
 
+    /// <summary>
+    ///     Handles debris shutdown/detach.
+    /// </summary>
     private void OnDebrisShutdown(EntityUid uid, OwnedDebrisComponent component, ComponentShutdown args)
     {
         if (!TryComp<DebrisFeaturePlacerControllerComponent>(component.OwningController, out var placer))
             return;
+
         placer.OwnedDebris[component.LastKey] = null;
+        if (Terminating(uid))
+            placer.OwnedDebris.Remove(component.LastKey);
     }
 
-    private void OnChunkUnloaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component, ref WorldChunkUnloadedEvent args)
+    /// <summary>
+    ///     Queues all debris owned by the placer for garbage collection.
+    /// </summary>
+    private void OnChunkUnloaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component,
+        ref WorldChunkUnloadedEvent args)
     {
         foreach (var (_, debris) in component.OwnedDebris)
         {
@@ -86,7 +108,12 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         component.DoSpawns = true;
     }
 
-    private void OnTryGetPlacableDebrisEvent(EntityUid uid, SimpleDebrisSelectorComponent component, ref TryGetPlaceableDebrisFeatureEvent args)
+    /// <summary>
+    ///     Handles providing a debris type to place for SimpleDebrisSelectorComponent.
+    ///     This randomly picks a debris type from the EntitySpawnCollectionCache.
+    /// </summary>
+    private void OnTryGetPlacableDebrisEvent(EntityUid uid, SimpleDebrisSelectorComponent component,
+        ref TryGetPlaceableDebrisFeatureEvent args)
     {
         if (args.DebrisProto is not null)
             return;
@@ -106,24 +133,19 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         args.DebrisProto = l[0];
     }
 
-    private void OnDeferredDone(TieDebrisToFeaturePlacerEvent ev)
-    {
-        var placer = Comp<DebrisFeaturePlacerControllerComponent>(ev.DebrisPlacer);
-        placer.OwnedDebris.Add(ev.Pos, ev.SpawnedEntity);
-        var owned = EnsureComp<OwnedDebrisComponent>(ev.SpawnedEntity);
-        owned.OwningController = ev.DebrisPlacer;
-        owned.LastKey = ev.Pos;
-
-        var xform = Transform(ev.SpawnedEntity);
-        var realchunk = GetOrCreateChunk(GetChunkCoords(ev.SpawnedEntity), xform.MapUid!.Value);
-        if (realchunk != ev.DebrisPlacer)
-        {
-            var chunk = Comp<WorldChunkComponent>(realchunk!.Value);
-            _sawmill.Error($"Debris thinks it's in chunk {GetChunkCoords(ev.DebrisPlacer)} when it's actually in {GetChunkCoords(realchunk!.Value)}. {ev.Pos} vs {xform.WorldPosition - WorldGen.ChunkToWorldCoords(chunk.Coordinates)}");
-        }
-    }
-
-    private void OnChunkLoaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component, ref WorldChunkLoadedEvent args)
+    /// <summary>
+    ///     Handles loading in debris. This does the following:
+    ///     - Checks if the debris is currently supposed to do spawns, if it isn't, aborts immediately.
+    ///     - Evaluates the density value to be used for placement, if it's zero, aborts.
+    ///     - Generates the points to generate debris at, if and only if they've not been selected already by a prior load.
+    ///     - Does the following in a loop over all generated points:
+    ///         - Raises an event to check if something else wants to intercept debris placement, if the event is handled,
+    ///           continues to the next point without generating anything.
+    ///         - Raises an event to get the debris type that should be used for generation.
+    ///         - Spawns the given debris at the point, adding it to the placer's index.
+    /// </summary>
+    private void OnChunkLoaded(EntityUid uid, DebrisFeaturePlacerControllerComponent component,
+        ref WorldChunkLoadedEvent args)
     {
         if (component.DoSpawns == false)
             return;
@@ -155,12 +177,13 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         foreach (var point in points)
         {
             var pointDensity = _noiseIndex.Evaluate(uid, densityChannel, WorldGen.WorldToChunkCoords(point));
-            if ((pointDensity == 0 && component.DensityClip) || _random.Prob(component.RandomCancellationChance))
+            if (pointDensity == 0 && component.DensityClip || _random.Prob(component.RandomCancellationChance))
                 continue;
 
             var coords = new EntityCoordinates(chunk.Map, point);
 
-            if (_mapManager.FindGridsIntersecting(Comp<MapComponent>(chunk.Map).WorldMap, safetyBounds.Translated(point), false).Any())
+            if (_mapManager
+                .FindGridsIntersecting(Comp<MapComponent>(chunk.Map).WorldMap, safetyBounds.Translated(point)).Any())
                 continue; // Oops, gonna collide.
 
             var preEv = new PrePlaceDebrisFeatureEvent(coords, args.Chunk);
@@ -168,7 +191,7 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
             if (uid != args.Chunk)
                 RaiseLocalEvent(args.Chunk, ref preEv);
 
-            if (preEv.Cancelled)
+            if (preEv.Handled)
                 continue;
 
             var debrisFeatureEv = new TryGetPlaceableDebrisFeatureEvent(coords, args.Chunk);
@@ -188,17 +211,24 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
                 }
             }
 
-            _deferred.SpawnEntityDeferred(debrisFeatureEv.DebrisProto, coords, new TieDebrisToFeaturePlacerEvent(args.Chunk, point));
+            var ent = Spawn(debrisFeatureEv.DebrisProto, coords);
+            component.OwnedDebris.Add(point, ent);
+
+            var owned = EnsureComp<OwnedDebrisComponent>(ent);
+            owned.OwningController = uid;
+            owned.LastKey = point;
         }
 
         if (failures > 0)
             _sawmill.Error($"Failed to place {failures} debris at chunk {args.Chunk}");
-
     }
 
+    /// <summary>
+    ///     Generates the points to put into a chunk using a poisson disk sampler.
+    /// </summary>
     private List<Vector2> GeneratePointsInChunk(EntityUid chunk, float density, Vector2 coords, EntityUid map)
     {
-        var offs = (int)((WorldGen.ChunkSize - (WorldGen.ChunkSize / 8)) / 2);
+        var offs = (int) ((WorldGen.ChunkSize - WorldGen.ChunkSize / 8.0f) / 2.0f);
         var topLeft = (-offs, -offs);
         var lowerRight = (offs, offs);
         var debrisPoints = _sampler.SampleRectangle(topLeft, lowerRight, density);
@@ -212,25 +242,20 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
 
         return debrisPoints;
     }
-
-    private sealed class TieDebrisToFeaturePlacerEvent : DeferredSpawnDoneEvent
-    {
-        public EntityUid DebrisPlacer;
-        public Vector2 Pos;
-
-        public TieDebrisToFeaturePlacerEvent(EntityUid debrisPlacer, Vector2 pos)
-        {
-            DebrisPlacer = debrisPlacer;
-            Pos = pos;
-        }
-    }
 }
 
 /// <summary>
-/// Fired on the debris feature placer controller and the chunk, ahead of placing a debris piece.
+///     Fired directed on the debris feature placer controller and the chunk, ahead of placing a debris piece.
 /// </summary>
 [ByRefEvent]
-public record struct PrePlaceDebrisFeatureEvent(EntityCoordinates Coords, EntityUid Chunk, bool Cancelled = false);
+[PublicAPI]
+public record struct PrePlaceDebrisFeatureEvent(EntityCoordinates Coords, EntityUid Chunk, bool Handled = false);
 
+/// <summary>
+///     Fired directed on the debris feature placer controller and the chunk, to select which debris piece to place.
+/// </summary>
 [ByRefEvent]
-public record struct TryGetPlaceableDebrisFeatureEvent(EntityCoordinates Coords, EntityUid Chunk, string? DebrisProto = null);
+[PublicAPI]
+public record struct TryGetPlaceableDebrisFeatureEvent(EntityCoordinates Coords, EntityUid Chunk,
+    string? DebrisProto = null);
+

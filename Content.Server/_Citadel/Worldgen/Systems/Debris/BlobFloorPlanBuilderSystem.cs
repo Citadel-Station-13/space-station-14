@@ -7,23 +7,23 @@ using Robust.Shared.Random;
 namespace Content.Server._Citadel.Worldgen.Systems.Debris;
 
 /// <summary>
-/// This handles building the floor plans for "blobby" debris.
+///     This handles building the floor plans for "blobby" debris.
 /// </summary>
 public sealed class BlobFloorPlanBuilderSystem : BaseWorldSystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinition = default!;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Initialize()
     {
         SubscribeLocalEvent<BlobFloorPlanBuilderComponent, ComponentStartup>(OnBlobFloorPlanBuilderStartup);
     }
 
-    private void OnBlobFloorPlanBuilderStartup(EntityUid uid, BlobFloorPlanBuilderComponent component, ComponentStartup args)
+    private void OnBlobFloorPlanBuilderStartup(EntityUid uid, BlobFloorPlanBuilderComponent component,
+        ComponentStartup args)
     {
         PlaceFloorplanTiles(component, Comp<MapGridComponent>(uid));
-        RaiseLocalEvent(uid, new FloorPlanBuiltEvent());
     }
 
     private void PlaceFloorplanTiles(BlobFloorPlanBuilderComponent comp, MapGridComponent grid)
@@ -40,21 +40,21 @@ public sealed class BlobFloorPlanBuilderSystem : BaseWorldSystem
             var south = point.Offset(Direction.South);
             var east = point.Offset(Direction.East);
             var west = point.Offset(Direction.West);
-            var radsq = Math.Pow(comp.Radius, 2); // I'd put this outside but i'm not 100% certain caching it between calls is a gain.
+            var radsq = Math.Pow(comp.Radius,
+                2); // I'd put this outside but i'm not 100% certain caching it between calls is a gain.
 
             // The math done is essentially a fancy way of comparing the distance from 0,0 to the radius,
             // and skipping the sqrt normally needed for dist.
-            if (!taken.ContainsKey(north) && Math.Pow(north.X, 2) + Math.Pow(north.Y, 2)  <= radsq)
+            if (!taken.ContainsKey(north) && Math.Pow(north.X, 2) + Math.Pow(north.Y, 2) <= radsq)
                 spawnPoints.Add(north);
-            if (!taken.ContainsKey(south) && Math.Pow(south.X, 2) + Math.Pow(south.Y, 2)  <= radsq)
+            if (!taken.ContainsKey(south) && Math.Pow(south.X, 2) + Math.Pow(south.Y, 2) <= radsq)
                 spawnPoints.Add(south);
-            if (!taken.ContainsKey(east) && Math.Pow(east.X, 2) + Math.Pow(east.Y, 2)  <= radsq)
+            if (!taken.ContainsKey(east) && Math.Pow(east.X, 2) + Math.Pow(east.Y, 2) <= radsq)
                 spawnPoints.Add(east);
-            if (!taken.ContainsKey(west) && Math.Pow(west.X, 2) + Math.Pow(west.Y, 2)  <= radsq)
+            if (!taken.ContainsKey(west) && Math.Pow(west.X, 2) + Math.Pow(west.Y, 2) <= radsq)
                 spawnPoints.Add(west);
 
             taken.Add(point, new Tile(_tileDefinition[_random.Pick(comp.FloorTileset)].TileId));
-
         }
 
         PlaceTile(Vector2i.Zero);
@@ -81,4 +81,3 @@ public sealed class BlobFloorPlanBuilderSystem : BaseWorldSystem
     }
 }
 
-public record struct FloorPlanBuiltEvent;
