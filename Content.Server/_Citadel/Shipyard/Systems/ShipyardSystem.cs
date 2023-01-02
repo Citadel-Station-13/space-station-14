@@ -9,8 +9,7 @@ using Content.Shared.GameTicking;
 using Robust.Server.GameObjects;
 using Robust.Server.Maps;
 using Robust.Shared.Map;
-using Robust.Shared.GameObjects;
-using static Content.Server.Power.Pow3r.PowerState;
+using Robust.Shared.Map.Components;
 
 namespace Content.Server.Shipyard.Systems
 {
@@ -49,8 +48,8 @@ namespace Content.Server.Shipyard.Systems
         /// <summary>
         /// Adds a ship to the shipyard, calculates its price, and attempts to ftl-dock it to the given station
         /// </summary>
-        /// <param name="Station ID"></param>
-        /// <param name="Shuttle Path"></param>
+        /// <param name="stationUid">The ID of the station to dock the shuttle to</param>
+        /// <param name="shuttlePath">The path to the grid file to load. Must be a grid file!</param>
         public void PurchaseShuttle(EntityUid? stationUid, string shuttlePath)
         {
             if (!TryComp<StationDataComponent>(stationUid, out var stationData) || !TryComp<ShuttleComponent>(AddShuttle(shuttlePath), out var shuttle))
@@ -66,44 +65,57 @@ namespace Content.Server.Shipyard.Systems
             //can do FTLTravel later instead if we want to open that door
             _shuttle.TryFTLDock(shuttle, targetGrid.Value);
 
-            _sawmill.Info($"Shuttle {shuttlePath} was purchased at {targetGrid} for {price} spacebucks");
+            _sawmill.Info($"Shuttle {shuttlePath} was purchased at {targetGrid} for {price}");
         }
 
         /// <summary>
         /// Loads a paused shuttle into the ShipyardMap from a file path
         /// </summary>
-        /// <param name="Shuttle Path"></param>
-        /// <returns></returns>
+        /// <param name="shuttlePath">The path to the grid file to load. Must be a grid file!</param>
+        /// <returns>Returns the EntityUid of the shuttle</returns>
         private EntityUid? AddShuttle(string shuttlePath)
         {
             if (ShipyardMap == null)
                 return null;
-
-            //only dealing with a single grid at a time for now
 
             var loadOptions = new MapLoadOptions()
             {
                 Offset = (500f + _shuttleIndex, 0f)
             };
 
-            var shuttle = _map.LoadGrid(ShipyardMap.Value, shuttlePath.ToString(), loadOptions);
-
-            if (shuttle == null)
+            if (!_map.TryLoad(ShipyardMap.Value, shuttlePath.ToString(), out var gridList, loadOptions) || gridList == null)
             {
                 _sawmill.Error($"Unable to spawn shuttle {shuttlePath}");
                 return null;
-            }
+            };
 
-            _shuttleIndex += _mapManager.GetGrid(shuttle.Value).LocalAABB.Width + ShuttleSpawnBuffer;
+            _shuttleIndex += _mapManager.GetGrid(gridList[0]).LocalAABB.Width + ShuttleSpawnBuffer;
+            var actualGrids = new List<EntityUid>();
+            var gridQuery = GetEntityQuery<MapGridComponent>();
 
-            return shuttle.Value;
-    }
+            foreach (var ent in gridList)
+            {
+                if (!gridQuery.HasComponent(ent))
+                    continue;
+
+                actualGrids.Add(ent);
+            };
+
+            //only dealing with 1 grid at a time for now, until more is known about multi-grid drifting
+            if (actualGrids.Count != 1)
+            {
+                _sawmill.Error($"Unable to spawn shuttle {shuttlePath}");
+                return null;
+            };
+
+            return actualGrids[0];
+        }
 
         /// <summary>
         /// Checks a shuttle to make sure that it is docked to the given station, and that there are no lifeforms aboard. Then it appraises the grid, outputs to the server log, and deletes the grid
         /// </summary>
-        /// <param name="Station ID"></param>
-        /// <param name="Shuttle ID"></param>
+        /// <param name="stationUid">The ID of the station that the shuttle is docked to</param>
+        /// <param name="shuttleUid">The grid ID of the shuttle to be appraised and sold</param>
         public void SellShuttle(EntityUid stationUid, EntityUid shuttleUid)
         {
             if (!TryComp<StationDataComponent>(stationUid, out var stationGrid) || !HasComp<ShuttleComponent>(shuttleUid) || !TryComp<TransformComponent>(shuttleUid, out var xform) || ShipyardMap == null)
@@ -141,7 +153,7 @@ namespace Content.Server.Shipyard.Systems
             var mobQuery = GetEntityQuery<MobStateComponent>();
             var xformQuery = GetEntityQuery<TransformComponent>();
 
-            if (_cargo.FoundOrganics(shuttleUid, mobQuery, xformQuery) == true)
+            if (_cargo.FoundOrganics(shuttleUid, mobQuery, xformQuery))
             {
                 _sawmill.Warning($"organics on board");
                 return;
@@ -159,7 +171,7 @@ namespace Content.Server.Shipyard.Systems
             {
                 ShipyardMap = null;
                 return;
-            }
+            };
 
             _mapManager.DeleteMap(ShipyardMap.Value);
         }
