@@ -30,6 +30,19 @@ public sealed class NetworkResourceManager : SharedNetworkResourceManager
         _cfgManager.OnValueChanged(CCVars.ResourceUploadingStoreEnabled, value => StoreUploaded = value, true);
 
         AutoDelete(_cfgManager.GetCVar(CCVars.ResourceUploadingStoreDeletionDays));
+<<<<<<< HEAD
+=======
+        //_replay.OnRecordingStarted += OnStartReplayRecording;
+    }
+
+    private void OnStartReplayRecording((MappingDataNode, List<object>) initReplayData)
+    {
+        // replays will need information about currently loaded extra resources
+        foreach (var (path, data) in ContentRoot.GetAllFiles())
+        {
+            initReplayData.Item2.Add(new ReplayResourceUploadMsg { RelativePath = path, Data = data });
+        }
+>>>>>>> 89301629f (Fix #13250 (#13368))
     }
 
     /// <summary>

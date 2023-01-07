@@ -23,6 +23,19 @@ public sealed class GamePrototypeLoadManager : IGamePrototypeLoadManager
     {
         _netManager.RegisterNetMessage<GamePrototypeLoadMessage>(ClientLoadsPrototype);
         _netManager.Connected += NetManagerOnConnected;
+<<<<<<< HEAD
+=======
+        //_replay.OnRecordingStarted += OnStartReplayRecording;
+    }
+
+    private void OnStartReplayRecording((MappingDataNode, List<object>) initReplayData)
+    {
+        // replays will need information about currently loaded prototypes
+        foreach (var prototype in _loadedPrototypes)
+        {
+            initReplayData.Item2.Add(new ReplayPrototypeUploadMsg { PrototypeData = prototype });
+        }
+>>>>>>> 89301629f (Fix #13250 (#13368))
     }
 
     public void SendGamePrototype(string prototype)
