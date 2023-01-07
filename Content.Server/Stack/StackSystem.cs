@@ -92,10 +92,51 @@ namespace Content.Server.Stack
         /// </summary>
         public List<EntityUid> SpawnMultiple(string entityPrototype, int amount, EntityCoordinates spawnPosition)
         {
+<<<<<<< HEAD
             var proto = _prototypeManager.Index<EntityPrototype>(entityPrototype);
             proto.TryGetComponent<StackComponent>(out var stack);
             var maxCountPerStack = GetMaxCount(stack);
             var spawnedEnts = new List<EntityUid>();
+=======
+            var list = new List<EntityUid>();
+            if (amount <= 0)
+                return list;
+
+            // At least 1 is being spawned, we'll use the first to extract otherwise inaccessible information
+            // ??TODO??: Indexing the entity proto and extracting from its component registry could possibly be better?
+            // it doesn't look like it would save LOC even compressing this to a single loop and I'm not sure what other issues it might introduce
+            var firstSpawn = Spawn(materialProto.StackEntity, coordinates);
+            list.Add(firstSpawn);
+
+            if (!TryComp<StackComponent>(firstSpawn, out var stack) || stack.StackTypeId == null)
+                return list;
+
+            if (!TryComp<MaterialComponent>(firstSpawn, out var material))
+                return list;
+
+            int maxCountPerStack = _sharedStack.GetMaxCount(stack);
+            var materialPerStack = material.Materials[materialProto.ID];
+
+            var materialPerMaxCount = maxCountPerStack * materialPerStack;
+
+            // no material duping for you
+            if (amount < materialPerStack)
+            {
+                Del(firstSpawn);
+                return list;
+            }
+
+            if (amount > materialPerMaxCount)
+            {
+                SetCount(firstSpawn, maxCountPerStack, stack);
+                amount -= materialPerMaxCount;
+            } else
+            {
+                SetCount(firstSpawn, (amount / materialPerStack), stack);
+                amount = 0;
+            }
+
+>>>>>>> 1f5bae751 (MaterialComponent cleanup (#13326))
             while (amount > 0)
             {
                 var entity = Spawn(entityPrototype, spawnPosition);

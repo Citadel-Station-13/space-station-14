@@ -1,6 +1,10 @@
 - type: material
   id: Biomass
+<<<<<<< HEAD
   stack: Biomass
+=======
+  stackEntity: MaterialBiomass1
+>>>>>>> 1f5bae751 (MaterialComponent cleanup (#13326))
   name: materials-biomass
   icon: { sprite: /Textures/Objects/Misc/monkeycube.rsi, state: cube }
   color: "#8A9A5B"
@@ -8,7 +12,11 @@
 
 - type: material
   id: Cloth
+<<<<<<< HEAD
   stack: Cloth
+=======
+  stackEntity: MaterialCloth1
+>>>>>>> 1f5bae751 (MaterialComponent cleanup (#13326))
   name: materials-cloth
   icon: { sprite: /Textures/Objects/Materials/materials.rsi, state: cloth }
   color: "#e7e7de"
@@ -16,7 +24,11 @@
 
 - type: material
   id: Durathread
+<<<<<<< HEAD
   stack: Durathread
+=======
+  stackEntity: MaterialDurathread1
+>>>>>>> 1f5bae751 (MaterialComponent cleanup (#13326))
   name: materials-durathread
   icon: { sprite: /Textures/Objects/Materials/materials.rsi, state: durathread }
   color: "#8291a1"
@@ -24,7 +36,11 @@
 
 - type: material
   id: Plasma
+<<<<<<< HEAD
   stack: Plasma
+=======
+  stackEntity: SheetPlasma1
+>>>>>>> 1f5bae751 (MaterialComponent cleanup (#13326))
   name: materials-plasma
   icon: { sprite: Objects/Materials/Sheets/other.rsi, state: plasma }
   color: "#7e009e"
@@ -32,7 +48,11 @@
 
 - type: material
   id: Plastic
+<<<<<<< HEAD
   stack: Plastic
+=======
+  stackEntity: SheetPlastic1
+>>>>>>> 1f5bae751 (MaterialComponent cleanup (#13326))
   name: materials-plastic
   icon: { sprite: Objects/Materials/Sheets/other.rsi, state: plastic }
   color: "#d9d9d9"
@@ -40,7 +60,11 @@
 
 - type: material
   id: Wood
+<<<<<<< HEAD
   stack: WoodPlank
+=======
+  stackEntity: MaterialWoodPlank1
+>>>>>>> 1f5bae751 (MaterialComponent cleanup (#13326))
   name: materials-wood
   icon: { sprite: Objects/Materials/materials.rsi, state: wood }
   color: "#966F33"
@@ -48,7 +72,11 @@
 
 - type: material
   id: Uranium
+<<<<<<< HEAD
   stack: Uranium
+=======
+  stackEntity: SheetUranium1
+>>>>>>> 1f5bae751 (MaterialComponent cleanup (#13326))
   name: materials-uranium
   icon: { sprite: Objects/Materials/Sheets/other.rsi, state: uranium }
   color: "#32a852"

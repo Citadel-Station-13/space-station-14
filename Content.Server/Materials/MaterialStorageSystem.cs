@@ -15,6 +15,27 @@ public sealed class MaterialStorageSystem : SharedMaterialStorageSystem
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+<<<<<<< HEAD
+=======
+    [Dependency] private readonly StackSystem _stackSystem = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<MaterialStorageComponent, MachineDeconstructedEvent>(OnDeconstructed);
+    }
+
+    private void OnDeconstructed(EntityUid uid, MaterialStorageComponent component, MachineDeconstructedEvent args)
+    {
+        if (!component.DropOnDeconstruct)
+            return;
+
+        foreach (var (material, amount) in component.Storage)
+        {
+            _stackSystem.SpawnMultipleFromMaterial(amount, material, Transform(uid).Coordinates);
+        }
+    }
+>>>>>>> 1f5bae751 (MaterialComponent cleanup (#13326))
 
     public override bool TryInsertMaterialEntity(EntityUid user, EntityUid toInsert, EntityUid receiver, MaterialStorageComponent? component = null)
     {
