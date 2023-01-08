@@ -55,6 +55,11 @@ namespace Content.Client.ContextMenu.UI
             RootMenu.Close();
             CancelOpen?.Cancel();
             CancelClose?.Cancel();
+<<<<<<< HEAD:Content.Client/ContextMenu/UI/ContextMenuPresenter.cs
+=======
+            OnContextClosed?.Invoke();
+            RootMenu.Close();
+>>>>>>> 2ee5eaeee (Fix context menu not fully closing (#13376)):Content.Client/ContextMenu/UI/ContextMenuUIController.cs
         }
 
         /// <summary>
