@@ -70,6 +70,10 @@ namespace Content.Client.ContextMenu.UI
             _xform = _entityManager.EntitySysManager.GetEntitySystem<TransformSystem>();
 
             _cfg.OnValueChanged(CCVars.EntityMenuGroupingType, OnGroupingChanged, true);
+<<<<<<< HEAD:Content.Client/ContextMenu/UI/EntityMenuPresenter.cs
+=======
+            _context.OnContextKeyEvent += OnKeyBindDown;
+>>>>>>> 5761ba8e0 (Fix verb menu not loading (#13454)):Content.Client/ContextMenu/UI/EntityMenuUIController.cs
 
             CommandBinds.Builder
                 .Bind(EngineKeyFunctions.UseSecondary,  new PointerInputCmdHandler(HandleOpenEntityMenu, outsidePrediction: true))
@@ -80,7 +84,13 @@ namespace Content.Client.ContextMenu.UI
         {
             base.Dispose();
             Elements.Clear();
+<<<<<<< HEAD:Content.Client/ContextMenu/UI/EntityMenuPresenter.cs
             CommandBinds.Unregister<EntityMenuPresenter>();
+=======
+            _cfg.UnsubValueChanged(CCVars.EntityMenuGroupingType, OnGroupingChanged);
+            _context.OnContextKeyEvent -= OnKeyBindDown;
+            CommandBinds.Unregister<EntityMenuUIController>();
+>>>>>>> 5761ba8e0 (Fix verb menu not loading (#13454)):Content.Client/ContextMenu/UI/EntityMenuUIController.cs
         }
 
         /// <summary>
@@ -102,7 +112,11 @@ namespace Content.Client.ContextMenu.UI
             RootMenu.Open(box);
         }
 
+<<<<<<< HEAD:Content.Client/ContextMenu/UI/EntityMenuPresenter.cs
         public override void OnKeyBindDown(ContextMenuElement element, GUIBoundKeyEventArgs args)
+=======
+        public void OnKeyBindDown(ContextMenuElement element, GUIBoundKeyEventArgs args)
+>>>>>>> 5761ba8e0 (Fix verb menu not loading (#13454)):Content.Client/ContextMenu/UI/EntityMenuUIController.cs
         {
             base.OnKeyBindDown(element, args);
             if (element is not EntityMenuElement entityElement)
@@ -229,7 +243,15 @@ namespace Content.Client.ContextMenu.UI
                 foreach (var entity in entityGroups[0])
                 {
                     var element = new EntityMenuElement(entity);
+<<<<<<< HEAD:Content.Client/ContextMenu/UI/EntityMenuPresenter.cs
                     AddElement(RootMenu, element);
+=======
+                    element.SubMenu = new ContextMenuPopup(_context, element);
+                    element.SubMenu.OnPopupOpen += () => _verb.OpenVerbMenu(entity, popup: element.SubMenu);
+                    element.SubMenu.OnPopupHide += element.SubMenu.MenuBody.DisposeAllChildren;
+
+                    _context.AddElement(_context.RootMenu, element);
+>>>>>>> 5761ba8e0 (Fix verb menu not loading (#13454)):Content.Client/ContextMenu/UI/EntityMenuUIController.cs
                     Elements.TryAdd(entity, element);
                 }
                 return;
@@ -245,7 +267,14 @@ namespace Content.Client.ContextMenu.UI
 
                 // this group only has a single entity, add a simple menu element
                 var element = new EntityMenuElement(group[0]);
+<<<<<<< HEAD:Content.Client/ContextMenu/UI/EntityMenuPresenter.cs
                 AddElement(RootMenu, element);
+=======
+                element.SubMenu = new ContextMenuPopup(_context, element);
+                element.SubMenu.OnPopupOpen += () => _verb.OpenVerbMenu(group[0], popup: element.SubMenu);
+                element.SubMenu.OnPopupHide += element.SubMenu.MenuBody.DisposeAllChildren;
+                _context.AddElement(_context.RootMenu, element);
+>>>>>>> 5761ba8e0 (Fix verb menu not loading (#13454)):Content.Client/ContextMenu/UI/EntityMenuUIController.cs
                 Elements.TryAdd(group[0], element);
             }
 
