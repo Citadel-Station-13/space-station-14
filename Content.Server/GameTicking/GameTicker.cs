@@ -13,6 +13,10 @@ using Content.Server.Station.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
 using Content.Shared.GameTicking;
+<<<<<<< HEAD
+=======
+using Content.Shared.Mobs.Systems;
+>>>>>>> eeb5b17b3 (Mobstate Refactor (#13389))
 using Content.Shared.Roles;
 using Robust.Server;
 using Robust.Server.GameObjects;
@@ -34,6 +38,11 @@ namespace Content.Server.GameTicking
     public sealed partial class GameTicker : SharedGameTicker
     {
         [Dependency] private readonly MapLoaderSystem _map = default!;
+<<<<<<< HEAD
+=======
+        [Dependency] private readonly MobStateSystem _mobState = default!;
+        [Dependency] private readonly SharedTransformSystem _transform = default!;
+>>>>>>> eeb5b17b3 (Mobstate Refactor (#13389))
 
         [ViewVariables] private bool _initialized;
         [ViewVariables] private bool _postInitialized;
