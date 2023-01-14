@@ -17,6 +17,25 @@ public abstract class AlertsSystem : EntitySystem
             : null;
     }
 
+<<<<<<< HEAD
+=======
+    public short GetSeverityRange(AlertType alertType)
+    {
+        var minSeverity = _typeToAlert[alertType].MinSeverity;
+        return (short)MathF.Min(minSeverity,_typeToAlert[alertType].MaxSeverity - minSeverity);
+    }
+
+    public short GetMaxSeverity(AlertType alertType)
+    {
+        return _typeToAlert[alertType].MaxSeverity;
+    }
+
+    public short GetMinSeverity(AlertType alertType)
+    {
+        return _typeToAlert[alertType].MinSeverity;
+    }
+
+>>>>>>> f42bbb226 (Fixing MobState issues (#13465))
     public bool IsShowingAlert(EntityUid euid, AlertType alertType)
     {
         if (!EntityManager.TryGetComponent(euid, out AlertsComponent? alertsComponent))
