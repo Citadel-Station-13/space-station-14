@@ -25,13 +25,39 @@ namespace Content.Shared.Decals
             base.Initialize();
 
             SubscribeLocalEvent<GridInitializeEvent>(OnGridInitialize);
+<<<<<<< HEAD
+=======
+            SubscribeLocalEvent<DecalGridComponent, ComponentAdd>(OnCompAdd);
+            SubscribeLocalEvent<DecalGridComponent, ComponentStartup>(OnCompStartup);
+            SubscribeLocalEvent<DecalGridComponent, ComponentRemove>(OnCompRemove);
+>>>>>>> e5b4b70e4 (Fix decals (#13491))
         }
 
         private void OnGridInitialize(GridInitializeEvent msg)
         {
+<<<<<<< HEAD
             var comp = EntityManager.EnsureComponent<DecalGridComponent>(msg.EntityUid);
             ChunkIndex[msg.EntityUid] = new();
             foreach (var (indices, decals) in comp.ChunkCollection.ChunkCollection)
+=======
+            EnsureComp<DecalGridComponent>(msg.EntityUid);
+        }
+
+        protected virtual void OnCompRemove(EntityUid uid, DecalGridComponent component, ComponentRemove args)
+        {
+            ChunkIndex.Remove(uid);
+        }
+
+        protected virtual void OnCompAdd(EntityUid uid, DecalGridComponent component, ComponentAdd args)
+        {
+            ChunkIndex[uid] = new();
+        }
+
+        private void OnCompStartup(EntityUid uid, DecalGridComponent component, ComponentStartup args)
+        {
+            var index = ChunkIndex[uid];
+            foreach (var (indices, decals) in component.ChunkCollection.ChunkCollection)
+>>>>>>> e5b4b70e4 (Fix decals (#13491))
             {
                 foreach (var uid in decals.Decals.Keys)
                 {
