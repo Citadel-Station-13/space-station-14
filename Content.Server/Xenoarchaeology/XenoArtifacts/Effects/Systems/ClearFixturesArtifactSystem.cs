@@ -24,13 +24,17 @@ public sealed class ClearFixturesArtifactSystem : EntitySystem
         if (!TryComp<FixturesComponent>(uid, out var fixtures))
             return;
 
-        foreach (var (_, fixture) in fixtures.Fixtures)
+        foreach (var fixture in fixtures.Fixtures.Values)
         {
+<<<<<<< HEAD:Content.Server/Xenoarchaeology/XenoArtifacts/Effects/Systems/ClearFixturesArtifactSystem.cs
             if (!fixture.Hard)
                 continue;
 
             fixture.CollisionLayer = (int) CollisionGroup.None;
             fixture.CollisionMask = (int) CollisionGroup.None;
+=======
+            _physics.SetHard(uid, fixture, false, fixtures);
+>>>>>>> bf79d7666 (Content update for ECS physics (#13291)):Content.Server/Xenoarchaeology/XenoArtifacts/Effects/Systems/PhasingArtifactSystem.cs
         }
     }
 }
