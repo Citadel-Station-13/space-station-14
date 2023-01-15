@@ -44034,7 +44034,11 @@ entities:
     parent: 8364
     type: Transform
 - uid: 6971
+<<<<<<< HEAD
   type: ChairFolding
+=======
+  type: SpaceVillainArcadeFilled
+>>>>>>> a047de01f (Prize limit for Arcades (#12855))
   components:
   - rot: 3.141592653589793 rad
     pos: 20.5,-6.5
@@ -51740,7 +51744,11 @@ entities:
     parent: 8364
     type: Transform
 - uid: 8201
+<<<<<<< HEAD
   type: WallReinforced
+=======
+  type: SpaceVillainArcadeFilled
+>>>>>>> a047de01f (Prize limit for Arcades (#12855))
   components:
   - pos: 6.5,-23.5
     parent: 8364
@@ -101446,7 +101454,7 @@ entities:
     parent: 8364
     type: Transform
 - uid: 11688
-  type: SpaceVillainArcade
+  type: SpaceVillainArcadeFilled
   components:
   - pos: 72.5,12.5
     parent: 8364
@@ -201420,7 +201428,7 @@ entities:
     parent: 8364
     type: Transform
 - uid: 25880
-  type: SpaceVillainArcade
+  type: SpaceVillainArcadeFilled
   components:
   - pos: 18.5,-10.5
     parent: 8364
@@ -202215,7 +202223,3336 @@ entities:
 - uid: 26035
   type: WeaponCapacitorRecharger
   components:
+<<<<<<< HEAD
   - pos: -1.5,-5.5
+=======
+  - pos: 77.5,-4.5
+    parent: 8364
+    type: Transform
+- uid: 26036
+  type: FirelockEdge
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 75.5,-9.5
+    parent: 8364
+    type: Transform
+- uid: 26037
+  type: FirelockEdge
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 75.5,-8.5
+    parent: 8364
+    type: Transform
+- uid: 26038
+  type: FirelockEdge
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 53.5,-9.5
+    parent: 8364
+    type: Transform
+- uid: 26039
+  type: FirelockEdge
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 53.5,-8.5
+    parent: 8364
+    type: Transform
+- uid: 26040
+  type: TableGlass
+  components:
+  - pos: 37.5,-36.5
+    parent: 8364
+    type: Transform
+- uid: 26041
+  type: GasAnalyzer
+  components:
+  - pos: 37.528275,-36.43644
+    parent: 8364
+    type: Transform
+- uid: 26042
+  type: TableGlass
+  components:
+  - pos: 29.5,-32.5
+    parent: 8364
+    type: Transform
+- uid: 26043
+  type: TableGlass
+  components:
+  - pos: 30.5,-32.5
+    parent: 8364
+    type: Transform
+- uid: 26044
+  type: TableGlass
+  components:
+  - pos: 31.5,-32.5
+    parent: 8364
+    type: Transform
+- uid: 26045
+  type: BoxSyringe
+  components:
+  - pos: 29.377853,-32.327065
+    parent: 8364
+    type: Transform
+- uid: 26046
+  type: FirelockGlass
+  components:
+  - pos: 48.5,-43.5
+    parent: 8364
+    type: Transform
+- uid: 26047
+  type: FirelockGlass
+  components:
+  - pos: 49.5,-43.5
+    parent: 8364
+    type: Transform
+- uid: 26048
+  type: FirelockGlass
+  components:
+  - pos: 82.5,-54.5
+    parent: 8364
+    type: Transform
+- uid: 26049
+  type: SpawnVendingMachineRestockFoodDrink
+  components:
+  - pos: -31.5,-43.5
+    parent: 8364
+    type: Transform
+- uid: 26050
+  type: FirelockGlass
+  components:
+  - pos: -23.5,-47.5
+    parent: 8364
+    type: Transform
+- uid: 26051
+  type: FirelockGlass
+  components:
+  - pos: -3.5,-49.5
+    parent: 8364
+    type: Transform
+- uid: 26052
+  type: FirelockGlass
+  components:
+  - pos: 56.5,5.5
+    parent: 8364
+    type: Transform
+- uid: 26053
+  type: FirelockGlass
+  components:
+  - pos: 64.5,9.5
+    parent: 8364
+    type: Transform
+- uid: 26054
+  type: BoxPillCanister
+  components:
+  - pos: 29.91919,-32.34986
+    parent: 8364
+    type: Transform
+- uid: 26055
+  type: ClosetBase
+  components:
+  - pos: 47.5,-29.5
+    parent: 8364
+    type: Transform
+- uid: 26056
+  type: LockerMedical
+  components:
+  - pos: 43.5,-29.5
+    parent: 8364
+    type: Transform
+- uid: 26057
+  type: FaxMachineBase
+  components:
+  - pos: 33.5,-20.5
+    parent: 8364
+    type: Transform
+  - name: Medical
+    type: FaxMachine
+- uid: 26058
+  type: CarpetBlue
+  components:
+  - pos: 43.5,-45.5
+    parent: 8364
+    type: Transform
+- uid: 26059
+  type: CarpetBlue
+  components:
+  - pos: 44.5,-44.5
+    parent: 8364
+    type: Transform
+- uid: 26060
+  type: CarpetBlue
+  components:
+  - pos: 44.5,-45.5
+    parent: 8364
+    type: Transform
+- uid: 26061
+  type: CarpetBlue
+  components:
+  - pos: 45.5,-44.5
+    parent: 8364
+    type: Transform
+- uid: 26062
+  type: CarpetBlue
+  components:
+  - pos: 45.5,-45.5
+    parent: 8364
+    type: Transform
+- uid: 26063
+  type: VendingMachineGeneDrobe
+  components:
+  - flags: SessionSpecific
+    type: MetaData
+  - pos: 42.5,-36.5
+    parent: 8364
+    type: Transform
+- uid: 26064
+  type: FirelockGlass
+  components:
+  - pos: -7.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26065
+  type: FirelockGlass
+  components:
+  - pos: 6.5,-77.5
+    parent: 8364
+    type: Transform
+- uid: 26066
+  type: FirelockGlass
+  components:
+  - pos: 6.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26067
+  type: FirelockGlass
+  components:
+  - pos: 6.5,-67.5
+    parent: 8364
+    type: Transform
+- uid: 26068
+  type: FirelockGlass
+  components:
+  - pos: 6.5,-66.5
+    parent: 8364
+    type: Transform
+- uid: 26069
+  type: FirelockGlass
+  components:
+  - pos: 6.5,-65.5
+    parent: 8364
+    type: Transform
+- uid: 26070
+  type: FirelockEdge
+  components:
+  - pos: 8.5,-69.5
+    parent: 8364
+    type: Transform
+- uid: 26071
+  type: FirelockEdge
+  components:
+  - pos: 9.5,-69.5
+    parent: 8364
+    type: Transform
+- uid: 26072
+  type: ComfyChair
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 6.5,-26.5
+    parent: 8364
+    type: Transform
+- uid: 26073
+  type: SmokingPipeFilledTobacco
+  components:
+  - pos: 6.4571357,-27.269932
+    parent: 8364
+    type: Transform
+- uid: 26074
+  type: SmokingPipeFilledTobacco
+  components:
+  - pos: 6.6133857,-27.457432
+    parent: 8364
+    type: Transform
+- uid: 26075
+  type: BookEscalationSecurity
+  components:
+  - pos: 10.473087,-27.290308
+    parent: 8364
+    type: Transform
+- uid: 26076
+  type: WindowReinforcedDirectional
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 6.5,-23.5
+    parent: 8364
+    type: Transform
+- uid: 26077
+  type: WindowReinforcedDirectional
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 7.5,-23.5
+    parent: 8364
+    type: Transform
+- uid: 26078
+  type: WindowReinforcedDirectional
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 8.5,-23.5
+    parent: 8364
+    type: Transform
+- uid: 26079
+  type: WindowReinforcedDirectional
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 8.5,-23.5
+    parent: 8364
+    type: Transform
+- uid: 26080
+  type: WindowReinforcedDirectional
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 6.5,-23.5
+    parent: 8364
+    type: Transform
+- uid: 26081
+  type: CableHV
+  components:
+  - pos: 9.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26082
+  type: CableHV
+  components:
+  - pos: 8.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26083
+  type: PosterLegitNanotrasenLogo
+  components:
+  - pos: 5.5,-23.5
+    parent: 8364
+    type: Transform
+- uid: 26084
+  type: CableHV
+  components:
+  - pos: 10.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26085
+  type: CableHV
+  components:
+  - pos: 11.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26086
+  type: CableHV
+  components:
+  - pos: 12.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26087
+  type: CableHV
+  components:
+  - pos: 13.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26088
+  type: CableHV
+  components:
+  - pos: 13.5,-77.5
+    parent: 8364
+    type: Transform
+- uid: 26089
+  type: CableMV
+  components:
+  - pos: -9.5,-70.5
+    parent: 8364
+    type: Transform
+- uid: 26090
+  type: CableMV
+  components:
+  - pos: -9.5,-71.5
+    parent: 8364
+    type: Transform
+- uid: 26091
+  type: CableMV
+  components:
+  - pos: -9.5,-72.5
+    parent: 8364
+    type: Transform
+- uid: 26092
+  type: CableMV
+  components:
+  - pos: -9.5,-73.5
+    parent: 8364
+    type: Transform
+- uid: 26093
+  type: CableMV
+  components:
+  - pos: -9.5,-74.5
+    parent: 8364
+    type: Transform
+- uid: 26094
+  type: CableMV
+  components:
+  - pos: -9.5,-75.5
+    parent: 8364
+    type: Transform
+- uid: 26095
+  type: CableMV
+  components:
+  - pos: -9.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26096
+  type: CableMV
+  components:
+  - pos: -10.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26097
+  type: CableMV
+  components:
+  - pos: -11.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26098
+  type: CableMV
+  components:
+  - pos: -12.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26099
+  type: CableMV
+  components:
+  - pos: -13.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26100
+  type: CableMV
+  components:
+  - pos: -14.5,-76.5
+    parent: 8364
+    type: Transform
+- uid: 26101
+  type: CableMV
+  components:
+  - pos: -14.5,-77.5
+    parent: 8364
+    type: Transform
+- uid: 26102
+  type: CableMV
+  components:
+  - pos: -14.5,-78.5
+    parent: 8364
+    type: Transform
+- uid: 26103
+  type: CableMV
+  components:
+  - pos: -13.5,-78.5
+    parent: 8364
+    type: Transform
+- uid: 26104
+  type: CableMV
+  components:
+  - pos: -12.5,-78.5
+    parent: 8364
+    type: Transform
+- uid: 26105
+  type: CableMV
+  components:
+  - pos: -11.5,-78.5
+    parent: 8364
+    type: Transform
+- uid: 26106
+  type: CableMV
+  components:
+  - pos: -10.5,-78.5
+    parent: 8364
+    type: Transform
+- uid: 26107
+  type: CableMV
+  components:
+  - pos: -10.5,-79.5
+    parent: 8364
+    type: Transform
+- uid: 26108
+  type: CableMV
+  components:
+  - pos: -9.5,-79.5
+    parent: 8364
+    type: Transform
+- uid: 26109
+  type: FirelockGlass
+  components:
+  - pos: -17.5,-34.5
+    parent: 8364
+    type: Transform
+- uid: 26110
+  type: FirelockGlass
+  components:
+  - pos: -18.5,-34.5
+    parent: 8364
+    type: Transform
+- uid: 26111
+  type: FirelockGlass
+  components:
+  - pos: 7.5,29.5
+    parent: 8364
+    type: Transform
+- uid: 26112
+  type: FirelockGlass
+  components:
+  - pos: 7.5,21.5
+    parent: 8364
+    type: Transform
+- uid: 26113
+  type: FirelockGlass
+  components:
+  - pos: 7.5,20.5
+    parent: 8364
+    type: Transform
+- uid: 26114
+  type: FirelockGlass
+  components:
+  - pos: 7.5,19.5
+    parent: 8364
+    type: Transform
+- uid: 26115
+  type: FirelockGlass
+  components:
+  - pos: -15.5,20.5
+    parent: 8364
+    type: Transform
+- uid: 26116
+  type: Carpet
+  components:
+  - pos: 26.5,-0.5
+    parent: 8364
+    type: Transform
+- uid: 26117
+  type: Carpet
+  components:
+  - pos: 26.5,-1.5
+    parent: 8364
+    type: Transform
+- uid: 26118
+  type: Carpet
+  components:
+  - pos: 26.5,-2.5
+    parent: 8364
+    type: Transform
+- uid: 26119
+  type: Carpet
+  components:
+  - pos: 27.5,-0.5
+    parent: 8364
+    type: Transform
+- uid: 26120
+  type: Carpet
+  components:
+  - pos: 27.5,-1.5
+    parent: 8364
+    type: Transform
+- uid: 26121
+  type: Carpet
+  components:
+  - pos: 27.5,-2.5
+    parent: 8364
+    type: Transform
+- uid: 26122
+  type: RandomFoodSingle
+  components:
+  - pos: 24.5,-5.5
+    parent: 8364
+    type: Transform
+- uid: 26123
+  type: SpawnPointServiceWorker
+  components:
+  - pos: 21.5,-5.5
+    parent: 8364
+    type: Transform
+- uid: 26124
+  type: SpawnPointServiceWorker
+  components:
+  - pos: 24.5,-7.5
+    parent: 8364
+    type: Transform
+- uid: 26125
+  type: CigPackRed
+  components:
+  - pos: 31.422329,-23.460308
+    parent: 8364
+    type: Transform
+- uid: 26126
+  type: CheapLighter
+  components:
+  - pos: 31.641079,-23.335308
+    parent: 8364
+    type: Transform
+- uid: 26127
+  type: FirelockGlass
+  components:
+  - pos: -38.5,9.5
+    parent: 8364
+    type: Transform
+- uid: 26128
+  type: FirelockGlass
+  components:
+  - pos: -26.5,10.5
+    parent: 8364
+    type: Transform
+- uid: 26129
+  type: FirelockGlass
+  components:
+  - pos: -48.5,6.5
+    parent: 8364
+    type: Transform
+- uid: 26130
+  type: FirelockGlass
+  components:
+  - pos: -49.5,6.5
+    parent: 8364
+    type: Transform
+- uid: 26131
+  type: FirelockGlass
+  components:
+  - pos: -63.5,-6.5
+    parent: 8364
+    type: Transform
+- uid: 26132
+  type: FirelockGlass
+  components:
+  - pos: -64.5,-6.5
+    parent: 8364
+    type: Transform
+- uid: 26133
+  type: Chair
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 27.5,2.5
+    parent: 8364
+    type: Transform
+- uid: 26134
+  type: Chair
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 24.5,4.5
+    parent: 8364
+    type: Transform
+- uid: 26135
+  type: RandomSpawner
+  components:
+  - pos: 24.5,5.5
+    parent: 8364
+    type: Transform
+- uid: 26136
+  type: CableApcExtension
+  components:
+  - pos: -15.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26137
+  type: CableApcExtension
+  components:
+  - pos: -12.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26138
+  type: CableApcExtension
+  components:
+  - pos: -13.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26139
+  type: CableApcExtension
+  components:
+  - pos: -14.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26140
+  type: CableApcExtension
+  components:
+  - pos: -15.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26141
+  type: CableApcExtension
+  components:
+  - pos: -6.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26142
+  type: CableApcExtension
+  components:
+  - pos: -5.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26143
+  type: CableApcExtension
+  components:
+  - pos: 0.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26144
+  type: CableApcExtension
+  components:
+  - pos: 0.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26145
+  type: CableApcExtension
+  components:
+  - pos: 0.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26146
+  type: CableApcExtension
+  components:
+  - pos: 0.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26147
+  type: CableApcExtension
+  components:
+  - pos: 0.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26148
+  type: CableApcExtension
+  components:
+  - pos: 0.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26149
+  type: CableApcExtension
+  components:
+  - pos: -0.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26150
+  type: CableApcExtension
+  components:
+  - pos: -1.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26151
+  type: CableApcExtension
+  components:
+  - pos: -1.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26152
+  type: CableApcExtension
+  components:
+  - pos: -1.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26153
+  type: CableApcExtension
+  components:
+  - pos: -1.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26154
+  type: CableApcExtension
+  components:
+  - pos: 1.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26155
+  type: CableApcExtension
+  components:
+  - pos: 2.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26156
+  type: CableApcExtension
+  components:
+  - pos: 3.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26157
+  type: CableApcExtension
+  components:
+  - pos: 3.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26158
+  type: CableApcExtension
+  components:
+  - pos: 3.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26159
+  type: CableApcExtension
+  components:
+  - pos: 3.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26160
+  type: CableMV
+  components:
+  - pos: -20.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26161
+  type: CableMV
+  components:
+  - pos: -21.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26162
+  type: CableMV
+  components:
+  - pos: -22.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26163
+  type: CableMV
+  components:
+  - pos: -23.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26164
+  type: CableMV
+  components:
+  - pos: -23.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26165
+  type: CableMV
+  components:
+  - pos: -23.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26166
+  type: CableMV
+  components:
+  - pos: -23.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26167
+  type: CableMV
+  components:
+  - pos: -23.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26168
+  type: CableMV
+  components:
+  - pos: -23.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26169
+  type: CableMV
+  components:
+  - pos: -23.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26170
+  type: CableMV
+  components:
+  - pos: -23.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26171
+  type: CableMV
+  components:
+  - pos: -22.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26172
+  type: CableMV
+  components:
+  - pos: -21.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26173
+  type: CableMV
+  components:
+  - pos: -20.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26174
+  type: CableMV
+  components:
+  - pos: -19.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26175
+  type: CableMV
+  components:
+  - pos: -19.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26176
+  type: CableMV
+  components:
+  - pos: -19.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26177
+  type: CableMV
+  components:
+  - pos: -18.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26178
+  type: CableMV
+  components:
+  - pos: -17.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26179
+  type: CableMV
+  components:
+  - pos: -16.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26180
+  type: CableMV
+  components:
+  - pos: -15.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26181
+  type: CableMV
+  components:
+  - pos: -14.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26182
+  type: CableMV
+  components:
+  - pos: -13.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26183
+  type: CableMV
+  components:
+  - pos: -12.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26184
+  type: CableMV
+  components:
+  - pos: -11.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26185
+  type: CableMV
+  components:
+  - pos: -10.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26186
+  type: CableMV
+  components:
+  - pos: -10.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26187
+  type: CableMV
+  components:
+  - pos: -10.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26188
+  type: CableMV
+  components:
+  - pos: -9.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26189
+  type: CableMV
+  components:
+  - pos: -8.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26190
+  type: CableMV
+  components:
+  - pos: -7.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26191
+  type: CableMV
+  components:
+  - pos: -7.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26192
+  type: CableMV
+  components:
+  - pos: -7.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26193
+  type: CableMV
+  components:
+  - pos: -7.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26194
+  type: CableMV
+  components:
+  - pos: -7.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26195
+  type: CableMV
+  components:
+  - pos: -7.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26196
+  type: CableMV
+  components:
+  - pos: -7.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26197
+  type: CableMV
+  components:
+  - pos: -7.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26198
+  type: CableMV
+  components:
+  - pos: -7.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26199
+  type: CableMV
+  components:
+  - pos: -6.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26200
+  type: CableMV
+  components:
+  - pos: -5.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26201
+  type: CableMV
+  components:
+  - pos: -4.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26202
+  type: CableMV
+  components:
+  - pos: -3.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26203
+  type: CableMV
+  components:
+  - pos: -2.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26204
+  type: CableMV
+  components:
+  - pos: -1.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26205
+  type: CableMV
+  components:
+  - pos: -0.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26206
+  type: CableMV
+  components:
+  - pos: 0.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26207
+  type: CableMV
+  components:
+  - pos: 0.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26208
+  type: CableMV
+  components:
+  - pos: 0.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26209
+  type: CableMV
+  components:
+  - pos: 0.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26210
+  type: CableMV
+  components:
+  - pos: 0.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26211
+  type: CableMV
+  components:
+  - pos: 0.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26212
+  type: CableMV
+  components:
+  - pos: 0.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26213
+  type: CableMV
+  components:
+  - pos: 1.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26214
+  type: CableMV
+  components:
+  - pos: 2.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26215
+  type: CableMV
+  components:
+  - pos: 3.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26216
+  type: CableMV
+  components:
+  - pos: 4.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26217
+  type: CableMV
+  components:
+  - pos: -0.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26218
+  type: CableMV
+  components:
+  - pos: -1.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26219
+  type: CableMV
+  components:
+  - pos: -2.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26220
+  type: CableMV
+  components:
+  - pos: -7.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26221
+  type: CableMV
+  components:
+  - pos: -6.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26222
+  type: CableMV
+  components:
+  - pos: -5.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26223
+  type: CableMV
+  components:
+  - pos: -4.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26224
+  type: CableMV
+  components:
+  - pos: -3.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26225
+  type: CableMV
+  components:
+  - pos: -24.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26226
+  type: CableMV
+  components:
+  - pos: -25.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26227
+  type: CableMV
+  components:
+  - pos: -25.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26228
+  type: CableMV
+  components:
+  - pos: -25.5,43.5
+    parent: 8364
+    type: Transform
+- uid: 26229
+  type: CableMV
+  components:
+  - pos: -21.5,43.5
+    parent: 8364
+    type: Transform
+- uid: 26230
+  type: CableMV
+  components:
+  - pos: -21.5,42.5
+    parent: 8364
+    type: Transform
+- uid: 26231
+  type: CableMV
+  components:
+  - pos: -21.5,41.5
+    parent: 8364
+    type: Transform
+- uid: 26232
+  type: CableMV
+  components:
+  - pos: -21.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26233
+  type: CableMV
+  components:
+  - pos: -21.5,39.5
+    parent: 8364
+    type: Transform
+- uid: 26234
+  type: CableMV
+  components:
+  - pos: -18.5,39.5
+    parent: 8364
+    type: Transform
+- uid: 26235
+  type: CableMV
+  components:
+  - pos: -18.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26236
+  type: CableMV
+  components:
+  - pos: -18.5,41.5
+    parent: 8364
+    type: Transform
+- uid: 26237
+  type: CableMV
+  components:
+  - pos: -18.5,42.5
+    parent: 8364
+    type: Transform
+- uid: 26238
+  type: CableMV
+  components:
+  - pos: -18.5,43.5
+    parent: 8364
+    type: Transform
+- uid: 26239
+  type: CableMV
+  components:
+  - pos: -14.5,43.5
+    parent: 8364
+    type: Transform
+- uid: 26240
+  type: CableMV
+  components:
+  - pos: -14.5,42.5
+    parent: 8364
+    type: Transform
+- uid: 26241
+  type: CableMV
+  components:
+  - pos: -14.5,41.5
+    parent: 8364
+    type: Transform
+- uid: 26242
+  type: CableMV
+  components:
+  - pos: -14.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26243
+  type: CableMV
+  components:
+  - pos: -14.5,39.5
+    parent: 8364
+    type: Transform
+- uid: 26244
+  type: CableMV
+  components:
+  - pos: -15.5,39.5
+    parent: 8364
+    type: Transform
+- uid: 26245
+  type: CableMV
+  components:
+  - pos: -13.5,39.5
+    parent: 8364
+    type: Transform
+- uid: 26246
+  type: CableMV
+  components:
+  - pos: -8.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26247
+  type: CableMV
+  components:
+  - pos: -9.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26248
+  type: CableMV
+  components:
+  - pos: -10.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26249
+  type: CableMV
+  components:
+  - pos: -11.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26250
+  type: CableMV
+  components:
+  - pos: -11.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26251
+  type: CableMV
+  components:
+  - pos: -11.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26252
+  type: CableMV
+  components:
+  - pos: -11.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26253
+  type: CableMV
+  components:
+  - pos: -11.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26254
+  type: CableMV
+  components:
+  - pos: -11.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26255
+  type: CableMV
+  components:
+  - pos: -11.5,54.5
+    parent: 8364
+    type: Transform
+- uid: 26256
+  type: CableMV
+  components:
+  - pos: -12.5,54.5
+    parent: 8364
+    type: Transform
+- uid: 26257
+  type: CableMV
+  components:
+  - pos: -12.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26258
+  type: CableMV
+  components:
+  - pos: -13.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26259
+  type: CableMV
+  components:
+  - pos: -14.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26260
+  type: CableMV
+  components:
+  - pos: -14.5,54.5
+    parent: 8364
+    type: Transform
+- uid: 26261
+  type: CableMV
+  components:
+  - pos: -15.5,54.5
+    parent: 8364
+    type: Transform
+- uid: 26262
+  type: CableMV
+  components:
+  - pos: -20.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26263
+  type: CableMV
+  components:
+  - pos: -19.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26264
+  type: CableMV
+  components:
+  - pos: -18.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26265
+  type: CableMV
+  components:
+  - pos: -17.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26266
+  type: CableMV
+  components:
+  - pos: -16.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26267
+  type: CableMV
+  components:
+  - pos: -15.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26268
+  type: CableMV
+  components:
+  - pos: -15.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26269
+  type: CableMV
+  components:
+  - pos: -14.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26270
+  type: CableMV
+  components:
+  - pos: -13.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26271
+  type: CableMV
+  components:
+  - pos: -12.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26272
+  type: CableMV
+  components:
+  - pos: -4.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26273
+  type: CableMV
+  components:
+  - pos: -5.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26274
+  type: CableMV
+  components:
+  - pos: -6.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26275
+  type: CableMV
+  components:
+  - pos: -5.5,36.5
+    parent: 8364
+    type: Transform
+- uid: 26276
+  type: CableMV
+  components:
+  - pos: -5.5,37.5
+    parent: 8364
+    type: Transform
+- uid: 26277
+  type: CableMV
+  components:
+  - pos: -6.5,37.5
+    parent: 8364
+    type: Transform
+- uid: 26278
+  type: CableMV
+  components:
+  - pos: -6.5,38.5
+    parent: 8364
+    type: Transform
+- uid: 26279
+  type: CableMV
+  components:
+  - pos: -4.5,37.5
+    parent: 8364
+    type: Transform
+- uid: 26280
+  type: CableMV
+  components:
+  - pos: -4.5,38.5
+    parent: 8364
+    type: Transform
+- uid: 26281
+  type: CableMV
+  components:
+  - pos: -7.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26282
+  type: CableMV
+  components:
+  - pos: -8.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26283
+  type: CableMV
+  components:
+  - pos: -9.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26284
+  type: CableMV
+  components:
+  - pos: -10.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26285
+  type: CableMV
+  components:
+  - pos: -11.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26286
+  type: CableMV
+  components:
+  - pos: -12.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26287
+  type: CableMV
+  components:
+  - pos: -13.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26288
+  type: CableMV
+  components:
+  - pos: -14.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26289
+  type: CableMV
+  components:
+  - pos: -15.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26290
+  type: CableMV
+  components:
+  - pos: -16.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26291
+  type: CableMV
+  components:
+  - pos: -16.5,34.5
+    parent: 8364
+    type: Transform
+- uid: 26292
+  type: CableMV
+  components:
+  - pos: -16.5,36.5
+    parent: 8364
+    type: Transform
+- uid: 26293
+  type: CableMV
+  components:
+  - pos: -14.5,36.5
+    parent: 8364
+    type: Transform
+- uid: 26294
+  type: CableMV
+  components:
+  - pos: -14.5,37.5
+    parent: 8364
+    type: Transform
+- uid: 26295
+  type: CableMV
+  components:
+  - pos: -15.5,37.5
+    parent: 8364
+    type: Transform
+- uid: 26296
+  type: CableMV
+  components:
+  - pos: -13.5,37.5
+    parent: 8364
+    type: Transform
+- uid: 26297
+  type: CableMV
+  components:
+  - pos: -9.5,36.5
+    parent: 8364
+    type: Transform
+- uid: 26298
+  type: CableMV
+  components:
+  - pos: -9.5,37.5
+    parent: 8364
+    type: Transform
+- uid: 26299
+  type: CableHV
+  components:
+  - pos: -5.5,27.5
+    parent: 8364
+    type: Transform
+- uid: 26300
+  type: CableHV
+  components:
+  - pos: -5.5,28.5
+    parent: 8364
+    type: Transform
+- uid: 26301
+  type: CableHV
+  components:
+  - pos: -5.5,29.5
+    parent: 8364
+    type: Transform
+- uid: 26302
+  type: CableHV
+  components:
+  - pos: -5.5,30.5
+    parent: 8364
+    type: Transform
+- uid: 26303
+  type: CableHV
+  components:
+  - pos: -5.5,31.5
+    parent: 8364
+    type: Transform
+- uid: 26304
+  type: CableHV
+  components:
+  - pos: -5.5,32.5
+    parent: 8364
+    type: Transform
+- uid: 26305
+  type: CableHV
+  components:
+  - pos: -5.5,33.5
+    parent: 8364
+    type: Transform
+- uid: 26306
+  type: CableHV
+  components:
+  - pos: -5.5,34.5
+    parent: 8364
+    type: Transform
+- uid: 26307
+  type: CableHV
+  components:
+  - pos: -5.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26308
+  type: CableHV
+  components:
+  - pos: -6.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26309
+  type: CableHV
+  components:
+  - pos: -7.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26310
+  type: CableHV
+  components:
+  - pos: -8.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26311
+  type: CableHV
+  components:
+  - pos: -9.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26312
+  type: CableHV
+  components:
+  - pos: -10.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26313
+  type: CableHV
+  components:
+  - pos: -10.5,36.5
+    parent: 8364
+    type: Transform
+- uid: 26314
+  type: CableHV
+  components:
+  - pos: -10.5,37.5
+    parent: 8364
+    type: Transform
+- uid: 26315
+  type: CableHV
+  components:
+  - pos: -10.5,38.5
+    parent: 8364
+    type: Transform
+- uid: 26316
+  type: CableHV
+  components:
+  - pos: -10.5,39.5
+    parent: 8364
+    type: Transform
+- uid: 26317
+  type: CableHV
+  components:
+  - pos: -10.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26318
+  type: CableHV
+  components:
+  - pos: -10.5,41.5
+    parent: 8364
+    type: Transform
+- uid: 26319
+  type: CableHV
+  components:
+  - pos: -10.5,42.5
+    parent: 8364
+    type: Transform
+- uid: 26320
+  type: CableHV
+  components:
+  - pos: -10.5,43.5
+    parent: 8364
+    type: Transform
+- uid: 26321
+  type: CableHV
+  components:
+  - pos: -10.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26322
+  type: CableHV
+  components:
+  - pos: -11.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26323
+  type: CableHV
+  components:
+  - pos: -12.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26324
+  type: CableHV
+  components:
+  - pos: -13.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26325
+  type: CableHV
+  components:
+  - pos: -14.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26326
+  type: CableHV
+  components:
+  - pos: -15.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26327
+  type: CableHV
+  components:
+  - pos: -16.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26328
+  type: CableHV
+  components:
+  - pos: -17.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26329
+  type: CableHV
+  components:
+  - pos: -18.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26330
+  type: CableHV
+  components:
+  - pos: -19.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26331
+  type: CableHV
+  components:
+  - pos: -20.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26332
+  type: CableHV
+  components:
+  - pos: -21.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26333
+  type: CableHV
+  components:
+  - pos: -22.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26334
+  type: CableHV
+  components:
+  - pos: -23.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26335
+  type: CableHV
+  components:
+  - pos: -23.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26336
+  type: CableHV
+  components:
+  - pos: -23.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26337
+  type: CableHV
+  components:
+  - pos: -23.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26338
+  type: CableHV
+  components:
+  - pos: -23.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26339
+  type: CableHV
+  components:
+  - pos: -23.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26340
+  type: CableHV
+  components:
+  - pos: -23.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26341
+  type: CableHV
+  components:
+  - pos: -23.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26342
+  type: CableHV
+  components:
+  - pos: -22.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26343
+  type: CableHV
+  components:
+  - pos: -21.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26344
+  type: CableHV
+  components:
+  - pos: -20.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26345
+  type: WardrobePrisonFilled
+  components:
+  - pos: -17.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26346
+  type: WardrobePrisonFilled
+  components:
+  - pos: -20.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26347
+  type: WardrobePrisonFilled
+  components:
+  - pos: -21.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26348
+  type: WardrobePrisonFilled
+  components:
+  - pos: -18.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26349
+  type: Bed
+  components:
+  - pos: -21.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26350
+  type: Bed
+  components:
+  - pos: -18.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26351
+  type: Bed
+  components:
+  - pos: -17.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26352
+  type: Bed
+  components:
+  - pos: -20.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26353
+  type: BedsheetOrange
+  components:
+  - pos: -20.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26354
+  type: BedsheetSyndie
+  components:
+  - pos: -17.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26355
+  type: BedsheetOrange
+  components:
+  - pos: -18.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26356
+  type: BedsheetOrange
+  components:
+  - pos: -21.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26357
+  type: ToiletDirtyWater
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -23.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26358
+  type: Sink
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -23.5,41.5
+    parent: 8364
+    type: Transform
+- uid: 26359
+  type: Mirror
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -24.5,41.5
+    parent: 8364
+    type: Transform
+- uid: 26360
+  type: ChessBoard
+  components:
+  - pos: -14.520999,41.38247
+    parent: 8364
+    type: Transform
+- uid: 26361
+  type: ParchisBoard
+  components:
+  - pos: -14.380374,40.648094
+    parent: 8364
+    type: Transform
+- uid: 26362
+  type: d6Dice
+  components:
+  - pos: -14.755374,40.835594
+    parent: 8364
+    type: Transform
+- uid: 26363
+  type: d6Dice
+  components:
+  - pos: -14.567874,40.56997
+    parent: 8364
+    type: Transform
+- uid: 26364
+  type: PoweredSmallLight
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -20.5,41.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26365
+  type: PoweredSmallLight
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -18.5,41.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26366
+  type: PoweredSmallLight
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -18.5,47.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26367
+  type: PoweredSmallLight
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -20.5,47.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26368
+  type: Poweredlight
+  components:
+  - pos: -19.5,45.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26369
+  type: Poweredlight
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -11.5,50.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26370
+  type: Poweredlight
+  components:
+  - pos: -14.5,45.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26371
+  type: Poweredlight
+  components:
+  - pos: -5.5,45.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26372
+  type: Poweredlight
+  components:
+  - pos: -9.5,41.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26373
+  type: Poweredlight
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -4.5,49.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26374
+  type: Poweredlight
+  components:
+  - pos: -1.5,51.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26375
+  type: Poweredlight
+  components:
+  - pos: 3.5,51.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26376
+  type: Poweredlight
+  components:
+  - pos: -8.5,53.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26377
+  type: Chair
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -21.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26378
+  type: Chair
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -18.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26379
+  type: Chair
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -17.5,41.5
+    parent: 8364
+    type: Transform
+- uid: 26380
+  type: Chair
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -20.5,41.5
+    parent: 8364
+    type: Transform
+- uid: 26381
+  type: Table
+  components:
+  - pos: -9.5,34.5
+    parent: 8364
+    type: Transform
+- uid: 26382
+  type: Table
+  components:
+  - pos: -10.5,34.5
+    parent: 8364
+    type: Transform
+- uid: 26383
+  type: Table
+  components:
+  - pos: -11.5,34.5
+    parent: 8364
+    type: Transform
+- uid: 26384
+  type: LockerEvidence
+  components:
+  - pos: -7.5,34.5
+    parent: 8364
+    type: Transform
+- uid: 26385
+  type: LockerEvidence
+  components:
+  - pos: -8.5,34.5
+    parent: 8364
+    type: Transform
+- uid: 26386
+  type: PottedPlant16
+  components:
+  - pos: -12.5,34.5
+    parent: 8364
+    type: Transform
+- uid: 26387
+  type: Rack
+  components:
+  - pos: -15.5,34.5
+    parent: 8364
+    type: Transform
+- uid: 26388
+  type: Handcuffs
+  components:
+  - pos: -15.384127,34.584564
+    parent: 8364
+    type: Transform
+- uid: 26389
+  type: Poweredlight
+  components:
+  - pos: -12.5,36.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26390
+  type: Poweredlight
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -4.5,36.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26391
+  type: SurveillanceCameraSecurity
+  components:
+  - rot: 3.141592653589793 rad
+    pos: -10.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26392
+  type: SurveillanceCameraSecurity
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -4.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26393
+  type: SurveillanceCameraSecurity
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 1.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26394
+  type: SurveillanceCameraSecurity
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -11.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26395
+  type: SurveillanceCameraSecurity
+  components:
+  - pos: -19.5,43.5
+    parent: 8364
+    type: Transform
+- uid: 26396
+  type: Chair
+  components:
+  - pos: -7.5,37.5
+    parent: 8364
+    type: Transform
+- uid: 26397
+  type: AirSensor
+  components:
+  - pos: -5.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26398
+  type: AirSensor
+  components:
+  - pos: 0.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26399
+  type: FireAlarm
+  components:
+  - pos: -0.5,52.5
+    parent: 8364
+    type: Transform
+  - devices:
+    - 9185
+    - 26398
+    - 7282
+    - 25677
+    - 25678
+    type: DeviceList
+- uid: 26400
+  type: FireAlarm
+  components:
+  - pos: -6.5,53.5
+    parent: 8364
+    type: Transform
+  - devices:
+    - 7301
+    - 8910
+    - 26397
+    - 25677
+    - 25678
+    type: DeviceList
+- uid: 26401
+  type: Catwalk
+  components:
+  - pos: -23.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26402
+  type: Catwalk
+  components:
+  - pos: -23.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26403
+  type: Catwalk
+  components:
+  - pos: -23.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26404
+  type: Catwalk
+  components:
+  - pos: -23.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26405
+  type: Table
+  components:
+  - pos: 1.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26406
+  type: Table
+  components:
+  - pos: 0.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26407
+  type: Table
+  components:
+  - pos: -0.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26408
+  type: Table
+  components:
+  - pos: 2.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26409
+  type: Carpet
+  components:
+  - pos: -14.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26410
+  type: Carpet
+  components:
+  - pos: -14.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26411
+  type: PoweredSmallLight
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -13.5,42.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26412
+  type: Carpet
+  components:
+  - pos: -13.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26413
+  type: Carpet
+  components:
+  - pos: -13.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26414
+  type: Fireplace
+  components:
+  - pos: -13.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26415
+  type: Carpet
+  components:
+  - pos: -12.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26416
+  type: Carpet
+  components:
+  - pos: -12.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26417
+  type: Stool
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -8.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26418
+  type: Carpet
+  components:
+  - pos: -11.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26419
+  type: Carpet
+  components:
+  - pos: -11.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26420
+  type: BlockGameArcade
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -9.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26421
+  type: TableWood
+  components:
+  - pos: -14.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26422
+  type: TableWood
+  components:
+  - pos: -11.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26423
+  type: ComfyChair
+  components:
+  - pos: -11.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26424
+  type: ComfyChair
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -15.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26425
+  type: PoweredSmallLight
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -23.5,41.5
+    parent: 8364
+    type: Transform
+  - powerLoad: 0
+    type: ApcPowerReceiver
+- uid: 26426
+  type: SpaceVillainArcadeFilled
+  components:
+  - pos: -4.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26427
+  type: Stool
+  components:
+  - rot: 3.141592653589793 rad
+    pos: -4.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26428
+  type: Catwalk
+  components:
+  - pos: -14.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26429
+  type: Catwalk
+  components:
+  - pos: -13.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26430
+  type: Catwalk
+  components:
+  - pos: -12.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26431
+  type: Catwalk
+  components:
+  - pos: -11.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26432
+  type: Catwalk
+  components:
+  - pos: -10.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26433
+  type: Catwalk
+  components:
+  - pos: -9.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26434
+  type: Catwalk
+  components:
+  - pos: -8.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26435
+  type: Catwalk
+  components:
+  - pos: -7.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26436
+  type: Catwalk
+  components:
+  - pos: -6.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26437
+  type: Catwalk
+  components:
+  - pos: -5.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26438
+  type: Catwalk
+  components:
+  - pos: -23.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26439
+  type: Catwalk
+  components:
+  - pos: -22.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26440
+  type: Catwalk
+  components:
+  - pos: -21.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26441
+  type: Catwalk
+  components:
+  - pos: -20.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26442
+  type: Catwalk
+  components:
+  - pos: -19.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26443
+  type: Catwalk
+  components:
+  - pos: -18.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26444
+  type: ClothingShoesSlippers
+  components:
+  - pos: -15.657842,47.202713
+    parent: 8364
+    type: Transform
+- uid: 26445
+  type: ClothingOuterApronChef
+  components:
+  - pos: -6.4873962,52.56498
+    parent: 8364
+    type: Transform
+- uid: 26446
+  type: RandomSpawner
+  components:
+  - pos: -4.5,43.5
+    parent: 8364
+    type: Transform
+- uid: 26447
+  type: RandomSpawner
+  components:
+  - pos: -7.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26448
+  type: RandomSpawner
+  components:
+  - pos: -0.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26449
+  type: RandomSpawner
+  components:
+  - pos: -21.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26450
+  type: TrashBag
+  components:
+  - pos: -23.561554,51.44249
+    parent: 8364
+    type: Transform
+- uid: 26451
+  type: SpawnMobMouse
+  components:
+  - pos: -21.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26452
+  type: Sink
+  components:
+  - pos: -19.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26453
+  type: Rack
+  components:
+  - pos: -17.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26454
+  type: ClothingHandsGlovesColorOrange
+  components:
+  - pos: -17.662788,51.5307
+    parent: 8364
+    type: Transform
+- uid: 26455
+  type: ClothingHeadHatOrangesoft
+  components:
+  - pos: -17.569038,51.765076
+    parent: 8364
+    type: Transform
+- uid: 26456
+  type: SignElectricalMed
+  components:
+  - pos: 5.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26457
+  type: SignElectricalMed
+  components:
+  - pos: -3.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26458
+  type: SignElectricalMed
+  components:
+  - pos: -25.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26459
+  type: SignElectricalMed
+  components:
+  - pos: -16.5,39.5
+    parent: 8364
+    type: Transform
+- uid: 26460
+  type: PosterLegitWorkForAFuture
+  components:
+  - pos: -3.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26461
+  type: ComfyChair
+  components:
+  - rot: 3.141592653589793 rad
+    pos: -11.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26462
+  type: Bookshelf
+  components:
+  - pos: -11.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26463
+  type: HydroponicsToolSpade
+  components:
+  - pos: 1.5683146,51.57647
+    parent: 8364
+    type: Transform
+- uid: 26464
+  type: WeedSpray
+  components:
+  - pos: 2.5214396,51.592094
+    parent: 8364
+    type: Transform
+- uid: 26465
+  type: SinkWide
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 4.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26466
+  type: HydroponicsToolMiniHoe
+  components:
+  - pos: 1.5058146,51.529594
+    parent: 8364
+    type: Transform
+- uid: 26467
+  type: BookEscalationSecurity
+  components:
+  - pos: -13.487206,48.529594
+    parent: 8364
+    type: Transform
+- uid: 26468
+  type: Sink
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -9.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26469
+  type: SeedExtractor
+  components:
+  - pos: -1.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26470
+  type: Bookshelf
+  components:
+  - pos: -14.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26471
+  type: CannabisSeeds
+  components:
+  - pos: -23.525152,40.482742
+    parent: 8364
+    type: Transform
+- uid: 26472
+  type: Grille
+  components:
+  - pos: 21.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26473
+  type: CarpetSBlue
+  components:
+  - pos: -12.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26474
+  type: PackPaperRollingFilters
+  components:
+  - pos: -21.532673,46.54654
+    parent: 8364
+    type: Transform
+- uid: 26475
+  type: Grille
+  components:
+  - pos: 22.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26476
+  type: Grille
+  components:
+  - pos: 23.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26477
+  type: Grille
+  components:
+  - pos: 24.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26478
+  type: Grille
+  components:
+  - pos: 17.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26479
+  type: Grille
+  components:
+  - pos: 16.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26480
+  type: Grille
+  components:
+  - pos: 15.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26481
+  type: Grille
+  components:
+  - pos: 14.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26482
+  type: Grille
+  components:
+  - pos: 13.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26483
+  type: Grille
+  components:
+  - pos: 12.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26484
+  type: Grille
+  components:
+  - pos: 11.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26485
+  type: Grille
+  components:
+  - pos: 10.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26486
+  type: Grille
+  components:
+  - pos: 9.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26487
+  type: Grille
+  components:
+  - pos: 8.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26488
+  type: Grille
+  components:
+  - pos: 7.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26489
+  type: Grille
+  components:
+  - pos: -27.5,41.5
+    parent: 8364
+    type: Transform
+- uid: 26490
+  type: Grille
+  components:
+  - pos: -27.5,42.5
+    parent: 8364
+    type: Transform
+- uid: 26491
+  type: Grille
+  components:
+  - pos: -27.5,43.5
+    parent: 8364
+    type: Transform
+- uid: 26492
+  type: Grille
+  components:
+  - pos: -27.5,44.5
+    parent: 8364
+    type: Transform
+- uid: 26493
+  type: Grille
+  components:
+  - pos: -27.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26494
+  type: Grille
+  components:
+  - pos: -27.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26495
+  type: Grille
+  components:
+  - pos: -27.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26496
+  type: Grille
+  components:
+  - pos: -24.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26497
+  type: Grille
+  components:
+  - pos: -23.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26498
+  type: Grille
+  components:
+  - pos: -22.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26499
+  type: Grille
+  components:
+  - pos: -21.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26500
+  type: Grille
+  components:
+  - pos: -20.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26501
+  type: Grille
+  components:
+  - pos: -19.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26502
+  type: Grille
+  components:
+  - pos: -18.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26503
+  type: Grille
+  components:
+  - pos: -17.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26504
+  type: Grille
+  components:
+  - pos: -15.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26505
+  type: Grille
+  components:
+  - pos: -14.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26506
+  type: Grille
+  components:
+  - pos: -13.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26507
+  type: Grille
+  components:
+  - pos: -12.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26508
+  type: Grille
+  components:
+  - pos: -11.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26509
+  type: Grille
+  components:
+  - pos: -10.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26510
+  type: Grille
+  components:
+  - pos: -9.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26511
+  type: Grille
+  components:
+  - pos: -8.5,58.5
+    parent: 8364
+    type: Transform
+- uid: 26512
+  type: Grille
+  components:
+  - pos: -2.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26513
+  type: Grille
+  components:
+  - pos: -1.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26514
+  type: Grille
+  components:
+  - pos: -0.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26515
+  type: Grille
+  components:
+  - pos: 0.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26516
+  type: Grille
+  components:
+  - pos: 1.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26517
+  type: Grille
+  components:
+  - pos: 2.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26518
+  type: Grille
+  components:
+  - pos: 3.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26519
+  type: Grille
+  components:
+  - pos: 4.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26520
+  type: Grille
+  components:
+  - pos: 5.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26521
+  type: Grille
+  components:
+  - pos: 6.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26522
+  type: Grille
+  components:
+  - pos: 7.5,56.5
+    parent: 8364
+    type: Transform
+- uid: 26523
+  type: Grille
+  components:
+  - pos: 9.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26524
+  type: Grille
+  components:
+  - pos: 9.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26525
+  type: Grille
+  components:
+  - pos: 9.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26526
+  type: Grille
+  components:
+  - pos: 9.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26527
+  type: Grille
+  components:
+  - pos: 9.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26528
+  type: Grille
+  components:
+  - pos: 9.5,48.5
+    parent: 8364
+    type: Transform
+- uid: 26529
+  type: Grille
+  components:
+  - pos: -27.5,54.5
+    parent: 8364
+    type: Transform
+- uid: 26530
+  type: Grille
+  components:
+  - pos: -27.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26531
+  type: Grille
+  components:
+  - pos: -27.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26532
+  type: Grille
+  components:
+  - pos: -27.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26533
+  type: Grille
+  components:
+  - pos: -27.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26534
+  type: GrilleBroken
+  components:
+  - pos: -27.5,48.5
+    parent: 8364
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 26535
+  type: GrilleBroken
+  components:
+  - rot: 3.141592653589793 rad
+    pos: -27.5,49.5
+    parent: 8364
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 26536
+  type: RandomSpawner
+  components:
+  - pos: -10.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26537
+  type: RandomSpawner
+  components:
+  - pos: -12.5,47.5
+    parent: 8364
+    type: Transform
+- uid: 26538
+  type: Pill
+  components:
+  - pos: -4.40826,47.26007
+    parent: 8364
+    type: Transform
+- uid: 26539
+  type: Grille
+  components:
+  - pos: -20.5,35.5
+    parent: 8364
+    type: Transform
+- uid: 26540
+  type: Grille
+  components:
+  - pos: -20.5,34.5
+    parent: 8364
+    type: Transform
+- uid: 26541
+  type: Grille
+  components:
+  - pos: -20.5,33.5
+    parent: 8364
+    type: Transform
+- uid: 26542
+  type: Grille
+  components:
+  - pos: -20.5,32.5
+    parent: 8364
+    type: Transform
+- uid: 26543
+  type: Grille
+  components:
+  - pos: -20.5,31.5
+    parent: 8364
+    type: Transform
+- uid: 26544
+  type: Grille
+  components:
+  - pos: -20.5,30.5
+    parent: 8364
+    type: Transform
+- uid: 26545
+  type: AirCanister
+  components:
+  - pos: -21.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26546
+  type: ClosetEmergencyFilledRandom
+  components:
+  - pos: -22.5,51.5
+    parent: 8364
+    type: Transform
+- uid: 26547
+  type: Bucket
+  components:
+  - pos: 0.4866991,51.66165
+    parent: 8364
+    type: Transform
+- uid: 26548
+  type: VendingMachineSovietSoda
+  components:
+  - flags: SessionSpecific
+    type: MetaData
+  - pos: -24.5,45.5
+    parent: 8364
+    type: Transform
+- uid: 26549
+  type: Chair
+  components:
+  - pos: 1.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26550
+  type: Beaker
+  components:
+  - pos: -6.0280805,52.564606
+    parent: 8364
+    type: Transform
+- uid: 26551
+  type: ReagentContainerFlourSmall
+  components:
+  - pos: -6.5124555,50.51773
+    parent: 8364
+    type: Transform
+- uid: 26552
+  type: LockerFreezer
+  components:
+  - pos: -7.5,52.5
+    parent: 8364
+    type: Transform
+  - locked: False
+    type: Lock
+  - containers:
+      entity_storage: !type:Container
+        ents:
+        - 26553
+    type: ContainerContainer
+- uid: 26553
+  type: KnifePlastic
+  components:
+  - flags: InContainer
+    type: MetaData
+  - parent: 26552
+    type: Transform
+  - canCollide: False
+    type: Physics
+  - type: InsideEntityStorage
+- uid: 26554
+  type: MaintenanceFluffSpawner
+  components:
+  - pos: -8.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26555
+  type: BookRandom
+  components:
+  - pos: -14.522785,53.581825
+    parent: 8364
+    type: Transform
+- uid: 26556
+  type: PosterContrabandBountyHunters
+  components:
+  - pos: -18.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26557
+  type: PosterContrabandBeachStarYamamoto
+  components:
+  - pos: -19.5,41.5
+    parent: 8364
+    type: Transform
+- uid: 26558
+  type: PosterContrabandFreeTonto
+  components:
+  - pos: -11.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26559
+  type: PosterLegitNoERP
+  components:
+  - pos: -22.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26560
+  type: PosterLegitObey
+  components:
+  - pos: -4.5,46.5
+    parent: 8364
+    type: Transform
+- uid: 26561
+  type: PosterLegitSecWatch
+  components:
+  - pos: -10.5,53.5
+    parent: 8364
+    type: Transform
+- uid: 26562
+  type: PosterContrabandSyndicateRecruitment
+  components:
+  - pos: -22.5,49.5
+    parent: 8364
+    type: Transform
+- uid: 26563
+  type: PosterLegitStateLaws
+  components:
+  - pos: -7.5,40.5
+    parent: 8364
+    type: Transform
+- uid: 26564
+  type: PosterLegitSafetyReport
+  components:
+  - pos: -10.5,50.5
+    parent: 8364
+    type: Transform
+- uid: 26565
+  type: RandomPosterAny
+  components:
+  - pos: -16.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26566
+  type: RandomPosterAny
+  components:
+  - pos: 2.5,52.5
+    parent: 8364
+    type: Transform
+- uid: 26567
+  type: Chair
+  components:
+  - pos: -14.5,36.5
+    parent: 8364
+    type: Transform
+- uid: 26568
+  type: Chair
+  components:
+  - pos: -15.5,36.5
+    parent: 8364
+    type: Transform
+- uid: 26569
+  type: HarmonicaInstrument
+  components:
+  - pos: -17.476429,42.24517
+    parent: 8364
+    type: Transform
+- uid: 26570
+  type: FoodCondimentBottleEnzyme
+  components:
+  - pos: -0.39335,51.742676
+    parent: 8364
+    type: Transform
+- uid: 26571
+  type: PlushieSharkBlue
+  components:
+  - pos: -8.5066185,51.492676
+>>>>>>> a047de01f (Prize limit for Arcades (#12855))
     parent: 8364
     type: Transform
 ...

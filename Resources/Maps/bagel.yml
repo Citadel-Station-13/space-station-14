@@ -57801,7 +57801,7 @@ entities:
     parent: 60
     type: Transform
 - uid: 4611
-  type: SpaceVillainArcade
+  type: SpaceVillainArcadeFilled
   components:
   - rot: -1.5707963267948966 rad
     pos: -11.5,-64.5
@@ -62623,7 +62623,7 @@ entities:
     parent: 60
     type: Transform
 - uid: 5301
-  type: SpaceVillainArcade
+  type: SpaceVillainArcadeFilled
   components:
   - pos: -37.5,-34.5
     parent: 60
@@ -133829,7 +133829,7 @@ entities:
     parent: 60
     type: Transform
 - uid: 16123
-  type: SpaceVillainArcade
+  type: SpaceVillainArcadeFilled
   components:
   - rot: 1.5707963267948966 rad
     pos: -10.5,-14.5
