@@ -77,7 +77,7 @@ namespace Content.Client.ContextMenu.UI
                 return;
             }
 
-            EntityIcon.Sprite = _entityManager.GetComponentOrNull<ISpriteComponent>(entity);
+            EntityIcon.Sprite = _entityManager.GetComponentOrNull<SpriteComponent>(entity);
 
             var admin = IoCManager.Resolve<IClientAdminManager>();
 
