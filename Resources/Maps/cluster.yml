@@ -10333,7 +10333,7 @@ entities:
       32,22: 0
       32,23: 0
       33,17: 0
-      33,19: 1
+      33,19: 6
       33,21: 0
       33,22: 0
       33,23: 0
@@ -10664,6 +10664,7 @@ entities:
     - volume: 2500
       temperature: 293.15
       moles:
+<<<<<<< HEAD
       - 17.89022
       - 67.30131
       - 0
@@ -10711,6 +10712,10 @@ entities:
       moles:
       - 21.540726
       - 81.034164
+=======
+      - 20.619795
+      - 77.56971
+>>>>>>> 988c31e0c (pipes and power (#13482))
       - 0
       - 0
       - 0
@@ -10784,6 +10789,7 @@ entities:
     - volume: 2500
       temperature: 293.15
       moles:
+<<<<<<< HEAD
       - 20.38033
       - 76.66885
       - 0
@@ -10814,6 +10820,8 @@ entities:
     - volume: 2500
       temperature: 293.15
       moles:
+=======
+>>>>>>> 988c31e0c (pipes and power (#13482))
       - 21.213781
       - 79.80423
       - 0
@@ -10826,6 +10834,7 @@ entities:
       - 0
       - 0
       - 0
+<<<<<<< HEAD
     - volume: 2500
       temperature: 293.15
       moles:
@@ -10841,6 +10850,8 @@ entities:
       - 0
       - 0
       - 0
+=======
+>>>>>>> 988c31e0c (pipes and power (#13482))
     type: GridAtmosphere
   - type: OccluderTree
   - type: Shuttle
@@ -17680,8 +17691,7 @@ entities:
     parent: 127
     type: Transform
   - fixtures:
-    - density: 100
-      shape: !type:PolygonShape
+    - shape: !type:PolygonShape
         vertices:
         - 0.49,-0.49
         - 0.49,0.49
@@ -17699,9 +17709,10 @@ entities:
       - BulletImpassable
       - InteractImpassable
       - Opaque
+      density: 100
     - shape: !type:PhysShapeCircle
-        position: 0,-0.5
         radius: 0.2
+        position: 0,-0.5
       hard: False
       id: docking
     type: Fixtures
@@ -17713,8 +17724,7 @@ entities:
     parent: 127
     type: Transform
   - fixtures:
-    - density: 100
-      shape: !type:PolygonShape
+    - shape: !type:PolygonShape
         vertices:
         - 0.49,-0.49
         - 0.49,0.49
@@ -17732,9 +17742,10 @@ entities:
       - BulletImpassable
       - InteractImpassable
       - Opaque
+      density: 100
     - shape: !type:PhysShapeCircle
-        position: 0,-0.5
         radius: 0.2
+        position: 0,-0.5
       hard: False
       id: docking
     type: Fixtures
@@ -25107,8 +25118,7 @@ entities:
     parent: 127
     type: Transform
   - fixtures:
-    - density: 100
-      shape: !type:PolygonShape
+    - shape: !type:PolygonShape
         vertices:
         - 0.49,-0.49
         - 0.49,0.49
@@ -25126,9 +25136,10 @@ entities:
       - BulletImpassable
       - InteractImpassable
       - Opaque
+      density: 100
     - shape: !type:PhysShapeCircle
-        position: 0,-0.5
         radius: 0.2
+        position: 0,-0.5
       hard: False
       id: docking
     type: Fixtures
@@ -25331,8 +25342,7 @@ entities:
     parent: 127
     type: Transform
   - fixtures:
-    - density: 100
-      shape: !type:PolygonShape
+    - shape: !type:PolygonShape
         vertices:
         - 0.49,-0.49
         - 0.49,0.49
@@ -25350,9 +25360,10 @@ entities:
       - BulletImpassable
       - InteractImpassable
       - Opaque
+      density: 100
     - shape: !type:PhysShapeCircle
-        position: 0,-0.5
         radius: 0.2
+        position: 0,-0.5
       hard: False
       id: docking
     type: Fixtures
@@ -25395,8 +25406,7 @@ entities:
     parent: 127
     type: Transform
   - fixtures:
-    - density: 100
-      shape: !type:PolygonShape
+    - shape: !type:PolygonShape
         vertices:
         - 0.49,-0.49
         - 0.49,0.49
@@ -25414,9 +25424,10 @@ entities:
       - BulletImpassable
       - InteractImpassable
       - Opaque
+      density: 100
     - shape: !type:PhysShapeCircle
-        position: 0,-0.5
         radius: 0.2
+        position: 0,-0.5
       hard: False
       id: docking
     type: Fixtures
@@ -33359,8 +33370,7 @@ entities:
     parent: 127
     type: Transform
   - fixtures:
-    - density: 100
-      shape: !type:PolygonShape
+    - shape: !type:PolygonShape
         vertices:
         - 0.49,-0.49
         - 0.49,0.49
@@ -33378,9 +33388,10 @@ entities:
       - BulletImpassable
       - InteractImpassable
       - Opaque
+      density: 100
     - shape: !type:PhysShapeCircle
-        position: 0,-0.5
         radius: 0.2
+        position: 0,-0.5
       hard: False
       id: docking
     type: Fixtures
@@ -39477,8 +39488,7 @@ entities:
     parent: 127
     type: Transform
   - fixtures:
-    - density: 100
-      shape: !type:PolygonShape
+    - shape: !type:PolygonShape
         vertices:
         - 0.49,-0.49
         - 0.49,0.49
@@ -39496,9 +39506,10 @@ entities:
       - BulletImpassable
       - InteractImpassable
       - Opaque
+      density: 100
     - shape: !type:PhysShapeCircle
-        position: 0,-0.5
         radius: 0.2
+        position: 0,-0.5
       hard: False
       id: docking
     type: Fixtures
@@ -39509,8 +39520,7 @@ entities:
     parent: 127
     type: Transform
   - fixtures:
-    - density: 100
-      shape: !type:PolygonShape
+    - shape: !type:PolygonShape
         vertices:
         - 0.49,-0.49
         - 0.49,0.49
@@ -39528,9 +39538,10 @@ entities:
       - BulletImpassable
       - InteractImpassable
       - Opaque
+      density: 100
     - shape: !type:PhysShapeCircle
-        position: 0,-0.5
         radius: 0.2
+        position: 0,-0.5
       hard: False
       id: docking
     type: Fixtures
@@ -39541,8 +39552,7 @@ entities:
     parent: 127
     type: Transform
   - fixtures:
-    - density: 100
-      shape: !type:PolygonShape
+    - shape: !type:PolygonShape
         vertices:
         - 0.49,-0.49
         - 0.49,0.49
@@ -39560,9 +39570,10 @@ entities:
       - BulletImpassable
       - InteractImpassable
       - Opaque
+      density: 100
     - shape: !type:PhysShapeCircle
-        position: 0,-0.5
         radius: 0.2
+        position: 0,-0.5
       hard: False
       id: docking
     type: Fixtures
@@ -39573,8 +39584,7 @@ entities:
     parent: 127
     type: Transform
   - fixtures:
-    - density: 100
-      shape: !type:PolygonShape
+    - shape: !type:PolygonShape
         vertices:
         - 0.49,-0.49
         - 0.49,0.49
@@ -39592,9 +39602,10 @@ entities:
       - BulletImpassable
       - InteractImpassable
       - Opaque
+      density: 100
     - shape: !type:PhysShapeCircle
-        position: 0,-0.5
         radius: 0.2
+        position: 0,-0.5
       hard: False
       id: docking
     type: Fixtures
@@ -54533,7 +54544,11 @@ entities:
   - pos: 24.5,-5.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -73652.09
+=======
+  - SecondsUntilStateChange: -76723.14
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54549,7 +54564,11 @@ entities:
   - pos: 24.5,-4.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -73652.09
+=======
+  - SecondsUntilStateChange: -76723.14
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54565,7 +54584,11 @@ entities:
   - pos: 24.5,-7.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -73652.09
+=======
+  - SecondsUntilStateChange: -76723.14
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54581,7 +54604,11 @@ entities:
   - pos: 24.5,-6.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -73652.09
+=======
+  - SecondsUntilStateChange: -76723.14
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54633,7 +54660,11 @@ entities:
   - pos: 13.5,-5.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54649,7 +54680,11 @@ entities:
   - pos: 14.5,-5.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54665,7 +54700,11 @@ entities:
   - pos: 15.5,-5.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54681,7 +54720,11 @@ entities:
   - pos: 16.5,-5.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54697,7 +54740,11 @@ entities:
   - pos: 17.5,-5.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54713,7 +54760,11 @@ entities:
   - pos: 18.5,-5.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54729,7 +54780,11 @@ entities:
   - pos: 12.5,-5.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54745,7 +54800,11 @@ entities:
   - pos: 19.5,-5.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54761,7 +54820,11 @@ entities:
   - pos: 11.5,-6.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54777,7 +54840,11 @@ entities:
   - pos: 11.5,-7.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54793,7 +54860,11 @@ entities:
   - pos: 20.5,-6.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54809,7 +54880,11 @@ entities:
   - pos: 20.5,-7.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74702.97
+=======
+  - SecondsUntilStateChange: -77774.016
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54825,7 +54900,11 @@ entities:
   - pos: 20.5,-9.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74618.37
+=======
+  - SecondsUntilStateChange: -77689.414
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -54841,7 +54920,11 @@ entities:
   - pos: 20.5,-11.5
     parent: 127
     type: Transform
+<<<<<<< HEAD
   - SecondsUntilStateChange: -74618.37
+=======
+  - SecondsUntilStateChange: -77689.414
+>>>>>>> 988c31e0c (pipes and power (#13482))
     state: Opening
     type: Door
   - inputs:
@@ -66657,6 +66740,25 @@ entities:
   - pos: 33.5,19.5
     parent: 127
     type: Transform
+  - fixtures:
+    - shape: !type:PolygonShape
+        vertices:
+        - 0.25,-0.48
+        - 0.25,0.48
+        - -0.25,0.48
+        - -0.25,-0.48
+      mask:
+      - Impassable
+      - MidImpassable
+      - LowImpassable
+      layer:
+      - BulletImpassable
+      - Opaque
+      density: 145
+    type: Fixtures
+  - open: True
+    removedMasks: 20
+    type: EntityStorage
 - uid: 8225
   type: ClosetEmergencyFilledRandom
   components:
@@ -69821,10 +69923,9 @@ entities:
   - powerLoad: 0
     type: ApcPowerReceiver
 - uid: 8684
-  type: GasPipeTJunction
+  type: GasPipeFourway
   components:
-  - rot: 3.141592653589793 rad
-    pos: 25.5,1.5
+  - pos: 25.5,1.5
     parent: 127
     type: Transform
   - color: '#0055CCFF'
@@ -70266,4 +70367,478 @@ entities:
     type: Transform
   - id: North Hall
     type: SurveillanceCamera
+<<<<<<< HEAD
+=======
+- uid: 8755
+  type: VendingMachineChefvend
+  components:
+  - flags: SessionSpecific
+    type: MetaData
+  - pos: 13.5,-11.5
+    parent: 127
+    type: Transform
+- uid: 8756
+  type: SpawnVendingMachineRestockFoodDrink
+  components:
+  - pos: 5.5,-14.5
+    parent: 127
+    type: Transform
+- uid: 8757
+  type: SpawnVendingMachineRestockFoodDrink
+  components:
+  - pos: 5.5,-14.5
+    parent: 127
+    type: Transform
+- uid: 8758
+  type: SpawnVendingMachineRestockFoodDrink
+  components:
+  - pos: 5.5,-14.5
+    parent: 127
+    type: Transform
+- uid: 8759
+  type: SheetPlasma1
+  components:
+  - pos: 4.5860763,4.8888874
+    parent: 127
+    type: Transform
+- uid: 8760
+  type: ComputerTechnologyDiskTerminal
+  components:
+  - pos: 5.5,-1.5
+    parent: 127
+    type: Transform
+- uid: 8761
+  type: Grille
+  components:
+  - pos: -10.5,32.5
+    parent: 127
+    type: Transform
+- uid: 8762
+  type: GrilleBroken
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -7.5,34.5
+    parent: 127
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 8763
+  type: Grille
+  components:
+  - pos: -8.5,32.5
+    parent: 127
+    type: Transform
+- uid: 8764
+  type: GrilleBroken
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -9.5,32.5
+    parent: 127
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 8765
+  type: Grille
+  components:
+  - pos: -6.5,34.5
+    parent: 127
+    type: Transform
+- uid: 8766
+  type: Grille
+  components:
+  - pos: -5.5,34.5
+    parent: 127
+    type: Transform
+- uid: 8767
+  type: Grille
+  components:
+  - pos: -3.5,35.5
+    parent: 127
+    type: Transform
+- uid: 8768
+  type: GrilleBroken
+  components:
+  - pos: -2.5,35.5
+    parent: 127
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 8769
+  type: Grille
+  components:
+  - pos: -1.5,35.5
+    parent: 127
+    type: Transform
+- uid: 8770
+  type: Grille
+  components:
+  - pos: -0.5,35.5
+    parent: 127
+    type: Transform
+- uid: 8771
+  type: Grille
+  components:
+  - pos: 1.5,35.5
+    parent: 127
+    type: Transform
+- uid: 8772
+  type: GrilleBroken
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 0.5,35.5
+    parent: 127
+    type: Transform
+  - canCollide: False
+    type: Physics
+- uid: 8773
+  type: BookRandom
+  components:
+  - pos: 19.66408,-31.2702
+    parent: 127
+    type: Transform
+- uid: 8774
+  type: BookRandom
+  components:
+  - pos: 19.50783,-31.2077
+    parent: 127
+    type: Transform
+- uid: 8775
+  type: CableHV
+  components:
+  - pos: -5.5,-35.5
+    parent: 127
+    type: Transform
+- uid: 8776
+  type: IntercomScience
+  components:
+  - pos: -5.5,3.5
+    parent: 127
+    type: Transform
+- uid: 8777
+  type: IntercomScience
+  components:
+  - pos: -2.5,-0.5
+    parent: 127
+    type: Transform
+- uid: 8778
+  type: IntercomScience
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 3.5,-0.5
+    parent: 127
+    type: Transform
+- uid: 8779
+  type: IntercomMedical
+  components:
+  - pos: 3.5,3.5
+    parent: 127
+    type: Transform
+- uid: 8780
+  type: IntercomMedical
+  components:
+  - pos: 2.5,13.5
+    parent: 127
+    type: Transform
+- uid: 8781
+  type: IntercomMedical
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 0.5,18.5
+    parent: 127
+    type: Transform
+- uid: 8782
+  type: IntercomSupply
+  components:
+  - pos: 13.5,11.5
+    parent: 127
+    type: Transform
+- uid: 8783
+  type: IntercomSupply
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 20.5,18.5
+    parent: 127
+    type: Transform
+- uid: 8784
+  type: IntercomSupply
+  components:
+  - pos: 14.5,5.5
+    parent: 127
+    type: Transform
+- uid: 8785
+  type: IntercomEngineering
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 28.5,0.5
+    parent: 127
+    type: Transform
+- uid: 8786
+  type: IntercomEngineering
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 26.5,15.5
+    parent: 127
+    type: Transform
+- uid: 8787
+  type: IntercomEngineering
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 38.5,13.5
+    parent: 127
+    type: Transform
+- uid: 8788
+  type: IntercomAll
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 28.5,-5.5
+    parent: 127
+    type: Transform
+- uid: 8789
+  type: IntercomAll
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 31.5,-1.5
+    parent: 127
+    type: Transform
+- uid: 8790
+  type: IntercomCommand
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 38.5,-8.5
+    parent: 127
+    type: Transform
+- uid: 8791
+  type: IntercomService
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 14.5,-9.5
+    parent: 127
+    type: Transform
+- uid: 8792
+  type: IntercomService
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 20.5,-12.5
+    parent: 127
+    type: Transform
+- uid: 8793
+  type: IntercomService
+  components:
+  - pos: 18.5,-15.5
+    parent: 127
+    type: Transform
+- uid: 8794
+  type: IntercomService
+  components:
+  - pos: 19.5,-20.5
+    parent: 127
+    type: Transform
+- uid: 8795
+  type: IntercomSecurity
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: 23.5,-18.5
+    parent: 127
+    type: Transform
+- uid: 8796
+  type: IntercomSecurity
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 34.5,-24.5
+    parent: 127
+    type: Transform
+- uid: 8797
+  type: IntercomSecurity
+  components:
+  - pos: 37.5,-25.5
+    parent: 127
+    type: Transform
+- uid: 8798
+  type: Intercom
+  components:
+  - rot: -1.5707963267948966 rad
+    pos: -1.5,-24.5
+    parent: 127
+    type: Transform
+- uid: 8799
+  type: Intercom
+  components:
+  - pos: 7.5,-15.5
+    parent: 127
+    type: Transform
+- uid: 8800
+  type: Intercom
+  components:
+  - pos: 21.5,-32.5
+    parent: 127
+    type: Transform
+- uid: 8801
+  type: Intercom
+  components:
+  - pos: 32.5,-33.5
+    parent: 127
+    type: Transform
+- uid: 8802
+  type: Intercom
+  components:
+  - pos: 38.5,-33.5
+    parent: 127
+    type: Transform
+- uid: 8803
+  type: Intercom
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 8.5,-12.5
+    parent: 127
+    type: Transform
+- uid: 8804
+  type: Intercom
+  components:
+  - rot: 3.141592653589793 rad
+    pos: 12.5,-24.5
+    parent: 127
+    type: Transform
+- uid: 8805
+  type: Intercom
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: 8.5,-3.5
+    parent: 127
+    type: Transform
+- uid: 8806
+  type: Intercom
+  components:
+  - pos: 21.5,4.5
+    parent: 127
+    type: Transform
+- uid: 8807
+  type: IntercomMedical
+  components:
+  - rot: 1.5707963267948966 rad
+    pos: -6.5,14.5
+    parent: 127
+    type: Transform
+- uid: 8808
+  type: CableApcExtension
+  components:
+  - pos: -1.5,10.5
+    parent: 127
+    type: Transform
+- uid: 8809
+  type: CableApcExtension
+  components:
+  - pos: -2.5,10.5
+    parent: 127
+    type: Transform
+- uid: 8810
+  type: CableApcExtension
+  components:
+  - pos: -0.5,4.5
+    parent: 127
+    type: Transform
+- uid: 8811
+  type: CableApcExtension
+  components:
+  - pos: -1.5,4.5
+    parent: 127
+    type: Transform
+- uid: 8812
+  type: CableApcExtension
+  components:
+  - pos: -2.5,4.5
+    parent: 127
+    type: Transform
+- uid: 8813
+  type: CableApcExtension
+  components:
+  - pos: 1.5,4.5
+    parent: 127
+    type: Transform
+- uid: 8814
+  type: CableApcExtension
+  components:
+  - pos: 28.5,15.5
+    parent: 127
+    type: Transform
+- uid: 8815
+  type: IntercomSecurity
+  components:
+  - pos: 43.5,-17.5
+    parent: 127
+    type: Transform
+- uid: 8816
+  type: CableApcExtension
+  components:
+  - pos: 12.5,-22.5
+    parent: 127
+    type: Transform
+- uid: 8817
+  type: CableApcExtension
+  components:
+  - pos: 6.5,-1.5
+    parent: 127
+    type: Transform
+- uid: 8818
+  type: CableApcExtension
+  components:
+  - pos: 6.5,-0.5
+    parent: 127
+    type: Transform
+- uid: 8819
+  type: CableApcExtension
+  components:
+  - pos: 25.5,9.5
+    parent: 127
+    type: Transform
+- uid: 8820
+  type: CableApcExtension
+  components:
+  - pos: 24.5,9.5
+    parent: 127
+    type: Transform
+- uid: 8821
+  type: GasPipeStraight
+  components:
+  - pos: 25.5,0.5
+    parent: 127
+    type: Transform
+  - color: '#0055CCFF'
+    type: AtmosPipeColor
+- uid: 8822
+  type: CableApcExtension
+  components:
+  - pos: 35.5,17.5
+    parent: 127
+    type: Transform
+- uid: 8823
+  type: CableApcExtension
+  components:
+  - pos: -11.5,21.5
+    parent: 127
+    type: Transform
+- uid: 8824
+  type: CableApcExtension
+  components:
+  - pos: -11.5,22.5
+    parent: 127
+    type: Transform
+- uid: 8825
+  type: CableApcExtension
+  components:
+  - pos: -11.5,23.5
+    parent: 127
+    type: Transform
+- uid: 8826
+  type: CableApcExtension
+  components:
+  - pos: -11.5,24.5
+    parent: 127
+    type: Transform
+- uid: 8827
+  type: CableApcExtension
+  components:
+  - pos: -11.5,25.5
+    parent: 127
+    type: Transform
+>>>>>>> 988c31e0c (pipes and power (#13482))
 ...
