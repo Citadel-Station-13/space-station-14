@@ -17,6 +17,25 @@ public abstract class AlertsSystem : EntitySystem
             : null;
     }
 
+<<<<<<< HEAD
+=======
+    public short GetSeverityRange(AlertType alertType)
+    {
+        var minSeverity = _typeToAlert[alertType].MinSeverity;
+        return (short)MathF.Max(minSeverity,_typeToAlert[alertType].MaxSeverity - minSeverity);
+    }
+
+    public short GetMaxSeverity(AlertType alertType)
+    {
+        return _typeToAlert[alertType].MaxSeverity;
+    }
+
+    public short GetMinSeverity(AlertType alertType)
+    {
+        return _typeToAlert[alertType].MinSeverity;
+    }
+
+>>>>>>> 2e0121b21 (Fixing health alerts not properly updating when players are damaged (#13480))
     public bool IsShowingAlert(EntityUid euid, AlertType alertType)
     {
         if (!EntityManager.TryGetComponent(euid, out AlertsComponent? alertsComponent))
