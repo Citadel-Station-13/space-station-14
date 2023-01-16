@@ -215,8 +215,14 @@ namespace Content.Client.Verbs.UI
         private void ExecuteVerb(Verb verb)
         {
             _verbSystem.ExecuteVerb(CurrentTarget, verb);
+<<<<<<< HEAD:Content.Client/Verbs/UI/VerbMenuPresenter.cs
             if (verb.CloseMenu)
                 _verbSystem.CloseAllMenus();
+=======
+
+            if (verb.CloseMenu ?? verb.CloseMenuDefault)
+                _context.Close();
+>>>>>>> 22d72f56b (Guidebook Revival (#13320)):Content.Client/Verbs/UI/VerbMenuUIController.cs
         }
     }
 }
