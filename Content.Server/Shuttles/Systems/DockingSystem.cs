@@ -1,4 +1,3 @@
-using Content.Server.Doors.Components;
 using Content.Server.Doors.Systems;
 using Content.Server.NPC.Pathfinding;
 using Content.Server.Shuttles.Components;
@@ -10,7 +9,6 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Dynamics.Joints;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Utility;
@@ -20,6 +18,11 @@ namespace Content.Server.Shuttles.Systems
     public sealed partial class DockingSystem : EntitySystem
     {
         [Dependency] private readonly IMapManager _mapManager = default!;
+<<<<<<< HEAD
+=======
+        [Dependency] private readonly AirlockSystem _airlocks = default!;
+        [Dependency] private readonly DoorSystem _doorSystem = default!;
+>>>>>>> 2873a830b (ECS airlocks (#13500))
         [Dependency] private readonly FixtureSystem _fixtureSystem = default!;
         [Dependency] private readonly SharedJointSystem _jointSystem = default!;
         [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
@@ -281,7 +284,11 @@ namespace Content.Server.Shuttles.Systems
 
             // TODO: I want this to ideally be 2 fixtures to force them to have some level of alignment buuuttt
             // I also need collisionmanager for that yet again so they get dis.
+<<<<<<< HEAD
             _fixtureSystem.TryCreateFixture(physicsComponent, fixture);
+=======
+            _fixtureSystem.TryCreateFixture(uid, shape, DockingFixture, hard: false, body: physicsComponent);
+>>>>>>> 2873a830b (ECS airlocks (#13500))
         }
 
         /// <summary>
@@ -359,7 +366,7 @@ namespace Content.Server.Shuttles.Systems
                     doorA.ChangeAirtight = false;
                     if (TryComp<AirlockComponent>(dockA.Owner, out var airlockA))
                     {
-                        airlockA.SetBoltsWithAudio(true);
+                        _airlocks.SetBoltsWithAudio(dockA.Owner, airlockA, true);
                     }
                 }
             }
@@ -371,7 +378,7 @@ namespace Content.Server.Shuttles.Systems
                     doorB.ChangeAirtight = false;
                     if (TryComp<AirlockComponent>(dockB.Owner, out var airlockB))
                     {
-                        airlockB.SetBoltsWithAudio(true);
+                        _airlocks.SetBoltsWithAudio(dockB.Owner, airlockB, true);
                     }
                 }
             }
@@ -456,12 +463,12 @@ namespace Content.Server.Shuttles.Systems
 
             if (TryComp<AirlockComponent>(dock.Owner, out var airlockA))
             {
-                airlockA.SetBoltsWithAudio(false);
+                _airlocks.SetBoltsWithAudio(dock.Owner, airlockA, false);
             }
 
             if (TryComp<AirlockComponent>(dock.DockedWith, out var airlockB))
             {
-                airlockB.SetBoltsWithAudio(false);
+                _airlocks.SetBoltsWithAudio(dock.DockedWith.Value, airlockB, false);
             }
 
             if (TryComp(dock.Owner, out DoorComponent? doorA))

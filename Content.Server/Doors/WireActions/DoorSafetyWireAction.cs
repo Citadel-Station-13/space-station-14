@@ -1,6 +1,8 @@
 using Content.Server.Doors.Components;
 using Content.Server.Wires;
 using Content.Shared.Doors;
+using Content.Shared.Doors.Components;
+using Content.Shared.Doors.Systems;
 using Content.Shared.Wires;
 
 namespace Content.Server.Doors;
@@ -41,7 +43,7 @@ public sealed class DoorSafetyWireAction : BaseWireAction
         if (EntityManager.TryGetComponent<AirlockComponent>(wire.Owner, out var door))
         {
             WiresSystem.TryCancelWireAction(wire.Owner, PulseTimeoutKey.Key);
-            door.Safety = false;
+            EntityManager.System<SharedAirlockSystem>().SetSafety(door, false);
         }
 
         return true;
@@ -51,7 +53,7 @@ public sealed class DoorSafetyWireAction : BaseWireAction
     {
         if (EntityManager.TryGetComponent<AirlockComponent>(wire.Owner, out var door))
         {
-            door.Safety = true;
+            EntityManager.System<SharedAirlockSystem>().SetSafety(door, true);
         }
 
         return true;
@@ -61,7 +63,7 @@ public sealed class DoorSafetyWireAction : BaseWireAction
     {
         if (EntityManager.TryGetComponent<AirlockComponent>(wire.Owner, out var door))
         {
-            door.Safety = false;
+            EntityManager.System<SharedAirlockSystem>().SetSafety(door, false);
             WiresSystem.StartWireAction(wire.Owner, _timeout, PulseTimeoutKey.Key, new TimedWireEvent(AwaitSafetyTimerFinish, wire));
         }
 
@@ -82,7 +84,7 @@ public sealed class DoorSafetyWireAction : BaseWireAction
         {
             if (EntityManager.TryGetComponent<AirlockComponent>(wire.Owner, out var door))
             {
-                door.Safety = true;
+                EntityManager.System<SharedAirlockSystem>().SetSafety(door, true);
             }
         }
     }
