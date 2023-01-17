@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 using Content.Server.Administration;
+=======
+﻿using Content.Server.Administration;
+using Content.Server.Administration.Logs;
+>>>>>>> 6e8705b2e (Make phones functional (#12892))
 using Content.Server.Bible.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.Popups;
@@ -42,8 +47,8 @@ public sealed class PrayerSystem : EntitySystem
 
         var prayerVerb = new ActivationVerb
         {
-            Text = Loc.GetString("prayer-verbs-pray"),
-            IconTexture = "/Textures/Interface/pray.svg.png",
+            Text = Loc.GetString(comp.Verb),
+            IconTexture = comp.VerbImage == "" ? null : comp.VerbImage,
             Act = () =>
             {
                 if (comp.BibleUserOnly && !EntityManager.TryGetComponent<BibleUserComponent>(args.User, out var bibleUser))
@@ -52,9 +57,9 @@ public sealed class PrayerSystem : EntitySystem
                     return;
                 }
 
-                _quickDialog.OpenDialog(actor.PlayerSession, "Pray", "Message", (string message) =>
+                _quickDialog.OpenDialog(actor.PlayerSession, Loc.GetString(comp.Verb), "Message", (string message) =>
                 {
-                    Pray(actor.PlayerSession, message);
+                    Pray(actor.PlayerSession, comp, message);
                 });
             },
             Impact = LogImpact.Low,
@@ -75,7 +80,7 @@ public sealed class PrayerSystem : EntitySystem
         if (target.AttachedEntity == null)
             return;
 
-        var message = popupMessage == "" ? "" : popupMessage + $" \"{messageString}\"";
+        var message = popupMessage == "" ? "" : popupMessage + (messageString == "" ? "" : $" \"{messageString}\"");
 
         _popupSystem.PopupEntity(popupMessage, target.AttachedEntity.Value, target, PopupType.Large);
         _chatManager.ChatMessageToOne(ChatChannel.Local, messageString, message, EntityUid.Invalid, false, target.ConnectedClient);
@@ -85,19 +90,25 @@ public sealed class PrayerSystem : EntitySystem
     /// Sends a message to the admin channel with a message and username
     /// </summary>
     /// <param name="sender">The IPlayerSession who sent the original message</param>
+    /// <param name="comp">Prayable component used to make the prayer</param>
     /// <param name="message">Message to be sent to the admin chat</param>
     /// <remarks>
     /// You may be wondering, "Why the admin chat, specifically? Nobody even reads it!"
     /// Exactly.
     ///  </remarks>
-    public void Pray(IPlayerSession sender, string message)
+    public void Pray(IPlayerSession sender, PrayableComponent comp, string message)
     {
         if (sender.AttachedEntity == null)
             return;
 
 
-        _popupSystem.PopupEntity(Loc.GetString("prayer-popup-notify-sent"), sender.AttachedEntity.Value, sender, PopupType.Medium);
+        _popupSystem.PopupEntity(Loc.GetString(comp.SentMessage), sender.AttachedEntity.Value, sender, PopupType.Medium);
 
+<<<<<<< HEAD
         _chatManager.SendAdminAnnouncement(Loc.GetString("prayer-chat-notify", ("name", sender.Name), ("message", message)));
+=======
+        _chatManager.SendAdminAnnouncement($"{Loc.GetString(comp.NotifiactionPrefix)} <{sender.Name}>: {message}");
+        _adminLogger.Add(LogType.AdminMessage, LogImpact.Low, $"{ToPrettyString(sender.AttachedEntity.Value):player} sent prayer ({Loc.GetString(comp.NotifiactionPrefix)}): {message}");
+>>>>>>> 6e8705b2e (Make phones functional (#12892))
     }
 }
