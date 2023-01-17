@@ -1,16 +1,20 @@
 using Content.Client.Pointing.Components;
+<<<<<<< HEAD
 using Content.Shared.MobState.EntitySystems;
+=======
+using Content.Client.Gravity;
+using Content.Shared.Mobs.Systems;
+>>>>>>> 67ed59a50 (Makes mobs visually float when weightless (#13391))
 using Content.Shared.Pointing;
 using Content.Shared.Verbs;
-using Robust.Client.Animations;
 using Robust.Client.GameObjects;
-using Robust.Shared.Animations;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client.Pointing;
 
 public sealed class PointingSystem : SharedPointingSystem
 {
+<<<<<<< HEAD
     [Dependency] private readonly AnimationPlayerSystem _player = default!;
     [Dependency] private readonly SharedMobStateSystem _mobState = default!;
 
@@ -48,6 +52,10 @@ public sealed class PointingSystem : SharedPointingSystem
             }
         }
     };
+=======
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly FloatingVisualizerSystem _floatingSystem = default!;
+>>>>>>> 67ed59a50 (Makes mobs visually float when weightless (#13391))
 
     public override void Initialize()
     {
@@ -61,7 +69,7 @@ public sealed class PointingSystem : SharedPointingSystem
 
     private void OnArrowAnimation(EntityUid uid, PointingArrowComponent component, AnimationCompletedEvent args)
     {
-        _player.Play(uid, PointingAnimation, AnimationKey);
+        _floatingSystem.FloatAnimation(uid, component.Offset, component.AnimationKey, component.AnimationTime);
     }
 
     private void AddPointingVerb(GetVerbsEvent<Verb> args)
@@ -95,19 +103,19 @@ public sealed class PointingSystem : SharedPointingSystem
         args.Verbs.Add(verb);
     }
 
-    private void OnArrowStartup(EntityUid uid, PointingArrowComponent arrow, ComponentStartup args)
+    private void OnArrowStartup(EntityUid uid, PointingArrowComponent component, ComponentStartup args)
     {
-        if (EntityManager.TryGetComponent(uid, out SpriteComponent? sprite))
+        if (TryComp<SpriteComponent>(uid, out var sprite))
         {
             sprite.DrawDepth = (int) DrawDepth.Overlays;
         }
 
-        _player.Play(uid, PointingAnimation, AnimationKey);
+        _floatingSystem.FloatAnimation(uid, component.Offset, component.AnimationKey, component.AnimationTime);
     }
 
     private void OnRogueArrowStartup(EntityUid uid, RoguePointingArrowComponent arrow, ComponentStartup args)
     {
-        if (EntityManager.TryGetComponent(uid, out SpriteComponent? sprite))
+        if (TryComp<SpriteComponent>(uid, out var sprite))
         {
             sprite.DrawDepth = (int) DrawDepth.Overlays;
             sprite.NoRotation = false;
