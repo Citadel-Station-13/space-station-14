@@ -350,6 +350,7 @@
       screen: artifact
   - type: ResearchClient
   - type: AnalysisConsole
+    reportEntityId: PaperArtifactAnalyzer
   - type: DeviceList
   - type: DeviceNetwork
     deviceNetId: Wired
