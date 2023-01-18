@@ -194,6 +194,12 @@ namespace Content.Server.Bed.Sleep
         /// </summary>
         public bool TryWaking(EntityUid uid, bool force = false, EntityUid? user = null)
         {
+<<<<<<< HEAD
+=======
+            if (!Resolve(uid, ref component, false))
+                return false;
+
+>>>>>>> 222e01100 (Don't log resolve for waking (#13435))
             if (!force && HasComp<ForcedSleepingComponent>(uid))
             {
                 if (user != null)
