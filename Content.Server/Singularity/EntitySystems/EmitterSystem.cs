@@ -79,6 +79,50 @@ namespace Content.Server.Singularity.EntitySystems
             }
         }
 
+<<<<<<< HEAD
+=======
+        private void OnGetVerb(EntityUid uid, EmitterComponent component, GetVerbsEvent<Verb> args)
+        {
+            if (!args.CanAccess || !args.CanInteract || args.Hands == null)
+                return;
+
+            if (TryComp<LockComponent>(uid, out var lockComp) && lockComp.Locked)
+                return;
+
+            if (component.SelectableTypes.Count < 2)
+                return;
+
+            foreach (var type in component.SelectableTypes)
+            {
+                var proto = _prototype.Index<EntityPrototype>(type);
+
+                var v = new Verb
+                {
+                    Priority = 1,
+                    Category = VerbCategory.SelectType,
+                    Text = proto.Name,
+                    Disabled = type == component.BoltType,
+                    Impact = LogImpact.Medium,
+                    DoContactInteraction = true,
+                    Act = () =>
+                    {
+                        component.BoltType = type;
+                        _popup.PopupEntity(Loc.GetString("emitter-component-type-set", ("type", proto.Name)), uid);
+                    }
+                };
+                args.Verbs.Add(v);
+            }
+        }
+
+        private void OnExamined(EntityUid uid, EmitterComponent component, ExaminedEvent args)
+        {
+            if (component.SelectableTypes.Count < 2)
+                return;
+            var proto = _prototype.Index<EntityPrototype>(component.BoltType);
+            args.PushMarkup(Loc.GetString("emitter-component-current-type", ("type", proto.Name)));
+        }
+
+>>>>>>> 4d5722633 (Anomaly fixes (#13558))
         private void ReceivedChanged(
             EntityUid uid,
             EmitterComponent component,
