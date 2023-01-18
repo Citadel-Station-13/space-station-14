@@ -262,7 +262,14 @@ namespace Content.Client.ContextMenu.UI
             foreach (var entity in group)
             {
                 var subElement = new EntityMenuElement(entity);
+<<<<<<< HEAD:Content.Client/ContextMenu/UI/EntityMenuPresenter.cs
                 AddElement(subMenu, subElement);
+=======
+                subElement.SubMenu = new ContextMenuPopup(_context, subElement);
+                subElement.SubMenu.OnPopupOpen += () => _verb.OpenVerbMenu(group[0], popup: subElement.SubMenu);
+                subElement.SubMenu.OnPopupHide += subElement.SubMenu.MenuBody.DisposeAllChildren;
+                _context.AddElement(subMenu, subElement);
+>>>>>>> 1ae1207ab (Fix nested context menu popup (#13578)):Content.Client/ContextMenu/UI/EntityMenuUIController.cs
                 Elements.TryAdd(entity, subElement);
             }
 
