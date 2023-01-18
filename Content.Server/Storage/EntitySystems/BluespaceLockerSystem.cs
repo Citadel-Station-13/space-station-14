@@ -29,7 +29,29 @@ public sealed class BluespaceLockerSystem : EntitySystem
 
     private void OnStartup(EntityUid uid, BluespaceLockerComponent component, ComponentStartup args)
     {
+<<<<<<< HEAD
         GetTargetStorage(component);
+=======
+        GetTarget(uid, component, true);
+
+        if (component.BehaviorProperties.BluespaceEffectOnInit)
+            BluespaceEffect(uid, component, component, true);
+    }
+
+    public void BluespaceEffect(EntityUid effectTargetUid, BluespaceLockerComponent effectSourceComponent, BluespaceLockerComponent? effectTargetComponent, bool bypassLimit = false)
+    {
+        if (!bypassLimit && Resolve(effectTargetUid, ref effectTargetComponent, false))
+            if (effectTargetComponent!.BehaviorProperties.BluespaceEffectMinInterval > 0)
+            {
+                var curTimeTicks = _timing.CurTick.Value;
+                if (curTimeTicks < effectTargetComponent.BluespaceEffectNextTime)
+                    return;
+
+                effectTargetComponent.BluespaceEffectNextTime = curTimeTicks + (uint) (_timing.TickRate * effectTargetComponent.BehaviorProperties.BluespaceEffectMinInterval);
+            }
+
+        Spawn(effectSourceComponent.BehaviorProperties.BluespaceEffectPrototype, effectTargetUid.ToCoordinates());
+>>>>>>> 5f2bccd1b (Bluespace lockers fix (#13575))
     }
 
     private void PreOpen(EntityUid uid, BluespaceLockerComponent component, StorageBeforeOpenEvent args)
@@ -95,7 +117,65 @@ public sealed class BluespaceLockerSystem : EntitySystem
         return true;
     }
 
+<<<<<<< HEAD
     private EntityStorageComponent? GetTargetStorage(BluespaceLockerComponent component)
+=======
+    /// <returns>True if any HashSet in <paramref name="a"/> would grant access to <paramref name="b"/></returns>
+    private bool AccessMatch(IReadOnlyCollection<HashSet<string>>? a, IReadOnlyCollection<HashSet<string>>? b)
+    {
+        if ((a == null || a.Count == 0) && (b == null || b.Count == 0))
+            return true;
+        if (a != null && a.Any(aSet => aSet.Count == 0))
+            return true;
+        if (b != null && b.Any(bSet => bSet.Count == 0))
+            return true;
+
+        if (a != null && b != null)
+            return a.Any(aSet => b.Any(aSet.SetEquals));
+        return false;
+    }
+
+    private bool ValidAutolink(EntityUid locker, EntityUid link, BluespaceLockerComponent lockerComponent)
+    {
+        if (!ValidLink(locker, link, lockerComponent, true))
+            return false;
+
+        if (lockerComponent.PickLinksFromSameMap &&
+            link.ToCoordinates().GetMapId(EntityManager) != locker.ToCoordinates().GetMapId(EntityManager))
+            return false;
+
+        if (lockerComponent.PickLinksFromStationGrids &&
+            !HasComp<StationMemberComponent>(link.ToCoordinates().GetGridUid(EntityManager)))
+            return false;
+
+        if (lockerComponent.PickLinksFromResistLockers &&
+            !HasComp<ResistLockerComponent>(link))
+            return false;
+
+        if (lockerComponent.PickLinksFromSameAccess)
+        {
+            TryComp<AccessReaderComponent>(locker, out var sourceAccess);
+            TryComp<AccessReaderComponent>(link, out var targetAccess);
+            if (!AccessMatch(sourceAccess?.AccessLists, targetAccess?.AccessLists))
+                return false;
+        }
+
+        if (HasComp<BluespaceLockerComponent>(link))
+        {
+            if (lockerComponent.PickLinksFromNonBluespaceLockers)
+                return false;
+        }
+        else
+        {
+            if (lockerComponent.PickLinksFromBluespaceLockers)
+                return false;
+        }
+
+        return true;
+    }
+
+    public (EntityUid uid, EntityStorageComponent storageComponent, BluespaceLockerComponent? bluespaceLockerComponent)? GetTarget(EntityUid lockerUid, BluespaceLockerComponent component, bool init = false)
+>>>>>>> 5f2bccd1b (Bluespace lockers fix (#13575))
     {
         while (true)
         {
@@ -115,8 +195,30 @@ public sealed class BluespaceLockerSystem : EntitySystem
                     component.BluespaceLinks.Add(storage);
                     if (component.AutoLinksBidirectional)
                     {
+<<<<<<< HEAD
                         _entityManager.EnsureComponent<BluespaceLockerComponent>(storage.Owner, out var targetBluespaceComponent);
                         targetBluespaceComponent.BluespaceLinks.Add(_entityManager.GetComponent<EntityStorageComponent>(component.Owner));
+=======
+                        var targetBluespaceComponent = CompOrNull<BluespaceLockerComponent>(potentialLink);
+
+                        if (targetBluespaceComponent == null)
+                        {
+                            targetBluespaceComponent = AddComp<BluespaceLockerComponent>(potentialLink);
+
+                            if (component.AutoLinksBidirectional)
+                                targetBluespaceComponent.BluespaceLinks.Add(lockerUid);
+
+                            if (component.AutoLinksUseProperties)
+                                targetBluespaceComponent.BehaviorProperties = component.AutoLinkProperties with {};
+
+                            GetTarget(potentialLink, targetBluespaceComponent, true);
+                            BluespaceEffect(potentialLink, targetBluespaceComponent, targetBluespaceComponent, true);
+                        }
+                        else if (component.AutoLinksBidirectional)
+                        {
+                            targetBluespaceComponent.BluespaceLinks.Add(lockerUid);
+                        }
+>>>>>>> 5f2bccd1b (Bluespace lockers fix (#13575))
                     }
                     if (component.BluespaceLinks.Count >= component.MinBluespaceLinks)
                         break;
@@ -125,6 +227,13 @@ public sealed class BluespaceLockerSystem : EntitySystem
 
             // If there are no possible link targets and no links, return null
             if (component.BluespaceLinks.Count == 0)
+<<<<<<< HEAD
+=======
+            {
+                if (component.MinBluespaceLinks == 0 && init)
+                    RemComp<BluespaceLockerComponent>(lockerUid);
+
+>>>>>>> 5f2bccd1b (Bluespace lockers fix (#13575))
                 return null;
 
             // Attempt to select, validate, and return a link
