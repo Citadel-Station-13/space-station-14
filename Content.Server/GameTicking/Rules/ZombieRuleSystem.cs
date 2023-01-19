@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Linq;
 using Content.Server.Actions;
 using Content.Server.Chat.Managers;
@@ -76,9 +77,9 @@ public sealed class ZombieRuleSystem : GameRuleSystem
         else if (percent <= 0.25)
             ev.AddLine(Loc.GetString("zombie-round-end-amount-low"));
         else if (percent <= 0.5)
-            ev.AddLine(Loc.GetString("zombie-round-end-amount-medium", ("percent", Math.Round((percent * 100), 2).ToString())));
+            ev.AddLine(Loc.GetString("zombie-round-end-amount-medium", ("percent", Math.Round((percent * 100), 2).ToString(CultureInfo.InvariantCulture))));
         else if (percent < 1)
-            ev.AddLine(Loc.GetString("zombie-round-end-amount-high", ("percent", Math.Round((percent * 100), 2).ToString())));
+            ev.AddLine(Loc.GetString("zombie-round-end-amount-high", ("percent", Math.Round((percent * 100), 2).ToString(CultureInfo.InvariantCulture))));
         else
             ev.AddLine(Loc.GetString("zombie-round-end-amount-all"));
 
@@ -173,7 +174,6 @@ public sealed class ZombieRuleSystem : GameRuleSystem
         {
             _chatManager.DispatchServerAnnouncement(Loc.GetString("zombie-no-one-ready"));
             ev.Cancel();
-            return;
         }
     }
 
@@ -215,7 +215,7 @@ public sealed class ZombieRuleSystem : GameRuleSystem
                     livingHumans.Add(mob.Owner);
             }
         }
-        return ((float) livingZombies.Count) / (float) totalPlayers.Count;
+        return livingZombies.Count / (float) totalPlayers.Count;
     }
 
     /// <summary>

@@ -137,6 +137,7 @@ public sealed class SolutionSystemTests
             Assert.That(containerSystem
                 .TryMixAndOverflow(beaker, solution, oilAdded, threshold, out var overflowingSolution));
 
+<<<<<<< HEAD
             Assert.That(solution.CurrentVolume, Is.EqualTo(FixedPoint2.New(threshold)));
             solution.ContainsReagent("Water", out var waterMix);
             solution.ContainsReagent("Oil", out var oilMix);
@@ -146,6 +147,17 @@ public sealed class SolutionSystemTests
             Assert.That(overflowingSolution.CurrentVolume, Is.EqualTo(FixedPoint2.New(80)));
             overflowingSolution.ContainsReagent("Water", out var waterOverflow);
             overflowingSolution.ContainsReagent("Oil", out var oilOverFlow);
+=======
+            Assert.That(solution.Volume, Is.EqualTo(FixedPoint2.New(threshold)));
+            solution.TryGetReagent("Water", out var waterMix);
+            solution.TryGetReagent("Oil", out var oilMix);
+            Assert.That(waterMix, Is.EqualTo(FixedPoint2.New(threshold / (ratio + 1))));
+            Assert.That(oilMix, Is.EqualTo(FixedPoint2.New(threshold / (ratio + 1) * ratio)));
+
+            Assert.That(overflowingSolution.Volume, Is.EqualTo(FixedPoint2.New(80)));
+            overflowingSolution.TryGetReagent("Water", out var waterOverflow);
+            overflowingSolution.TryGetReagent("Oil", out var oilOverFlow);
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
             Assert.That(waterOverflow, Is.EqualTo(waterQuantity - waterMix));
             Assert.That(oilOverFlow, Is.EqualTo(oilQuantity - oilMix));
         });

@@ -397,6 +397,18 @@ public sealed class FaxSystem : EntitySystem
             { FaxConstants.FaxPaperContentData, paper.Content },
         };
 
+<<<<<<< HEAD
+=======
+        if (metadata.EntityPrototype != null)
+        {
+            // TODO: Ideally, we could just make a copy of the whole entity when it's
+            // faxed, in order to preserve visuals, etc.. This functionality isn't
+            // available yet, so we'll pass along the originating prototypeId and fall
+            // back to "Paper" in SpawnPaperFromQueue if we can't find one here.
+            payload[FaxConstants.FaxPaperPrototypeData] = metadata.EntityPrototype.ID;
+        }
+
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
         if (paper.StampState != null)
         {
             payload[FaxConstants.FaxPaperStampStateData] = paper.StampState;

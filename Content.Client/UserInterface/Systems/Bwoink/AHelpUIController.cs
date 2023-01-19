@@ -134,9 +134,15 @@ public sealed class AHelpUIController: UIController, IOnStateChanged<GameplaySta
         if (_uiHelper != null && _uiHelper.IsAdmin == isAdmin)
             return;
 
+<<<<<<< HEAD
         _uiHelper?.Dispose();
         var ownerUserId = _playerManager!.LocalPlayer!.UserId;
         _uiHelper = isAdmin ? new AdminAHelpUIHandler(ownerUserId) : new UserAHelpUIHandler(ownerUserId);
+=======
+        UIHelper?.Dispose();
+        var ownerUserId = _playerManager.LocalPlayer!.UserId;
+        UIHelper = isAdmin ? new AdminAHelpUIHandler(ownerUserId) : new UserAHelpUIHandler(ownerUserId);
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
 
         _uiHelper.SendMessageAction = (userId, textMessage) => _bwoinkSystem?.Send(userId, textMessage);
         _uiHelper.OnClose += () => { SetAHelpPressed(false); };

@@ -114,7 +114,11 @@ namespace Content.Server.Bed.Sleep
                 return;
             }
             if (TryComp<SpamEmitSoundComponent>(uid, out var spam))
+<<<<<<< HEAD
                 spam.Enabled = (args.CurrentMobState == DamageState.Alive) ? true : false;
+=======
+                spam.Enabled = args.NewMobState == MobState.Alive;
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
         }
 
         private void AddWakeVerb(EntityUid uid, SleepingComponent component, GetVerbsEvent<AlternativeVerb> args)

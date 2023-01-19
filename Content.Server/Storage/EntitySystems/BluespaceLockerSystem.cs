@@ -29,7 +29,29 @@ public sealed class BluespaceLockerSystem : EntitySystem
 
     private void OnStartup(EntityUid uid, BluespaceLockerComponent component, ComponentStartup args)
     {
+<<<<<<< HEAD
         GetTargetStorage(component);
+=======
+        GetTarget(uid, component, true);
+
+        if (component.BehaviorProperties.BluespaceEffectOnInit)
+            BluespaceEffect(uid, component, component, true);
+    }
+
+    public void BluespaceEffect(EntityUid effectTargetUid, BluespaceLockerComponent effectSourceComponent, BluespaceLockerComponent? effectTargetComponent, bool bypassLimit = false)
+    {
+        if (!bypassLimit && Resolve(effectTargetUid, ref effectTargetComponent, false))
+            if (effectTargetComponent.BehaviorProperties.BluespaceEffectMinInterval > 0)
+            {
+                var curTimeTicks = _timing.CurTick.Value;
+                if (curTimeTicks < effectTargetComponent.BluespaceEffectNextTime)
+                    return;
+
+                effectTargetComponent.BluespaceEffectNextTime = curTimeTicks + (uint) (_timing.TickRate * effectTargetComponent.BehaviorProperties.BluespaceEffectMinInterval);
+            }
+
+        Spawn(effectSourceComponent.BehaviorProperties.BluespaceEffectPrototype, effectTargetUid.ToCoordinates());
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
     }
 
     private void PreOpen(EntityUid uid, BluespaceLockerComponent component, StorageBeforeOpenEvent args)

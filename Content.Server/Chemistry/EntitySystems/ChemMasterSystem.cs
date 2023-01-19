@@ -346,9 +346,15 @@ namespace Content.Server.Chemistry.EntitySystems
             var pills = storage.Storage?.ContainedEntities.Select(pill =>
             {
                 _solutionContainerSystem.TryGetSolution(pill, SharedChemMaster.PillSolutionName, out var solution);
+<<<<<<< HEAD
                 var quantity = solution?.CurrentVolume ?? FixedPoint2.Zero;
                 return (Name(pill), quantity);
             }).ToList();
+=======
+                var quantity = solution?.Volume ?? FixedPoint2.Zero;
+                return (Name(pill), quantity);
+            })).ToList();
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
 
             return pills is null
                 ? null

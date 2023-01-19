@@ -24,7 +24,7 @@ namespace Content.Shared.Materials
         public bool Abstract { get; } = false;
 
         [ViewVariables]
-        [IdDataFieldAttribute]
+        [IdDataField]
         public string ID { get; } = default!;
 
         [DataField("stack", customTypeSerializer:typeof(PrototypeIdSerializer<StackPrototype>))]

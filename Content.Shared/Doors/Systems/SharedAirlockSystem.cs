@@ -46,6 +46,28 @@ public abstract class SharedAirlockSystem : EntitySystem
     public void ToggleEmergencyAccess(SharedAirlockComponent component)
     {
         component.EmergencyAccess = !component.EmergencyAccess;
+<<<<<<< HEAD
         UpdateEmergencyLightStatus(component);
+=======
+        UpdateEmergencyLightStatus(uid, component);
+    }
+
+    public void SetAutoCloseDelayModifier(AirlockComponent component, float value)
+    {
+        if (component.AutoCloseDelayModifier.Equals(value))
+            return;
+
+        component.AutoCloseDelayModifier = value;
+    }
+
+    public void SetSafety(AirlockComponent component, bool value)
+    {
+        component.Safety = value;
+    }
+
+    public void SetBoltWireCut(AirlockComponent component, bool value)
+    {
+        component.BoltWireCut = value;
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
     }
 }

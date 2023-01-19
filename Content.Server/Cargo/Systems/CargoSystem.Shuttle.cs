@@ -288,9 +288,20 @@ public sealed partial class CargoSystem
         var possibleNames = _protoMan.Index<DatasetPrototype>(prototype.NameDataset).Values;
         var name = _random.Pick(possibleNames);
 
+<<<<<<< HEAD
         var shuttleUid = _map.LoadGrid(CargoMap.Value, prototype.Path.ToString());
         var xform = Transform(shuttleUid!.Value);
         MetaData(shuttleUid!.Value).EntityName = name;
+=======
+        if (!_map.TryLoad(CargoMap.Value, prototype.Path.ToString(), out var gridList))
+        {
+            _sawmill.Error($"Could not load the cargo shuttle!");
+            return;
+        }
+        var shuttleUid = gridList[0];
+        var xform = Transform(shuttleUid);
+        MetaData(shuttleUid).EntityName = name;
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
 
         // TODO: Something better like a bounds check.
         xform.LocalPosition += 100 * _index;
@@ -514,7 +525,7 @@ public sealed partial class CargoSystem
             _popup.PopupEntity(Loc.GetString("cargo-shuttle-console-organics"), player.Value, player.Value);
             SoundSystem.Play(component.DenySound.GetSound(), Filter.Pvs(uid, entityManager: EntityManager), uid);
             return;
-        };
+        }
 
         SellPallets(shuttle, bank);
         _console.RefreshShuttleConsoles();

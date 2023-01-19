@@ -15,6 +15,145 @@ namespace Content.Client.Paper.UI
             RobustXamlLoader.Load(this);
         }
 
+<<<<<<< HEAD
+=======
+        /// <summary>
+        ///     Initialize this UI according to <code>visuals</code> Initializes
+        ///     textures, recalculates sizes, and applies some layout rules.
+        /// </summary>
+        public void InitVisuals(PaperVisualsComponent visuals)
+        {
+            var resCache = IoCManager.Resolve<IResourceCache>();
+
+            // Initialize the background:
+            PaperBackground.ModulateSelfOverride = visuals.BackgroundModulate;
+            var backgroundImage = visuals.BackgroundImagePath != null? resCache.GetResource<TextureResource>(visuals.BackgroundImagePath) : null;
+            if (backgroundImage != null)
+            {
+                var backgroundImageMode = visuals.BackgroundImageTile ? StyleBoxTexture.StretchMode.Tile : StyleBoxTexture.StretchMode.Stretch;
+                var backgroundPatchMargin = visuals.BackgroundPatchMargin;
+                PaperBackground.PanelOverride = new StyleBoxTexture
+                {
+                    Texture = backgroundImage,
+                    TextureScale = visuals.BackgroundScale,
+                    Mode = backgroundImageMode,
+                    PatchMarginLeft = backgroundPatchMargin.Left,
+                    PatchMarginBottom = backgroundPatchMargin.Bottom,
+                    PatchMarginRight = backgroundPatchMargin.Right,
+                    PatchMarginTop = backgroundPatchMargin.Top
+                };
+
+            }
+            else
+            {
+                PaperBackground.PanelOverride = null;
+            }
+
+
+            // Then the header:
+            if (visuals.HeaderImagePath != null)
+            {
+                HeaderImage.TexturePath = visuals.HeaderImagePath;
+                HeaderImage.MinSize = HeaderImage.TextureNormal?.Size ?? Vector2.Zero;
+            }
+
+            HeaderImage.ModulateSelfOverride = visuals.HeaderImageModulate;
+            HeaderImage.Margin = new Thickness(visuals.HeaderMargin.Left, visuals.HeaderMargin.Top,
+                    visuals.HeaderMargin.Right, visuals.HeaderMargin.Bottom);
+
+
+            PaperContent.ModulateSelfOverride = visuals.ContentImageModulate;
+            WrittenTextLabel.ModulateSelfOverride = visuals.FontAccentColor;
+
+            var contentImage = visuals.ContentImagePath != null ? resCache.GetResource<TextureResource>(visuals.ContentImagePath) : null;
+            if (contentImage != null)
+            {
+                // Setup the paper content texture, but keep a reference to it, as we can't set
+                // some font-related properties here. We'll fix those up later, in Draw()
+                _paperContentTex = new StyleBoxTexture
+                {
+                    Texture = contentImage,
+                    Mode = StyleBoxTexture.StretchMode.Tile,
+                };
+                PaperContent.PanelOverride = _paperContentTex;
+                _paperContentLineScale = visuals.ContentImageNumLines;
+            }
+
+            PaperContent.Margin = new Thickness(
+                    visuals.ContentMargin.Left, visuals.ContentMargin.Top,
+                    visuals.ContentMargin.Right, visuals.ContentMargin.Bottom);
+
+            if (visuals.MaxWritableArea != null)
+            {
+                var a = (Vector2)visuals.MaxWritableArea;
+                // Paper has requested that this has a maximum area that you can write on.
+                // So, we'll make the window non-resizable and fix the size of the content.
+                // Ideally, would like to be able to allow resizing only one direction.
+                ScrollingContents.MinSize = Vector2.Zero;
+                ScrollingContents.MinSize = a;
+
+                if (a.X > 0.0f)
+                {
+                    ScrollingContents.MaxWidth = a.X;
+                    _allowedResizeModes &= ~(DragMode.Left | DragMode.Right);
+
+                    // Since this dimension has been specified by the user, we
+                    // need to undo the SetSize which was configured in the xaml.
+                    // Controls use NaNs to indicate unset for this value.
+                    // This is leaky - there should be a method for this
+                    SetWidth = float.NaN;
+                }
+
+                if (a.Y > 0.0f)
+                {
+                    ScrollingContents.MaxHeight = a.Y;
+                    _allowedResizeModes &= ~(DragMode.Top | DragMode.Bottom);
+                    SetHeight = float.NaN;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Control interface. We'll mostly rely on the children to do the drawing
+        ///     but in order to get lines on paper to match up with the rich text labels,
+        ///     we need to do a small calculation to sync them up.
+        /// </summary>
+        protected override void Draw(DrawingHandleScreen handle)
+        {
+            // Now do the deferred setup of the written area. At the point
+            // that InitVisuals runs, the label hasn't had it's style initialized
+            // so we need to get some info out now:
+            if (WrittenTextLabel.TryGetStyleProperty<Font>("font", out var font))
+            {
+                float fontLineHeight = font.GetLineHeight(UIScale);
+                // This positions the texture so the font baseline is on the bottom:
+                _paperContentTex.ExpandMarginTop = font.GetDescent(UIScale);
+                // And this scales the texture so that it's a single text line:
+                var scaleY = (_paperContentLineScale * fontLineHeight) / _paperContentTex.Texture?.Height ?? fontLineHeight;
+                _paperContentTex.TextureScale = new Vector2(1, scaleY);
+
+                // Now, we might need to add some padding to the text to ensure
+                // that, even if a header is specified, the text will line up with
+                // where the content image expects the font to be rendered (i.e.,
+                // adjusting the height of the header image shouldn't cause the
+                // text to be offset from a line)
+                {
+                    var headerHeight = HeaderImage.Size.Y + HeaderImage.Margin.Top + HeaderImage.Margin.Bottom;
+                    var headerInLines = headerHeight / (fontLineHeight * _paperContentLineScale);
+                    var paddingRequiredInLines = (float)Math.Ceiling(headerInLines) - headerInLines;
+                    var verticalMargin = fontLineHeight * paddingRequiredInLines * _paperContentLineScale;
+                    TextAlignmentPadding.Margin = new Thickness(0.0f, verticalMargin, 0.0f, 0.0f);
+                }
+            }
+
+            base.Draw(handle);
+        }
+
+        /// <summary>
+        ///     Initialize the paper contents, i.e. the text typed by the
+        ///     user and any stamps that have peen put on the page.
+        /// </summary>
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
         public void Populate(SharedPaperComponent.PaperBoundUserInterfaceState state)
         {
             if (state.Mode == SharedPaperComponent.PaperAction.Write)

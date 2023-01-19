@@ -17,7 +17,12 @@ namespace Content.Shared.Chemistry.Components
     [DataDefinition]
     public sealed partial class Solution : IEnumerable<Solution.ReagentQuantity>, ISerializationHooks
     {
+<<<<<<< HEAD
         // Most objects on the station hold only 1 or 2 reagents
+=======
+        // This is a list because it is actually faster to add and remove reagents from
+        // a list than a dictionary, though contains-reagent checks are slightly slower,
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
         [DataField("reagents")]
         public List<ReagentQuantity> Contents = new(2);
 
@@ -123,8 +128,62 @@ namespace Content.Shared.Chemistry.Components
 
             Contents.Add(new ReagentQuantity(reagentId, quantity));
 
+<<<<<<< HEAD
             TotalVolume += quantity;
             ThermalEnergy = oldThermalEnergy + addedThermalEnergy;
+=======
+        /// <summary>
+        ///     Adds a given quantity of a reagent directly into the solution.
+        /// </summary>
+        /// <param name="proto">The prototype of the reagent to add.</param>
+        /// <param name="quantity">The quantity in milli-units.</param>
+        public void AddReagent(ReagentPrototype proto, FixedPoint2 quantity)
+        {
+            AddReagent(proto.ID, quantity, false);
+            _heatCapacity += quantity.Float() * proto.SpecificHeat;
+        }
+
+        /// <summary>
+        ///     Adds a given quantity of a reagent directly into the solution.
+        /// </summary>
+        /// <param name="proto">The prototype of the reagent to add.</param>
+        /// <param name="quantity">The quantity in milli-units.</param>
+        public void AddReagent(ReagentPrototype proto, FixedPoint2 quantity, float temperature, IPrototypeManager? protoMan)
+        {
+            if (_heatCapacityDirty)
+                UpdateHeatCapacity(protoMan);
+
+            var totalThermalEnergy = Temperature * _heatCapacity + temperature * proto.SpecificHeat;
+            AddReagent(proto, quantity);
+            Temperature = _heatCapacity == 0 ? 0 : totalThermalEnergy / _heatCapacity;
+        }
+
+
+        /// <summary>
+        ///     Scales the amount of solution by some integer quantity.
+        /// </summary>
+        /// <param name="scale">The scalar to modify the solution by.</param>
+        public void ScaleSolution(int scale)
+        {
+            if (scale == 1)
+                return;
+
+            if (scale == 0)
+            {
+                RemoveAllSolution();
+                return;
+            }
+
+            _heatCapacity *= scale;
+            Volume *= scale;
+
+            for (int i = 0; i <= Contents.Count; i++)
+            {
+                var old = Contents[i];
+                Contents[i] = new ReagentQuantity(old.ReagentId, old.Quantity * scale);
+            }
+            ValidateSolution();
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
         }
 
         /// <summary>
@@ -297,7 +356,15 @@ namespace Content.Shared.Chemistry.Components
             return newSolution;
         }
 
+<<<<<<< HEAD
         public void AddSolution(Solution otherSolution)
+=======
+        /// <summary>
+        /// Variant of <see cref="SplitSolution(FixedPoint2)"/> that doesn't return a new solution containing the removed reagents.
+        /// </summary>
+        /// <param name="toTake">The quantity of this solution to remove</param>
+        public void RemoveSolution(FixedPoint2 toTake)
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
         {
             var oldThermalEnergy = Temperature * GetHeatCapacity();
             var addedThermalEnergy = otherSolution.Temperature * otherSolution.GetHeatCapacity();

@@ -89,7 +89,6 @@ public sealed class AFKSystem : EntitySystem
             {
                 var ev = new UnAFKEvent(pSession);
                 RaiseLocalEvent(ref ev);
-                continue;
             }
         }
     }

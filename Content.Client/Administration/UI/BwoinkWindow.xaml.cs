@@ -101,7 +101,7 @@ namespace Content.Client.Administration.UI
                     return a.ActiveThisRound ? -1 : 1;
 
                 // Finally, sort by the most recent message.
-                return bch!.LastMessage.CompareTo(ach!.LastMessage);
+                return bch.LastMessage.CompareTo(ach.LastMessage);
             };
 
             Bans.OnPressed += _ =>

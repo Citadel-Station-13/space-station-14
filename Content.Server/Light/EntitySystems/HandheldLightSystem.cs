@@ -253,7 +253,11 @@ namespace Content.Server.Light.EntitySystems
             }
             else
             {
+<<<<<<< HEAD
                 appearanceComponent.SetData(HandheldLightVisuals.Power, HandheldLightPowerStates.Dying);
+=======
+                _appearance.SetData(component.Owner, HandheldLightVisuals.Power, HandheldLightPowerStates.Dying, appearanceComponent);
+>>>>>>> c6d3e4f3b (Fix warnings and code cleanup/fixes (#13570))
             }
 
             if (component.Activated && !battery.TryUseCharge(component.Wattage * frameTime))
