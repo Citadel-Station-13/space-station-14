@@ -5,69 +5,71 @@ using Content.Shared.Wires;
 
 namespace Content.Server.Doors;
 
-[DataDefinition]
-public sealed class DoorTimingWireAction : BaseWireAction
+public sealed class DoorTimingWireAction : ComponentWireAction<AirlockComponent>
 {
+<<<<<<< HEAD
     [DataField("color")]
     private Color _statusColor = Color.Orange;
 
     [DataField("name")]
     private string _text = "TIMR";
 
+=======
+    public override Color Color { get; set; } = Color.Orange;
+    public override string Name { get; set; } = "wire-name-door-timer";
+    
+>>>>>>> b20b4b11c (Wire action cleanup (#13496))
     [DataField("timeout")]
     private int _timeout = 30;
 
-    public override StatusLightData? GetStatusLightData(Wire wire)
+    public override StatusLightState? GetLightState(Wire wire, AirlockComponent comp)
     {
-        var lightState = StatusLightState.Off;
-        if (IsPowered(wire.Owner)
-            && EntityManager.TryGetComponent<AirlockComponent>(wire.Owner, out var door))
+        switch (comp.AutoCloseDelayModifier)
         {
-            switch (door.AutoCloseDelayModifier)
-            {
-                case 0.01f:
-                    lightState = StatusLightState.Off;
-                    break;
-                case <= 0.5f:
-                    lightState = StatusLightState.BlinkingSlow;
-                    break;
-                default:
-                    lightState = StatusLightState.On;
-                    break;
-            }
+            case 0.01f:
+                return StatusLightState.Off;
+            case <= 0.5f:
+                return StatusLightState.BlinkingSlow;
+            default:
+                return StatusLightState.On;
         }
-
-        return new StatusLightData(
-            _statusColor,
-            lightState,
-            _text);
     }
 
     public override object StatusKey { get; } = AirlockWireStatus.TimingIndicator;
 
-    public override bool Cut(EntityUid user, Wire wire)
+    public override bool Cut(EntityUid user, Wire wire, AirlockComponent door)
     {
+<<<<<<< HEAD
         if (EntityManager.TryGetComponent<AirlockComponent>(wire.Owner, out var door))
         {
             WiresSystem.TryCancelWireAction(wire.Owner, PulseTimeoutKey.Key);
             door.AutoCloseDelayModifier = 0.01f;
         }
 
+=======
+        WiresSystem.TryCancelWireAction(wire.Owner, PulseTimeoutKey.Key);
+        EntityManager.System<SharedAirlockSystem>().SetAutoCloseDelayModifier(door, 0.01f);
+>>>>>>> b20b4b11c (Wire action cleanup (#13496))
         return true;
     }
 
-    public override bool Mend(EntityUid user, Wire wire)
+    public override bool Mend(EntityUid user, Wire wire, AirlockComponent door)
     {
+<<<<<<< HEAD
         if (EntityManager.TryGetComponent<AirlockComponent>(wire.Owner, out var door))
         {
             door.AutoCloseDelayModifier = 1f;
         }
 
+=======
+        EntityManager.System<SharedAirlockSystem>().SetAutoCloseDelayModifier(door, 1f);
+>>>>>>> b20b4b11c (Wire action cleanup (#13496))
         return true;
     }
 
-    public override bool Pulse(EntityUid user, Wire wire)
+    public override void Pulse(EntityUid user, Wire wire, AirlockComponent door)
     {
+<<<<<<< HEAD
         if (EntityManager.TryGetComponent<AirlockComponent>(wire.Owner, out var door))
         {
             door.AutoCloseDelayModifier = 0.5f;
@@ -76,6 +78,10 @@ public sealed class DoorTimingWireAction : BaseWireAction
 
 
         return true;
+=======
+        EntityManager.System<SharedAirlockSystem>().SetAutoCloseDelayModifier(door, 0.5f);
+        WiresSystem.StartWireAction(wire.Owner, _timeout, PulseTimeoutKey.Key, new TimedWireEvent(AwaitTimingTimerFinish, wire));
+>>>>>>> b20b4b11c (Wire action cleanup (#13496))
     }
 
     public override void Update(Wire wire)

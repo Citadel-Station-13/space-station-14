@@ -80,5 +80,11 @@ public enum LogType
     Stripping = 75,
     Stamina = 76,
     EntitySpawn = 77,
+<<<<<<< HEAD
     Container = 78,
+=======
+    AdminMessage = 78,
+    Anomaly = 79,
+    WireHacking = 80,
+>>>>>>> b20b4b11c (Wire action cleanup (#13496))
 }

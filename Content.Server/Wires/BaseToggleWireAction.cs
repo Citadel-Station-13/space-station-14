@@ -46,7 +46,7 @@ public abstract class BaseToggleWireAction : BaseWireAction
         return true;
     }
 
-    public override bool Pulse(EntityUid user, Wire wire)
+    public override void Pulse(EntityUid user, Wire wire)
     {
         ToggleValue(wire.Owner, !GetValue(wire.Owner));
 
@@ -54,8 +54,6 @@ public abstract class BaseToggleWireAction : BaseWireAction
         {
             WiresSystem.StartWireAction(wire.Owner, Delay, TimeoutKey, new TimedWireEvent(AwaitPulseCancel, wire));
         }
-
-        return true;
     }
 
     public override void Update(Wire wire)

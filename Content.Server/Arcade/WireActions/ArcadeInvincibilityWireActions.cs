@@ -5,11 +5,16 @@ using Content.Shared.Wires;
 
 namespace Content.Server.Arcade;
 
-[DataDefinition]
 public sealed class ArcadePlayerInvincibleWireAction : BaseToggleWireAction
 {
+<<<<<<< HEAD
     private string _text = "MNGR";
     private Color _color = Color.Purple;
+=======
+    public override string Name { get; set; } = "wire-name-arcade-invincible";
+
+    public override Color Color { get; set; } = Color.Purple;
+>>>>>>> b20b4b11c (Wire action cleanup (#13496))
 
     public override object? StatusKey { get; } = SharedSpaceVillainArcadeComponent.Indicators.HealthManager;
 
@@ -27,27 +32,24 @@ public sealed class ArcadePlayerInvincibleWireAction : BaseToggleWireAction
             && !arcade.PlayerInvincibilityFlag;
     }
 
-    public override StatusLightData? GetStatusLightData(Wire wire)
+    public override StatusLightState? GetLightState(Wire wire)
     {
-        var lightState = StatusLightState.Off;
-
-        if (IsPowered(wire.Owner) && EntityManager.TryGetComponent<SpaceVillainArcadeComponent>(wire.Owner, out var arcade))
+        if (EntityManager.TryGetComponent<SpaceVillainArcadeComponent>(wire.Owner, out var arcade))
         {
-            lightState = arcade.PlayerInvincibilityFlag || arcade.EnemyInvincibilityFlag
+            return arcade.PlayerInvincibilityFlag || arcade.EnemyInvincibilityFlag
                 ? StatusLightState.BlinkingSlow
                 : StatusLightState.On;
         }
 
-        return new StatusLightData(
-            _color,
-            lightState,
-            _text);
+        return StatusLightState.Off;
     }
 }
 
-[DataDefinition]
 public sealed class ArcadeEnemyInvincibleWireAction : BaseToggleWireAction
 {
+    public override string Name { get; set; } = "wire-name-player-invincible";
+    public override Color Color { get; set; } = Color.Purple;
+
     public override object? StatusKey { get; } = null;
 
     public override void ToggleValue(EntityUid owner, bool setting)
