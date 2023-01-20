@@ -1,25 +1,26 @@
-using Content.Server.Popups;
-using Content.Shared.Audio;
-using Content.Shared.Examine;
-using Content.Shared.Interaction.Events;
-using Content.Shared.Throwing;
+using Content.Shared.Dice;
+using Content.Shared.Popups;
 using JetBrains.Annotations;
-using Robust.Server.GameObjects;
-using Robust.Shared.Audio;
-using Robust.Shared.Player;
 using Robust.Shared.Random;
 
-namespace Content.Server.Dice
+namespace Content.Server.Dice;
+
+[UsedImplicitly]
+public sealed class DiceSystem : SharedDiceSystem
 {
-    [UsedImplicitly]
-    public sealed class DiceSystem : EntitySystem
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+
+    public override void Roll(EntityUid uid, DiceComponent? die = null)
     {
-        [Dependency] private readonly IRobustRandom _random = default!;
+        if (!Resolve(uid, ref die))
+            return;
 
-        public override void Initialize()
-        {
-            base.Initialize();
+        var roll = _random.Next(1, die.Sides);
+        SetCurrentSide(uid, roll, die);
 
+<<<<<<< HEAD
             SubscribeLocalEvent<DiceComponent, ComponentInit>(OnComponentInit);
             SubscribeLocalEvent<DiceComponent, UseInHandEvent>(OnUseInHand);
             SubscribeLocalEvent<DiceComponent, LandEvent>(OnLand);
@@ -77,5 +78,9 @@ namespace Content.Server.Dice
             die.Owner.PopupMessageEveryone(Loc.GetString("dice-component-on-roll-land", ("die", die.Owner), ("currentSide", die.CurrentSide)));
             SoundSystem.Play(die.Sound.GetSound(), Filter.Pvs(die.Owner), die.Owner, AudioHelpers.WithVariation(0.05f));
         }
+=======
+        _popup.PopupEntity(Loc.GetString("dice-component-on-roll-land", ("die", uid), ("currentSide", die.CurrentValue)), uid);
+        _audio.PlayPvs(die.Sound, uid);
+>>>>>>> 2904a368f (Dice tweaks (#13514))
     }
 }
