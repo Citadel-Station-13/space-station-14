@@ -22,8 +22,15 @@
   description: A die with ten sides. Works better for d100 rolls than a golf ball.
   components:
   - type: Dice
+<<<<<<< HEAD
     sides: 100
     step: 10
+=======
+    sides: 10
+    multiplier: 10
+    offset: 1 # first side is a 0
+    currentValue: 0
+>>>>>>> a9b9dc0a1 (Fix dice sprite error (#13628))
   - type: Sprite
     state: d100100
 
