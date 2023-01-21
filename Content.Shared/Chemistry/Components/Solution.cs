@@ -123,8 +123,62 @@ namespace Content.Shared.Chemistry.Components
 
             Contents.Add(new ReagentQuantity(reagentId, quantity));
 
+<<<<<<< HEAD
             TotalVolume += quantity;
             ThermalEnergy = oldThermalEnergy + addedThermalEnergy;
+=======
+        /// <summary>
+        ///     Adds a given quantity of a reagent directly into the solution.
+        /// </summary>
+        /// <param name="proto">The prototype of the reagent to add.</param>
+        /// <param name="quantity">The quantity in milli-units.</param>
+        public void AddReagent(ReagentPrototype proto, FixedPoint2 quantity)
+        {
+            AddReagent(proto.ID, quantity, false);
+            _heatCapacity += quantity.Float() * proto.SpecificHeat;
+        }
+
+        /// <summary>
+        ///     Adds a given quantity of a reagent directly into the solution.
+        /// </summary>
+        /// <param name="proto">The prototype of the reagent to add.</param>
+        /// <param name="quantity">The quantity in milli-units.</param>
+        public void AddReagent(ReagentPrototype proto, FixedPoint2 quantity, float temperature, IPrototypeManager? protoMan)
+        {
+            if (_heatCapacityDirty)
+                UpdateHeatCapacity(protoMan);
+
+            var totalThermalEnergy = Temperature * _heatCapacity + temperature * proto.SpecificHeat;
+            AddReagent(proto, quantity);
+            Temperature = _heatCapacity == 0 ? 0 : totalThermalEnergy / _heatCapacity;
+        }
+
+
+        /// <summary>
+        ///     Scales the amount of solution by some integer quantity.
+        /// </summary>
+        /// <param name="scale">The scalar to modify the solution by.</param>
+        public void ScaleSolution(int scale)
+        {
+            if (scale == 1)
+                return;
+
+            if (scale <= 0)
+            {
+                RemoveAllSolution();
+                return;
+            }
+
+            _heatCapacity *= scale;
+            Volume *= scale;
+
+            for (int i = 0; i < Contents.Count; i++)
+            {
+                var old = Contents[i];
+                Contents[i] = new ReagentQuantity(old.ReagentId, old.Quantity * scale);
+            }
+            ValidateSolution();
+>>>>>>> c3e6ac256 (Fix ScaleSolution() (#13630))
         }
 
         /// <summary>
