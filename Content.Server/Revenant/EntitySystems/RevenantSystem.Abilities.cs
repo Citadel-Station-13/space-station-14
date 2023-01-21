@@ -7,7 +7,6 @@ using Robust.Shared.Random;
 using Robust.Shared.Player;
 using Robust.Shared.Map;
 using Content.Shared.Tag;
-using Content.Shared.Maps;
 using Content.Server.Storage.Components;
 using Content.Server.Light.Components;
 using Content.Server.Ghost;
@@ -21,11 +20,16 @@ using Content.Shared.Item;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.MobState;
 using System.Linq;
+<<<<<<< HEAD
 using Content.Server.Beam;
 using Content.Server.Emag;
 using Content.Server.Humanoid;
+=======
+using Content.Server.Maps;
+>>>>>>> d87d8f288 (predict emag and make blessed record struct events (#13623))
 using Content.Server.Revenant.Components;
 using Content.Server.Store.Components;
+using Content.Shared.Emag.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
 using Content.Shared.Revenant.Components;
@@ -336,7 +340,7 @@ public sealed partial class RevenantSystem
 
         foreach (var ent in _lookup.GetEntitiesInRange(uid, component.MalfunctionRadius))
         {
-            _emag.DoEmag(ent, ent); //it emags itself. spooky.
+            _emag.DoEmagEffect(ent, ent); //it emags itself. spooky.
         }
     }
 }
