@@ -173,5 +173,58 @@ namespace Content.Server.Doors.Systems
                 args.Cancel();
             }
         }
+<<<<<<< HEAD
+=======
+
+        public bool CanChangeState(EntityUid uid, AirlockComponent component)
+        {
+            return this.IsPowered(uid, EntityManager) && !component.BoltsDown;
+        }
+
+        public void UpdateBoltLightStatus(EntityUid uid, AirlockComponent component)
+        {
+            if (!TryComp<AppearanceComponent>(uid, out var appearance))
+                return;
+
+            Appearance.SetData(uid, DoorVisuals.BoltLights, GetBoltLightsVisible(uid, component), appearance);
+        }
+
+        public void SetBoltsWithAudio(EntityUid uid, AirlockComponent component, bool newBolts)
+        {
+            if (newBolts == component.BoltsDown)
+                return;
+
+            component.BoltsDown = newBolts;
+            Audio.PlayPvs(newBolts ? component.BoltDownSound : component.BoltUpSound, uid);
+            UpdateBoltLightStatus(uid, component);
+        }
+
+        public bool GetBoltLightsVisible(EntityUid uid, AirlockComponent component)
+        {
+            return component.BoltLightsEnabled &&
+                   component.BoltsDown &&
+                   this.IsPowered(uid, EntityManager) &&
+                   TryComp<DoorComponent>(uid, out var doorComponent) &&
+                   doorComponent.State == DoorState.Closed;
+        }
+
+        public void SetBoltLightsEnabled(EntityUid uid, AirlockComponent component, bool value)
+        {
+            if (component.BoltLightsEnabled == value)
+                return;
+
+            component.BoltLightsEnabled = value;
+            UpdateBoltLightStatus(uid, component);
+        }
+
+        public void SetBoltsDown(EntityUid uid, AirlockComponent component, bool value)
+        {
+            if (component.BoltsDown == value)
+                return;
+
+            component.BoltsDown = value;
+            UpdateBoltLightStatus(uid, component);
+        }
+>>>>>>> 9874ce5f4 (Update bolt light after bolts fall (#13636))
     }
 }
