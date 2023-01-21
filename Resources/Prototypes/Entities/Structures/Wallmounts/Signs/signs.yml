@@ -246,8 +246,13 @@
 - type: entity
   parent: BaseSign
   id: SignAnomaly
+<<<<<<< HEAD
   name: xeno-archeology lab sign
   description: A sign indicating the xeno-archeology lab.
+=======
+  name: xenoarchaeology lab sign
+  description: A sign indicating the xenoarchaeology lab.
+>>>>>>> 2d0b36e18 (xenoarch guidebook entries (#13619))
   components:
   - type: Sprite
     state: anomaly
