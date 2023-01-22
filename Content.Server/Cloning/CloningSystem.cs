@@ -24,6 +24,11 @@ using Content.Server.Stack;
 using Content.Server.Jobs;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
+<<<<<<< HEAD
+=======
+using Content.Shared.Zombies;
+using Content.Shared.Mobs.Systems;
+>>>>>>> 6cebc2d73 (Zombie cloning fix (#12520))
 using Robust.Server.GameObjects;
 using Robust.Server.Containers;
 using Robust.Server.Player;
@@ -230,7 +235,11 @@ namespace Content.Server.Cloning
             var mob = Spawn(speciesPrototype.Prototype, Transform(clonePod.Owner).MapPosition);
             _humanoidSystem.CloneAppearance(bodyToClone, mob);
 
-            MetaData(mob).EntityName = MetaData(bodyToClone).EntityName;
+            var ev = new CloningEvent(bodyToClone, mob);
+            RaiseLocalEvent(bodyToClone, ref ev);
+
+            if (!ev.NameHandled)
+                MetaData(mob).EntityName = MetaData(bodyToClone).EntityName;
 
             var cloneMindReturn = EntityManager.AddComponent<BeingClonedComponent>(mob);
             cloneMindReturn.Mind = mind;
@@ -332,6 +341,23 @@ namespace Content.Server.Cloning
         public void Reset(RoundRestartCleanupEvent ev)
         {
             ClonesWaitingForMind.Clear();
+        }
+    }
+
+    /// <summary>
+    /// Raised after a new mob got spawned when cloning a humanoid
+    /// </summary>
+    [ByRefEvent]
+    public struct CloningEvent
+    {
+        public bool NameHandled = false;
+
+        public readonly EntityUid Source;
+        public readonly EntityUid Target;
+
+        public CloningEvent(EntityUid source, EntityUid target) {
+            Source = source;
+            Target = target;
         }
     }
 }
