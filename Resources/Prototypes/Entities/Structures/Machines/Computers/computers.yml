@@ -298,12 +298,21 @@
       interfaces:
         - key: enum.CrewMonitoringUIKey.Key
           type: CrewMonitoringBoundUserInterface
+<<<<<<< HEAD
     - type: CrewMonitoringConsole
     - type: DeviceNetwork
       deviceNetId: Wireless
       receiveFrequencyId: SuitSensor
     - type: WirelessNetworkConnection
       range: 500
+=======
+  - type: CrewMonitoringConsole
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    receiveFrequencyId: CrewMonitor
+  - type: WirelessNetworkConnection
+    range: 1200
+>>>>>>> c2b87dfed (Add a crew monitoring server (#7542))
 
 - type: entity
   parent: BaseComputer
