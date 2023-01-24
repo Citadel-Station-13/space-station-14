@@ -32,6 +32,10 @@ namespace Content.Server.Zombies
         [Dependency] private readonly ChatSystem _chat = default!;
         [Dependency] private readonly IPrototypeManager _protoManager = default!;
         [Dependency] private readonly IRobustRandom _robustRandom = default!;
+<<<<<<< HEAD
+=======
+        [Dependency] private readonly HumanoidAppearanceSystem _humanoidSystem = default!;
+>>>>>>> 48bcd30ef (Makes humanoid appearance component networked. (#13009))
 
         public override void Initialize()
         {
