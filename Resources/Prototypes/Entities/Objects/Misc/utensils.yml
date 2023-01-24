@@ -48,7 +48,15 @@
     - Fork
     breakChance: 0.20
   - type: Tag
+<<<<<<< HEAD
     tags: [ Plastic ]
+=======
+    tags:
+      - Plastic
+      - Trash
+  - type: StaticPrice
+    price: 0
+>>>>>>> caed330d0 (Pizza crate price tweaks (#13651))
 
 - type: entity
   parent: UtensilBase
@@ -106,3 +114,5 @@
     types:
     - Knife
     breakChance: 0.20
+  - type: StaticPrice
+    price: 0

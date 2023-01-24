@@ -4,7 +4,11 @@
     sprite: Objects/Consumable/Food/Baked/pizza.rsi
     state: margherita
   product: CrateFoodPizza
+<<<<<<< HEAD
   cost: 500
+=======
+  cost: 450
+>>>>>>> caed330d0 (Pizza crate price tweaks (#13651))
   category: Food
   group: market
 
@@ -29,6 +33,29 @@
   group: market
 
 - type: cargoProduct
+<<<<<<< HEAD
+=======
+  id: FoodDinnerware
+  icon:
+    sprite: Objects/Consumable/Food/plates.rsi
+    state: tin
+  product: CrateFoodDinnerware
+  cost: 750
+  category: Food
+  group: market
+
+- type: cargoProduct
+  id: FoodBarSupply
+  icon:
+    sprite: Objects/Consumable/Drinks/beerglass.rsi
+    state: icon
+  product: CrateFoodBarSupply
+  cost: 750
+  category: Food
+  group: market
+
+- type: cargoProduct
+>>>>>>> caed330d0 (Pizza crate price tweaks (#13651))
   id: FoodCrateKvassTank
   icon:
     sprite: Structures/Storage/kvass.rsi

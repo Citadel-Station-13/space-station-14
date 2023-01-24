@@ -36,9 +36,16 @@ public sealed class CargoTest
                 var ent = entManager.SpawnEntity(proto.Product, new MapCoordinates(Vector2.Zero, mapId));
                 var price = pricing.GetPrice(ent);
 
+<<<<<<< HEAD
                 Assert.That(price, Is.LessThan(proto.PointCost), $"Found arbitrage on {proto.ID} cargo product! Cost is {proto.PointCost} but sell is {price}!");
                 entManager.DeleteEntity(ent);
             }
+=======
+                    Assert.That(price, Is.AtMost(proto.PointCost), $"Found arbitrage on {proto.ID} cargo product! Cost is {proto.PointCost} but sell is {price}!");
+                    entManager.DeleteEntity(ent);
+                }
+            });
+>>>>>>> caed330d0 (Pizza crate price tweaks (#13651))
 
             mapManager.DeleteMap(mapId);
         });
