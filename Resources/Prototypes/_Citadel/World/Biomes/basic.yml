@@ -1,4 +1,4 @@
-﻿- type: biome
+﻿- type: citadelBiome
   id: CitadelAsteroidsStandard
   priority: 0 # This probably shouldn't get selected.
   noiseRanges: {}

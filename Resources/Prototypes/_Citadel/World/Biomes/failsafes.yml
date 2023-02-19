@@ -1,9 +1,9 @@
-﻿- type: biome
+﻿- type: citadelBiome
   id: CitadelFailsafe
   priority: -999999 # This DEFINITELY shouldn't get selected!
   noiseRanges: {}
 
-- type: biome
+- type: citadelBiome
   id: CitadelAsteroidsFallback
   priority: -999998 # This probably shouldn't get selected.
   noiseRanges: {}
