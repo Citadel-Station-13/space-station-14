@@ -123,7 +123,7 @@ namespace Content.Client.Entry
             // BEGIN CITADEL EDITS
             _prototypeManager.RegisterIgnore("noiseChannel");
             _prototypeManager.RegisterIgnore("worldgenConfig");
-            _prototypeManager.RegisterIgnore("biome");
+            _prototypeManager.RegisterIgnore("citadelBiome");
             _prototypeManager.RegisterIgnore("gcQueue");
             // END CITADEL EDITS
 
