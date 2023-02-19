@@ -5,6 +5,7 @@ using Content.Server.Wires;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.APC;
+using Content.Shared.Emag.Components;
 using Content.Shared.Emag.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -27,6 +28,7 @@ namespace Content.Server.Power.EntitySystems
         [Dependency] private readonly PopupSystem _popupSystem = default!;
         [Dependency] private readonly IGameTiming _gameTiming = default!;
         [Dependency] private readonly ToolSystem _toolSystem = default!;
+        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         private const float ScrewTime = 2f;
 
@@ -85,13 +87,10 @@ namespace Content.Server.Power.EntitySystems
             SoundSystem.Play(apc.OnReceiveMessageSound.GetSound(), Filter.Pvs(uid), uid, AudioParams.Default.WithVolume(-2f));
         }
 
-        private void OnEmagged(EntityUid uid, ApcComponent comp, GotEmaggedEvent args)
+        private void OnEmagged(EntityUid uid, ApcComponent comp, ref GotEmaggedEvent args)
         {
-            if(!comp.Emagged)
-            {
-                comp.Emagged = true;
-                args.Handled = true;
-            }
+            // no fancy conditions
+            args.Handled = true;
         }
 
         public void UpdateApcState(EntityUid uid,
@@ -114,7 +113,7 @@ namespace Content.Server.Power.EntitySystems
 
                 if (appearance != null)
                 {
-                    appearance.SetData(ApcVisuals.ChargeState, newState);
+                    _appearance.SetData(uid, ApcVisuals.ChargeState, newState, appearance);
                 }
             }
 
@@ -146,7 +145,7 @@ namespace Content.Server.Power.EntitySystems
             ApcComponent? apc=null,
             BatteryComponent? battery=null)
         {
-            if (apc != null && apc.Emagged)
+            if (apc != null && HasComp<EmaggedComponent>(uid))
                 return ApcChargeState.Emag;
 
             if (!Resolve(uid, ref apc, ref battery))
@@ -199,7 +198,7 @@ namespace Content.Server.Power.EntitySystems
         {
             if (!EntityManager.TryGetComponent(args.Used, out ToolComponent? tool))
                 return;
-            if (_toolSystem.UseTool(args.Used, args.User, uid, 0f, ScrewTime, new string[] { "Screwing" }, doAfterCompleteEvent: new ApcToolFinishedEvent(uid), toolComponent: tool))
+            if (_toolSystem.UseTool(args.Used, args.User, uid, 0f, ScrewTime, new[] { "Screwing" }, doAfterCompleteEvent: new ApcToolFinishedEvent(uid), toolComponent: tool))
             {
                 args.Handled = true;
             }
@@ -231,7 +230,7 @@ namespace Content.Server.Power.EntitySystems
             if (!Resolve(uid, ref appearance, ref apc, false))
                 return;
 
-            appearance.SetData(ApcVisuals.PanelState, GetPanelState(apc));
+            _appearance.SetData(uid, ApcVisuals.PanelState, GetPanelState(apc), appearance);
         }
 
         private sealed class ApcToolFinishedEvent : EntityEventArgs
