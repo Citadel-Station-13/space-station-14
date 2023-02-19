@@ -4,11 +4,11 @@ Write-Output "Pay attention to any output from git!"
 $target = Read-Host "Enter the branch you're syncing toward (typically upstream/master or similar)"
 $refs = git log --reverse --format=format:%H HEAD.. $target
 
-$cherryPickOption = New-Object System.Management.Automation.Host.ChoiceDescription "&Cherry-pick","Uses git cherry pick to integrate the commit into the current branch."
+$cherryPickOption = New-Object System.Management.Automation.Host.ChoiceDescription "&Cherry-pick","Uses git cherry pick to integrate the commit into the current branch. BE VERY CAREFUL WITH THIS."
 $mergeOption = New-Object System.Management.Automation.Host.ChoiceDescription "&Merge","Uses git merge to integrate the commit and any of it's children into the current branch."
 $skipOption = New-Object System.Management.Automation.Host.ChoiceDescription "&Skip","Skips introducing this commit."
 
-$mergeOptions = [System.Management.Automation.Host.ChoiceDescription[]]($cherryPickOption, $mergeOption, $skipOption)
+$mergeOptions = [System.Management.Automation.Host.ChoiceDescription[]]($skipOption, $mergeOption, $cherryPickOption)
 
 foreach ($unmerged in $refs) {
     $summary = git show --format=format:%s $unmerged
