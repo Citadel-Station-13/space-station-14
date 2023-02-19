@@ -123,6 +123,7 @@ namespace Content.IntegrationTests.Tests
                 var protoIds = prototypeMan
                     .EnumeratePrototypes<EntityPrototype>()
                     .Where(p => !p.Abstract)
+                    .Where(p => !p.Components.ContainsKey("MapGrid")) // CITADEL EDIT (did you know spawning fucktons of grids in one spot breaks things)
                     .Select(p => p.ID)
                     .ToList();
                 foreach (var protoId in protoIds)
