@@ -23,7 +23,7 @@ foreach ($unmerged in $refs) {
     $response = $host.UI.PromptForChoice("Commit action?", "", $mergeOptions, 0)
 
     Switch ($response) {
-        0 {
+        2 {
             Write-Output "== GIT =="
             git cherry-pick $unmerged
             Write-Output "== DONE =="
@@ -33,6 +33,6 @@ foreach ($unmerged in $refs) {
             git merge $unmerged
             Write-Output "== DONE =="
         }
-        2 { Write-Output ("Skipping " -f $unmerged) }
+        0 { Write-Output ("Skipping " -f $unmerged) }
     }
 }
