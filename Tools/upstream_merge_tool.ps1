@@ -58,3 +58,5 @@ foreach ($unmerged in $refs) {
         }
     }
 }
+
+# TODO: squash all merges together.
