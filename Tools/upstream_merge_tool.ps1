@@ -1,4 +1,4 @@
-﻿Write-Output "Moony's upstream merge workflow tool."
+Write-Output "Moony's upstream merge workflow tool."
 Write-Output "This tool can be stopped at any time, i.e. to finish a merge or resolve conflicts. Simply rerun the tool after having resolved the merge with normal git cli."
 Write-Output "Pay attention to any output from git! DO NOT RUN THIS ON A WORKING TREE WITH UNCOMMITTED FILES OF ANY KIND."
 $target = Read-Host "Enter the branch you're syncing toward (typically upstream/master or similar)"
@@ -53,7 +53,12 @@ foreach ($unmerged in $refs) {
 
     if ($parents.Length -ne 1) {
         $mergedin = $parents[1..($parents.Length-1)]
-        Write-Output "Which has children (note: Merging again will create a tower of merges, but fully preserves history):"
+        if ($summary -match ".*Merge tool skipping '[a-f0-9]{40}'$") {
+            Write-Output "Which has children (note: THIS IS A SKIP COMMIT, ANY OPTION BESIDES SKIP WILL FLATTEN IT):"
+        } else {
+            Write-Output "Which has children (note: Merging again will create a tower of merges, but fully preserves history):"
+        }
+        
         foreach ($tomerge in $mergedin) {
             git show --format=full --summary $mergedin
         }
