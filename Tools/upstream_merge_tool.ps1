@@ -10,7 +10,25 @@ $skipOption = New-Object System.Management.Automation.Host.ChoiceDescription "&S
 
 $mergeOptions = [System.Management.Automation.Host.ChoiceDescription[]]($skipOption, $mergeOption, $cherryPickOption)
 
+$nonlinears = @()
+
 foreach ($unmerged in $refs) {
+    # Finding non-linear commits i.e. merges..
+    $parents = (git log --format=format:%P -n 1 $unmerged) -split '\s+'
+    if ($parents.Length -eq 1) {
+        continue
+    }
+
+    # And indexing them, as we're going to need to skip them later to pick the actual merge.
+    $nonlinears = $nonlinears + $parents[1..($parents.Length-1)]
+}
+
+foreach ($unmerged in $refs) {
+    if ($nonlinears -contains $unmerged) {
+        Write-Output ("Skipping over {0}, which we'll merge later (non-linear history encountered)." -f $unmerged)
+        continue
+    }
+
     $summary = git show --format=format:%s $unmerged
 
     if ($summary -ieq "automatic changelog update") {
@@ -30,12 +48,23 @@ foreach ($unmerged in $refs) {
 
     git show --format=full --summary $unmerged
 
+    $parents = (git log --format=format:%P -n 1 $unmerged) -split '\s+'
+    Write-Output $parents
+
+    if ($parents.Length -ne 1) {
+        $mergedin = $parents[1..($parents.Length-1)]
+        Write-Output "Which has children (note: Merging again will create a tower of merges, but fully preserves history):"
+        foreach ($tomerge in $mergedin) {
+            git show --format=full --summary $mergedin
+        }
+    }
+
     $response = $host.UI.PromptForChoice("Commit action?", "", $mergeOptions, 0)
 
     Switch ($response) {
         2 {
             Write-Output "== GIT =="
-            git cherry-pick $unmerged
+            git cherry-pick -m 1 --allow-empty $unmerged
             Write-Output "== DONE =="
         }
         1 {
@@ -58,5 +87,3 @@ foreach ($unmerged in $refs) {
         }
     }
 }
-
-# TODO: squash all merges together.
