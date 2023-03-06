@@ -33,15 +33,11 @@ foreach ($unmerged in $refs) {
 
     if ($summary -ieq "automatic changelog update") {
         Write-Output ("Deliberately skipping changelog bot commit {0}." -f $unmerged)
-        Write-Output "== GIT (CONFLICTS ARE OKAY) =="
-        git merge --no-ff --no-commit --no-verify $unmerged
-        # DELIBERATELY IGNORE merge conflict markers. We're just going to undo the commit!
-        git add *
-        git commit -m ("squash! Merge tool skipping '{0}'" -f $unmerged)
-        $newhead = git log -n 1 --format=format:%H
-        git reset HEAD~ --hard
-        git reset $newhead --soft
-        git commit --amend --no-edit
+        Write-Output "== GIT =="
+        $blanktree = git write-tree # We construct a new tree object.
+        # With the current HEAD and the to-be-included commit as parents, adding it to the repo.
+        $newhead = git commit-tree $blanktree -p HEAD -p $unmerged -m ("squash! Mergebot skipped commit {0}." -f $unmerged)
+        git checkout $newhead -q
         Write-Output "== DONE =="
         continue
     }
@@ -79,15 +75,11 @@ foreach ($unmerged in $refs) {
         }
         0 {
             Write-Output ("Skipping {0}" -f $unmerged)
-            Write-Output "== GIT (CONFLICTS ARE OKAY) =="
-            git merge --no-ff --no-commit --no-verify $unmerged
-            # DELIBERATELY IGNORE merge conflict markers. We're just going to undo the commit!
-            git add *
-            git commit -m ("squash! Merge tool skipping '{0}'" -f $unmerged)
-            $newhead = git log -n 1 --format=format:%H
-            git reset HEAD~ --hard
-            git reset $newhead --soft
-            git commit --amend --no-edit
+            Write-Output "== GIT =="
+            $blanktree = git write-tree # We construct a new tree object.
+            # With the current HEAD and the to-be-included commit as parents, adding it to the repo.
+            $newhead = git commit-tree $blanktree -p HEAD -p $unmerged -m ("squash! Mergebot skipped commit {0}." -f $unmerged)
+            git checkout $newhead -q
             Write-Output "== DONE =="
         }
     }
