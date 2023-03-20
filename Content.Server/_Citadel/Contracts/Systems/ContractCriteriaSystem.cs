@@ -11,10 +11,46 @@ namespace Content.Server._Citadel.Contracts.Systems;
 [PublicAPI]
 public sealed class ContractCriteriaSystem : EntitySystem
 {
+    [Dependency] private readonly ContractManagementSystem _contract = default!;
+
     /// <inheritdoc/>
     public override void Initialize()
     {
         SubscribeLocalEvent<ContractCriteriaControlComponent, ContractStatusChangedEvent>(OnContractStatusChanged);
+        SubscribeLocalEvent<ContractComponent, CriteriaUpdatedEvent>(OnCriteriaUpdated);
+    }
+
+    private void OnCriteriaUpdated(EntityUid uid, ContractComponent component, CriteriaUpdatedEvent args)
+    {
+        if (component.Status != ContractStatus.Active)
+            return;
+
+        if (!TryComp<ContractCriteriaControlComponent>(uid, out var criteriaControl))
+            return;
+
+        // Deliberately process finalizing first, prefer letting them succeed over failure.
+        var allPass = criteriaControl.FinalizingCriteria.Count > 0; // Auto-fail if no finalizing criteria exist.
+        foreach (var criterion in criteriaControl.FinalizingCriteria)
+        {
+            var criteria = Comp<ContractCriteriaComponent>(criterion);
+            allPass &= criteria.Satisfied;
+        }
+
+        if (allPass)
+        {
+            _contract.TryFinalizeContract(uid, component);
+            return;
+        }
+
+        foreach (var criterion in criteriaControl.BreachingCriteria)
+        {
+            var criteria = Comp<ContractCriteriaComponent>(criterion);
+            if (criteria.Satisfied)
+            {
+                _contract.TryBreachContract(uid, component);
+                return;
+            }
+        }
     }
 
     #region Event Handling

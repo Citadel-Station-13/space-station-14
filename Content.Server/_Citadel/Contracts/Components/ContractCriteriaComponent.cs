@@ -21,3 +21,4 @@ public sealed class ContractCriteriaComponent : Component
 
 public readonly record struct CriteriaSetupEvent;
 public readonly record struct CriteriaStartTickingEvent;
+public readonly record struct CriteriaUpdatedEvent;

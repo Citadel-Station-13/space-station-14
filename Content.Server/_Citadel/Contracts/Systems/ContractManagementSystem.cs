@@ -93,4 +93,60 @@ public sealed class ContractManagementSystem : EntitySystem
 
         return contractEnt;
     }
+
+    private void ChangeContractState(EntityUid contractUid, ContractComponent contractComponent,
+        ContractStatus newStatus)
+    {
+        var oldStatus = contractComponent.Status;
+        contractComponent.Status = newStatus;
+        RaiseLocalEvent(new ContractStatusChangedEvent(oldStatus, newStatus));
+    }
+
+    public bool TryActivateContract(EntityUid contractUid, ContractComponent? contractComponent)
+    {
+        if (!Resolve(contractUid, ref contractComponent))
+            return false;
+
+        if (contractComponent.Status != ContractStatus.Initiating)
+            return false;
+
+        ChangeContractState(contractUid, contractComponent, ContractStatus.Active);
+        return true;
+    }
+
+    public bool TryFinalizeContract(EntityUid contractUid, ContractComponent? contractComponent)
+    {
+        if (!Resolve(contractUid, ref contractComponent))
+            return false;
+
+        if (contractComponent.Status != ContractStatus.Active)
+            return false;
+
+        ChangeContractState(contractUid, contractComponent, ContractStatus.Finalized);
+        return true;
+    }
+
+    public bool TryBreachContract(EntityUid contractUid, ContractComponent? contractComponent)
+    {
+        if (!Resolve(contractUid, ref contractComponent))
+            return false;
+
+        if (contractComponent.Status != ContractStatus.Active)
+            return false;
+
+        ChangeContractState(contractUid, contractComponent, ContractStatus.Breached);
+        return true;
+    }
+
+    public bool TryCancelContract(EntityUid contractUid, ContractComponent? contractComponent)
+    {
+        if (!Resolve(contractUid, ref contractComponent))
+            return false;
+
+        if (contractComponent.Status is not ContractStatus.Initiating and not ContractStatus.Active)
+            return false;
+
+        ChangeContractState(contractUid, contractComponent, ContractStatus.Cancelled);
+        return true;
+    }
 }
