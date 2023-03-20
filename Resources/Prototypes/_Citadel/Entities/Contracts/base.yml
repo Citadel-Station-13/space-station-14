@@ -1,0 +1,12 @@
+﻿- type: entity
+  id: CitadelBaseContract
+  name: Contract
+  description: |
+    A contract controller entity, manages some given contract.
+    You probably shouldn't be seeing this.
+  noSpawn: true
+  components:
+    - type: Contract
+    - type: ContractCriteriaControl
+      finalizingCriteria: []
+      breachingCriteria: []
