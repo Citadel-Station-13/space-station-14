@@ -27,6 +27,16 @@ public sealed class ContractManagementSystem : EntitySystem
     public override void Initialize()
     {
         _consoleHost.RegisterCommand("makecontract", MakeContractCommand, MakeContractCommandCompletion);
+        _consoleHost.RegisterCommand("lscontracts", ListContractsCommand);
+    }
+
+    private void ListContractsCommand(IConsoleShell shell, string argstr, string[] args)
+    {
+        var query = EntityQueryEnumerator<ContractComponent>();
+        while (query.MoveNext(out var uid, out var contract))
+        {
+
+        }
     }
 
     private CompletionResult MakeContractCommandCompletion(IConsoleShell shell, string[] args)
