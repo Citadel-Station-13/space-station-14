@@ -4,9 +4,22 @@
   description: |
     A contract controller entity, manages some given contract.
     You probably shouldn't be seeing this.
-  noSpawn: true
+  abstract: true
   components:
     - type: Contract
     - type: ContractCriteriaControl
       finalizingCriteria: []
       breachingCriteria: []
+
+- type: entity
+  id: CitadelTestingContract
+  parent: CitadelBaseContract
+  name: Test Contract
+  description: A contract that simply requires nobody dies and admin approval.
+  noSpawn: true
+  components:
+    - type: ContractCriteriaControl
+      finalizingCriteria:
+        - CitadelCriteriaAdminApproval
+      breachingCriteria:
+        - CitadelCriteriaNoDeaths

@@ -22,6 +22,7 @@ public sealed class ContractManagementSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     [Dependency] private readonly MindSystem _mindSystem = default!;
+    [Dependency] private readonly ContractCriteriaSystem _contractCriteria = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -33,10 +34,33 @@ public sealed class ContractManagementSystem : EntitySystem
     [AdminCommand(AdminFlags.Admin)]
     private void ListContractsCommand(IConsoleShell shell, string argstr, string[] args)
     {
-        var query = EntityQueryEnumerator<ContractComponent>();
-        while (query.MoveNext(out var uid, out var contract))
+        var query = EntityQueryEnumerator<ContractComponent, ContractCriteriaControlComponent>();
+        while (query.MoveNext(out var uid, out var contract, out var criteriaControl))
         {
-            shell.WriteLine($"{ToPrettyString(uid)} | OWNER: {ToPrettyString(contract.OwningContractor.OwnedEntity ?? EntityUid.Invalid)} | SUBCONS: {string.Join(',', contract.SubContractors.Select(x => ToPrettyString(x.OwnedEntity ?? EntityUid.Invalid)))}");
+            shell.WriteLine($"{ToPrettyString(uid)}");
+            shell.WriteLine($"STATE: {contract.Status}");
+            shell.WriteLine($"OWNER: {ToPrettyString(contract.OwningContractor.OwnedEntity ?? EntityUid.Invalid)}");
+            shell.WriteLine($"SUBCONS: {string.Join(',', contract.SubContractors.Select(x => ToPrettyString(x.OwnedEntity ?? EntityUid.Invalid)))}");
+            shell.WriteLine("Breaching criteria:");
+            foreach (var criterion in criteriaControl.BreachingCriteria)
+            {
+                _contractCriteria.TryGetCriteriaDisplayData(criterion, out var maybeData);
+                if (maybeData is { } data)
+                {
+                    shell.WriteLine($"- {data.Description}");
+                }
+            }
+
+            shell.WriteLine("Finalizing criteria:");
+            foreach (var criterion in criteriaControl.FinalizingCriteria)
+            {
+                _contractCriteria.TryGetCriteriaDisplayData(criterion, out var maybeData);
+                if (maybeData is { } data)
+                {
+                    shell.WriteLine($"- {data.Description}");
+                }
+            }
+            shell.WriteLine("========");
         }
     }
 
@@ -100,7 +124,7 @@ public sealed class ContractManagementSystem : EntitySystem
         contract.Status = ContractStatus.Initiating;
         contract.OwningContractor = owner;
 
-        RaiseLocalEvent(new ContractStatusChangedEvent(ContractStatus.Uninitialized, ContractStatus.Initiating));
+        RaiseLocalEvent(contractEnt, new ContractStatusChangedEvent(ContractStatus.Uninitialized, ContractStatus.Initiating));
 
         return contractEnt;
     }
@@ -110,7 +134,7 @@ public sealed class ContractManagementSystem : EntitySystem
     {
         var oldStatus = contractComponent.Status;
         contractComponent.Status = newStatus;
-        RaiseLocalEvent(new ContractStatusChangedEvent(oldStatus, newStatus));
+        RaiseLocalEvent(contractUid, new ContractStatusChangedEvent(oldStatus, newStatus));
     }
 
     public bool TryActivateContract(EntityUid contractUid, ContractComponent? contractComponent)

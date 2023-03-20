@@ -1,0 +1,19 @@
+﻿- type: entity
+  id: CitadelCriteriaNoDeaths
+  parent: CitadelBaseContractCriteria
+  name: No Death Criteria
+  description: A criteria that is satisfied when any crew member enters a dead state.
+  noSpawn: true
+  components:
+    - type: ContractCriteria
+    - type: CriteriaNoDeaths
+
+- type: entity
+  id: CitadelCriteriaAdminApproval
+  parent: CitadelBaseContractCriteria
+  name: Admin Approval Criteria
+  description: A criteria that is satisfied when an admin manually approves it.
+  noSpawn: true
+  components:
+    - type: ContractCriteria
+    - type: CriteriaNoDeaths

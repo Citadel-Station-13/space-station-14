@@ -45,7 +45,3 @@ public enum ContractStatus : uint
     Cancelled,
 }
 
-/// <summary>
-/// A directed event fired upon change in contract status.
-/// </summary>
-public readonly record struct ContractStatusChangedEvent(ContractStatus Old, ContractStatus New);

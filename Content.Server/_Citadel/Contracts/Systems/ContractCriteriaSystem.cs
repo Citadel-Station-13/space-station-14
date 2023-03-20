@@ -1,5 +1,9 @@
-﻿using Content.Server._Citadel.Contracts.Components;
+﻿using System.Diagnostics.CodeAnalysis;
+using Content.Server._Citadel.Contracts.Components;
+using Content.Server.Administration;
+using Content.Shared.Administration;
 using JetBrains.Annotations;
+using Robust.Shared.Console;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
 
@@ -11,6 +15,8 @@ namespace Content.Server._Citadel.Contracts.Systems;
 [PublicAPI]
 public sealed class ContractCriteriaSystem : EntitySystem
 {
+    [Dependency] private readonly IConsoleHost _consoleHost = default!;
+
     [Dependency] private readonly ContractManagementSystem _contract = default!;
 
     /// <inheritdoc/>
@@ -18,6 +24,63 @@ public sealed class ContractCriteriaSystem : EntitySystem
     {
         SubscribeLocalEvent<ContractCriteriaControlComponent, ContractStatusChangedEvent>(OnContractStatusChanged);
         SubscribeLocalEvent<ContractComponent, CriteriaUpdatedEvent>(OnCriteriaUpdated);
+        _consoleHost.RegisterCommand("finalizecontract", FinalizeContract);
+        _consoleHost.RegisterCommand("breachcontract", BreachContract);
+        _consoleHost.RegisterCommand("activatecontract", ActivateContract);
+    }
+
+    [AdminCommand(AdminFlags.Admin)]
+    private void FinalizeContract(IConsoleShell shell, string argstr, string[] args)
+    {
+        if (!EntityUid.TryParse(args[0], out var uid))
+        {
+            shell.WriteError($"The input '{args[0]}' is not a valid entity ID.");
+        }
+
+        if (_contract.TryFinalizeContract(uid, null))
+        {
+            shell.WriteLine("Finalized.");
+        }
+        else
+        {
+            shell.WriteError("Failed to finalize!");
+        }
+    }
+
+    [AdminCommand(AdminFlags.Admin)]
+    private void BreachContract(IConsoleShell shell, string argstr, string[] args)
+    {
+        if (!EntityUid.TryParse(args[0], out var uid))
+        {
+            shell.WriteError($"The input '{args[0]}' is not a valid entity ID.");
+        }
+
+        if (_contract.TryBreachContract(uid, null))
+        {
+            shell.WriteLine("Breached.");
+        }
+        else
+        {
+            shell.WriteError("Failed to breach!");
+        }
+    }
+
+    [AdminCommand(AdminFlags.Admin)]
+    private void ActivateContract(IConsoleShell shell, string argstr, string[] args)
+    {
+        if (!EntityUid.TryParse(args[0], out var uid))
+        {
+            shell.WriteError($"The input '{args[0]}' is not a valid entity ID.");
+        }
+
+        if (_contract.TryActivateContract(uid, null))
+        {
+            shell.WriteLine("Activated.");
+        }
+        else
+        {
+            shell.WriteError("Failed to activate!");
+        }
     }
 
     private void OnCriteriaUpdated(EntityUid uid, ContractComponent component, CriteriaUpdatedEvent args)
@@ -56,6 +119,7 @@ public sealed class ContractCriteriaSystem : EntitySystem
     #region Event Handling
     private void OnContractStatusChanged(EntityUid contractUid, ContractCriteriaControlComponent criteriaControlComponent, ContractStatusChangedEvent args)
     {
+        Logger.Debug($"{args.New}, {args.Old}");
         switch (args)
         {
             // Contract initiated, set up the criteria.
@@ -144,5 +208,22 @@ public sealed class ContractCriteriaSystem : EntitySystem
         criteriaControlComponent.BreachingCriteria.Add(criteria);
 
         return criteria;
+    }
+
+    public bool TryGetCriteriaDisplayData(EntityUid criteriaUid, [NotNullWhen(true)] out CriteriaDisplayData? displayData)
+    {
+        var ev = new CriteriaGetDisplayInfo();
+        RaiseLocalEvent(criteriaUid, ref ev);
+        displayData = ev.Info;
+        return displayData != null;
+    }
+
+    public void SetCriteriaStatus(EntityUid criteriaUid, bool status, ContractCriteriaComponent contractCriteria)
+    {
+        if (status == contractCriteria.Satisfied)
+            return;
+
+        contractCriteria.Satisfied = status;
+        RaiseLocalEvent(contractCriteria.OwningContract, new CriteriaUpdatedEvent());
     }
 }

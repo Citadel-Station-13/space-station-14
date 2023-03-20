@@ -4,6 +4,6 @@
   description: |
     A contract criteria controller entity, manages a criteria for some contract.
     You probably shouldn't be seeing this.
-  noSpawn: true
+  abstract: true
   components:
     - type: ContractCriteria
