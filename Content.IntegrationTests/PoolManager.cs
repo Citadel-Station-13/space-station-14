@@ -53,6 +53,9 @@ public static class PoolManager
         (CCVars.ThreadParallelCount.Name, "1", true),
         (CCVars.GameRoleTimers.Name, "false", false),
         (WorldgenCVars.WorldgenEnabled.Name, "false", false), // CITADEL EDIT
+        (CCVars.CargoShuttles.Name, "false", false),
+        (CCVars.EmergencyShuttleEnabled.Name, "false", false),
+        (CCVars.ProcgenPreload.Name, "false", false),
     };
 
     private static int PairId;
