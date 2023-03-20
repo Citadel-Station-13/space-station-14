@@ -30,12 +30,13 @@ public sealed class ContractManagementSystem : EntitySystem
         _consoleHost.RegisterCommand("lscontracts", ListContractsCommand);
     }
 
+    [AdminCommand(AdminFlags.Admin)]
     private void ListContractsCommand(IConsoleShell shell, string argstr, string[] args)
     {
         var query = EntityQueryEnumerator<ContractComponent>();
         while (query.MoveNext(out var uid, out var contract))
         {
-
+            shell.WriteLine($"{ToPrettyString(uid)} | OWNER: {ToPrettyString(contract.OwningContractor.OwnedEntity ?? EntityUid.Invalid)} | SUBCONS: {string.Join(',', contract.SubContractors.Select(x => ToPrettyString(x.OwnedEntity ?? EntityUid.Invalid)))}");
         }
     }
 
@@ -64,7 +65,7 @@ public sealed class ContractManagementSystem : EntitySystem
         }
     }
 
-    [AdminCommand(AdminFlags.Fun)]
+    [AdminCommand(AdminFlags.Admin)]
     private void MakeContractCommand(IConsoleShell shell, string argstr, string[] args)
     {
         if (args.Length != 2)
