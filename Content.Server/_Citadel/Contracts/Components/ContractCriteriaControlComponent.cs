@@ -1,5 +1,7 @@
-﻿using Content.Server._Citadel.Contracts.Systems;
+﻿using Content.Server._Citadel.Contracts.Prototypes;
+using Content.Server._Citadel.Contracts.Systems;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Dictionary;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
 namespace Content.Server._Citadel.Contracts.Components;
@@ -10,15 +12,9 @@ namespace Content.Server._Citadel.Contracts.Components;
 [RegisterComponent, Access(typeof(ContractCriteriaSystem))]
 public sealed class ContractCriteriaControlComponent : Component
 {
-    [DataField("finalizingCriteria", required: true, customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
-    [Access(typeof(ContractCriteriaSystem), Other = AccessPermissions.None)]
-    public List<string> ContractFinalizingCriteriaPrototypes = default!;
-    [DataField("breachingCriteria", required: true, customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
-    [Access(typeof(ContractCriteriaSystem), Other = AccessPermissions.None)]
-    public List<string> ContractBreachingCriteriaPrototypes = default!;
+    [DataField("criteria", required: true, customTypeSerializer: typeof(PrototypeIdDictionarySerializer<List<string>, CriteriaGroupPrototype>))]
+    public Dictionary<string, List<string>> CriteriaPrototypes = default!;
 
-    [DataField("finalizingCriteriaEntities")]
-    public List<EntityUid> FinalizingCriteria = new();
-    [DataField("breachingCriteriaEntities")]
-    public List<EntityUid> BreachingCriteria = new();
+    [DataField("criteriaEntities")]
+    public Dictionary<string, List<EntityUid>> Criteria = new();
 }

@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Content.Server._Citadel.Contracts.Components;
+using Content.Server._Citadel.Contracts.Prototypes;
 using Content.Server.Administration;
 using Content.Shared.Administration;
 using JetBrains.Annotations;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Server._Citadel.Contracts.Systems;
@@ -16,6 +18,7 @@ namespace Content.Server._Citadel.Contracts.Systems;
 public sealed class ContractCriteriaSystem : EntitySystem
 {
     [Dependency] private readonly IConsoleHost _consoleHost = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
 
     [Dependency] private readonly ContractManagementSystem _contract = default!;
 
@@ -83,6 +86,7 @@ public sealed class ContractCriteriaSystem : EntitySystem
         }
     }
 
+    #region Event Handling
     private void OnCriteriaUpdated(EntityUid uid, ContractComponent component, CriteriaUpdatedEvent args)
     {
         if (component.Status != ContractStatus.Active)
@@ -91,32 +95,59 @@ public sealed class ContractCriteriaSystem : EntitySystem
         if (!TryComp<ContractCriteriaControlComponent>(uid, out var criteriaControl))
             return;
 
-        // Deliberately process finalizing first, prefer letting them succeed over failure.
-        var allPass = criteriaControl.FinalizingCriteria.Count > 0; // Auto-fail if no finalizing criteria exist.
-        foreach (var criterion in criteriaControl.FinalizingCriteria)
+        foreach (var (groupProto, criteria) in criteriaControl.Criteria)
         {
-            var criteria = Comp<ContractCriteriaComponent>(criterion);
-            allPass &= criteria.Satisfied;
-        }
+            var group = _proto.Index<CriteriaGroupPrototype>(groupProto);
 
-        if (allPass)
-        {
-            _contract.TryFinalizeContract(uid, component);
-            return;
-        }
+            if (criteria.Count == 0)
+                continue;
 
-        foreach (var criterion in criteriaControl.BreachingCriteria)
-        {
-            var criteria = Comp<ContractCriteriaComponent>(criterion);
-            if (criteria.Satisfied)
+            switch (group.Mode)
             {
-                _contract.TryBreachContract(uid, component);
-                return;
+                case CriteriaGroupMode.All:
+                {
+                    var allPass = true;
+                    foreach (var criterion in criteria)
+                    {
+                        var comp = Comp<ContractCriteriaComponent>(criterion);
+                        allPass &= comp.Satisfied;
+                    }
+
+                    if (allPass)
+                    {
+                        ActivateCriteriaGroup(uid, group);
+                    }
+
+                    break;
+                }
+                case CriteriaGroupMode.Any:
+                {
+                    foreach (var criterion in criteria)
+                    {
+                        var comp = Comp<ContractCriteriaComponent>(criterion);
+                        if (comp.Satisfied)
+                        {
+                            ActivateCriteriaGroup(uid, group);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
 
-    #region Event Handling
+    private void ActivateCriteriaGroup(EntityUid contractUid, CriteriaGroupPrototype group)
+    {
+        foreach (var effect in group.Effects)
+        {
+            var ev = effect with { Contract = contractUid };
+            RaiseLocalEvent(ev);
+        }
+    }
+
     private void OnContractStatusChanged(EntityUid contractUid, ContractCriteriaControlComponent criteriaControlComponent, ContractStatusChangedEvent args)
     {
         Logger.Debug($"{args.New}, {args.Old}");
@@ -139,27 +170,23 @@ public sealed class ContractCriteriaSystem : EntitySystem
 
     private void OnContractInitiating(EntityUid contractUid, ContractCriteriaControlComponent criteriaControlComponent)
     {
-        foreach (var proto in criteriaControlComponent.ContractBreachingCriteriaPrototypes)
+        foreach (var (group, protos) in criteriaControlComponent.CriteriaPrototypes)
         {
-            AddContractBreachingCriteria(contractUid, proto, criteriaControlComponent);
-        }
-
-        foreach (var proto in criteriaControlComponent.ContractFinalizingCriteriaPrototypes)
-        {
-            AddContractFinalizingCriteria(contractUid, proto, criteriaControlComponent);
+            foreach (var proto in protos)
+            {
+                AddContractCriteria(contractUid, proto, group, criteriaControlComponent);
+            }
         }
     }
 
     private void OnContractActive(EntityUid contractUid, ContractCriteriaControlComponent criteriaControlComponent)
     {
-        foreach (var criteria in criteriaControlComponent.BreachingCriteria)
+        foreach (var (_, criteria) in criteriaControlComponent.Criteria)
         {
-            RaiseLocalEvent(criteria, new CriteriaStartTickingEvent());
-        }
-
-        foreach (var criteria in criteriaControlComponent.FinalizingCriteria)
-        {
-            RaiseLocalEvent(criteria, new CriteriaStartTickingEvent());
+            foreach (var criterion in criteria)
+            {
+                RaiseLocalEvent(criterion, new CriteriaStartTickingEvent());
+            }
         }
     }
     #endregion
@@ -182,30 +209,20 @@ public sealed class ContractCriteriaSystem : EntitySystem
     /// Adds a finalizing criteria to a contract.
     /// </summary>
     /// <returns>An initialized criteria.</returns>
-    public EntityUid AddContractFinalizingCriteria(EntityUid contractUid, string criteriaProto,
+    public EntityUid AddContractCriteria(EntityUid contractUid, string criteriaProto, string criteriaGroup,
         ContractCriteriaControlComponent? criteriaControlComponent = null)
     {
         // Deliberate throw-if-not-present, hence not using Resolve.
         criteriaControlComponent ??= Comp<ContractCriteriaControlComponent>(contractUid);
 
         var criteria = BuildContractCriteria(contractUid, criteriaProto, criteriaControlComponent);
-        criteriaControlComponent.FinalizingCriteria.Add(criteria);
+        if (!criteriaControlComponent.Criteria.TryGetValue(criteriaGroup, out var criterion))
+        {
+            criterion = new List<EntityUid>();
+            criteriaControlComponent.Criteria[criteriaGroup] = criterion;
+        }
 
-        return criteria;
-    }
-
-    /// <summary>
-    /// Adds a breaching criteria to a contract.
-    /// </summary>
-    /// <returns>An initialized criteria.</returns>
-    public EntityUid AddContractBreachingCriteria(EntityUid contractUid, string criteriaProto,
-        ContractCriteriaControlComponent? criteriaControlComponent = null)
-    {
-        // Deliberate throw-if-not-present, hence not using Resolve.
-        criteriaControlComponent ??= Comp<ContractCriteriaControlComponent>(contractUid);
-
-        var criteria = BuildContractCriteria(contractUid, criteriaProto, criteriaControlComponent);
-        criteriaControlComponent.BreachingCriteria.Add(criteria);
+        criterion.Add(criteria);
 
         return criteria;
     }

@@ -8,8 +8,7 @@
   components:
     - type: Contract
     - type: ContractCriteriaControl
-      finalizingCriteria: []
-      breachingCriteria: []
+      criteria: {}
 
 - type: entity
   id: CitadelTestingContract
@@ -19,7 +18,8 @@
   noSpawn: true
   components:
     - type: ContractCriteriaControl
-      finalizingCriteria:
-        - CitadelCriteriaAdminApproval
-      breachingCriteria:
-        - CitadelCriteriaNoDeaths
+      criteria:
+        Finalizing:
+          - CitadelCriteriaAdminApproval
+        Breaching:
+          - CitadelCriteriaNoDeaths

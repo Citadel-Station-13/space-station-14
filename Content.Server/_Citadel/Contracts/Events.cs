@@ -1,4 +1,5 @@
 ﻿using Content.Server._Citadel.Contracts.Components;
+using Robust.Shared.Console;
 
 namespace Content.Server._Citadel.Contracts;
 
@@ -15,3 +16,25 @@ public readonly record struct CriteriaUpdatedEvent;
 public record struct CriteriaGetDisplayInfo(CriteriaDisplayData? Info = null);
 
 public record struct CriteriaDisplayData(string Description);
+
+[ImplicitDataDefinitionForInheritors]
+public abstract record CriteriaGroupEffectEvent
+{
+    public EntityUid Contract;
+
+    protected CriteriaGroupEffectEvent(EntityUid contract)
+    {
+        Contract = contract;
+    }
+
+    protected CriteriaGroupEffectEvent()
+    {
+        Contract = EntityUid.Invalid;
+    }
+}
+
+public sealed record CriteriaGroupBreachContract : CriteriaGroupEffectEvent;
+
+public sealed record CriteriaGroupFinalizeContract : CriteriaGroupEffectEvent;
+
+public readonly record struct ListContractsConsoleCommandEvent(IConsoleShell Shell);

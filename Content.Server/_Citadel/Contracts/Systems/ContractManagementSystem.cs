@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Content.Server._Citadel.Contracts.Components;
+using Content.Server._Citadel.Contracts.Prototypes;
 using Content.Server.Administration;
 using Content.Server.Mind;
 using Content.Server.Mind.Components;
@@ -19,9 +20,9 @@ public sealed class ContractManagementSystem : EntitySystem
 {
     [Dependency] private readonly IConsoleHost _consoleHost = default!;
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
 
-    [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly ContractCriteriaSystem _contractCriteria = default!;
 
     /// <inheritdoc/>
@@ -29,6 +30,19 @@ public sealed class ContractManagementSystem : EntitySystem
     {
         _consoleHost.RegisterCommand("makecontract", MakeContractCommand, MakeContractCommandCompletion);
         _consoleHost.RegisterCommand("lscontracts", ListContractsCommand);
+
+        SubscribeLocalEvent<CriteriaGroupFinalizeContract>(OnCriteriaGroupFinalizeContract);
+        SubscribeLocalEvent<CriteriaGroupBreachContract>(OnCriteriaGroupBreachContract);
+    }
+
+    private void OnCriteriaGroupBreachContract(CriteriaGroupBreachContract ev)
+    {
+        TryBreachContract(ev.Contract);
+    }
+
+    private void OnCriteriaGroupFinalizeContract(CriteriaGroupFinalizeContract ev)
+    {
+        TryFinalizeContract(ev.Contract);
     }
 
     [AdminCommand(AdminFlags.Admin)]
@@ -41,25 +55,20 @@ public sealed class ContractManagementSystem : EntitySystem
             shell.WriteLine($"STATE: {contract.Status}");
             shell.WriteLine($"OWNER: {ToPrettyString(contract.OwningContractor.OwnedEntity ?? EntityUid.Invalid)}");
             shell.WriteLine($"SUBCONS: {string.Join(',', contract.SubContractors.Select(x => ToPrettyString(x.OwnedEntity ?? EntityUid.Invalid)))}");
-            shell.WriteLine("Breaching criteria:");
-            foreach (var criterion in criteriaControl.BreachingCriteria)
-            {
-                _contractCriteria.TryGetCriteriaDisplayData(criterion, out var maybeData);
-                if (maybeData is { } data)
-                {
-                    shell.WriteLine($"- {data.Description}");
-                }
-            }
 
-            shell.WriteLine("Finalizing criteria:");
-            foreach (var criterion in criteriaControl.FinalizingCriteria)
+            foreach (var (group, criteria) in criteriaControl.Criteria)
             {
-                _contractCriteria.TryGetCriteriaDisplayData(criterion, out var maybeData);
-                if (maybeData is { } data)
+                shell.WriteLine($"{_proto.Index<CriteriaGroupPrototype>(group).Name} criteria:");
+                foreach (var criterion in criteria)
                 {
-                    shell.WriteLine($"- {data.Description}");
+                    _contractCriteria.TryGetCriteriaDisplayData(criterion, out var maybeData);
+                    if (maybeData is { } data)
+                    {
+                        shell.WriteLine($"- {data.Description}");
+                    }
                 }
             }
+            RaiseLocalEvent(new ListContractsConsoleCommandEvent(shell));
             shell.WriteLine("========");
         }
     }
@@ -81,7 +90,7 @@ public sealed class ContractManagementSystem : EntitySystem
             }
             case 2:
             {
-                var options = _playerManager.ServerSessions.Select(c => c.Name).OrderBy(c => c);
+                var options = _player.ServerSessions.Select(c => c.Name).OrderBy(c => c);
                 return CompletionResult.FromHintOptions(options, Loc.GetString("cmd-ban-hint"));
             }
             default:
@@ -98,7 +107,7 @@ public sealed class ContractManagementSystem : EntitySystem
             return;
         }
 
-        if (!_playerManager.TryGetSessionByUsername(args[1], out var session))
+        if (!_player.TryGetSessionByUsername(args[1], out var session))
         {
             shell.WriteError($"Unknown player {args[1]}");
             return;
@@ -137,7 +146,7 @@ public sealed class ContractManagementSystem : EntitySystem
         RaiseLocalEvent(contractUid, new ContractStatusChangedEvent(oldStatus, newStatus));
     }
 
-    public bool TryActivateContract(EntityUid contractUid, ContractComponent? contractComponent)
+    public bool TryActivateContract(EntityUid contractUid, ContractComponent? contractComponent = null)
     {
         if (!Resolve(contractUid, ref contractComponent))
             return false;
@@ -149,7 +158,7 @@ public sealed class ContractManagementSystem : EntitySystem
         return true;
     }
 
-    public bool TryFinalizeContract(EntityUid contractUid, ContractComponent? contractComponent)
+    public bool TryFinalizeContract(EntityUid contractUid, ContractComponent? contractComponent = null)
     {
         if (!Resolve(contractUid, ref contractComponent))
             return false;
@@ -161,7 +170,7 @@ public sealed class ContractManagementSystem : EntitySystem
         return true;
     }
 
-    public bool TryBreachContract(EntityUid contractUid, ContractComponent? contractComponent)
+    public bool TryBreachContract(EntityUid contractUid, ContractComponent? contractComponent = null)
     {
         if (!Resolve(contractUid, ref contractComponent))
             return false;
