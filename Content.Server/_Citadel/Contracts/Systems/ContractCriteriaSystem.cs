@@ -8,6 +8,7 @@ using Robust.Shared.Console;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Serilog;
 
 namespace Content.Server._Citadel.Contracts.Systems;
 
@@ -97,6 +98,9 @@ public sealed class ContractCriteriaSystem : EntitySystem
 
         foreach (var (groupProto, criteria) in criteriaControl.Criteria)
         {
+            if (criteriaControl.FulfilledCriteriaGroups.Contains(groupProto))
+                continue;
+
             var group = _proto.Index<CriteriaGroupPrototype>(groupProto);
 
             if (criteria.Count == 0)
@@ -115,7 +119,7 @@ public sealed class ContractCriteriaSystem : EntitySystem
 
                     if (allPass)
                     {
-                        ActivateCriteriaGroup(uid, group);
+                        ActivateCriteriaGroup(uid, group, criteriaControl);
                     }
 
                     break;
@@ -127,7 +131,7 @@ public sealed class ContractCriteriaSystem : EntitySystem
                         var comp = Comp<ContractCriteriaComponent>(criterion);
                         if (comp.Satisfied)
                         {
-                            ActivateCriteriaGroup(uid, group);
+                            ActivateCriteriaGroup(uid, group, criteriaControl);
                             break;
                         }
                     }
@@ -139,18 +143,19 @@ public sealed class ContractCriteriaSystem : EntitySystem
         }
     }
 
-    private void ActivateCriteriaGroup(EntityUid contractUid, CriteriaGroupPrototype group)
+    private void ActivateCriteriaGroup(EntityUid contractUid, CriteriaGroupPrototype group, ContractCriteriaControlComponent criteriaControlComponent)
     {
+        criteriaControlComponent.FulfilledCriteriaGroups.Add(group.ID);
+
         foreach (var effect in group.Effects)
         {
             var ev = effect with { Contract = contractUid };
-            RaiseLocalEvent(ev);
+            RaiseLocalEvent((object)ev); // Cast is necessary to get a particular overload of RaiseLocalEvent that does downcasting internally.
         }
     }
 
     private void OnContractStatusChanged(EntityUid contractUid, ContractCriteriaControlComponent criteriaControlComponent, ContractStatusChangedEvent args)
     {
-        Logger.Debug($"{args.New}, {args.Old}");
         switch (args)
         {
             // Contract initiated, set up the criteria.

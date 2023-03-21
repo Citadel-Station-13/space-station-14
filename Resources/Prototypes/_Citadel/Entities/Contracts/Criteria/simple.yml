@@ -16,4 +16,5 @@
   noSpawn: true
   components:
     - type: ContractCriteria
-    - type: CriteriaNoDeaths
+    - type: CriteriaManual
+      desc: Bother a game admin to fill this out if it's not within a few minutes.

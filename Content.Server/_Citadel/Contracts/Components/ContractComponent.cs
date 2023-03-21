@@ -8,10 +8,19 @@ namespace Content.Server._Citadel.Contracts.Components;
 [RegisterComponent, Access(typeof(ContractManagementSystem))]
 public sealed class ContractComponent : Component
 {
+    /// <summary>
+    /// The contract's status, indicating whether it's completed or not among other things.
+    /// </summary>
     [DataField("status")]
     public ContractStatus Status;
+    /// <summary>
+    /// The contractor that owns this contract.
+    /// </summary>
     [ViewVariables]
-    public Mind.Mind OwningContractor = default!;
+    public Mind.Mind? OwningContractor = default;
+    /// <summary>
+    /// All subcontractors for the contract, who signed on or were invited by the owning contractor.
+    /// </summary>
     [ViewVariables]
     public List<Mind.Mind> SubContractors = new();
 }
@@ -21,6 +30,7 @@ public enum ContractStatus : uint
     /// <summary>
     /// Invalid contract state, if this shows up anywhere except as the "old" status during first setup, something's broken.
     /// </summary>
+    /// <remarks>It is completely valid for a contract to be in this state for an indefinite amount of time, given that it's not ticking.</remarks>
     Uninitialized = 0,
     /// <summary>
     /// Contract is not yet initiated, i.e. the owning contractor has not yet indicated starting the contract.

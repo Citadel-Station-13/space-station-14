@@ -45,7 +45,7 @@ public sealed class CriteriaNoDeathsSystem : EntitySystem
 
             foreach (var mind in contract.SubContractors.Append(contract.OwningContractor))
             {
-                anyDead |= mind.CharacterDeadIC;
+                anyDead |= mind?.CharacterDeadIC ?? false;
             }
 
             _criteria.SetCriteriaStatus(uid, anyDead, criteria);

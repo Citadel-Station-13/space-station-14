@@ -53,7 +53,7 @@ public sealed class ContractManagementSystem : EntitySystem
         {
             shell.WriteLine($"{ToPrettyString(uid)}");
             shell.WriteLine($"STATE: {contract.Status}");
-            shell.WriteLine($"OWNER: {ToPrettyString(contract.OwningContractor.OwnedEntity ?? EntityUid.Invalid)}");
+            shell.WriteLine($"OWNER: {ToPrettyString(contract.OwningContractor?.OwnedEntity ?? EntityUid.Invalid)}");
             shell.WriteLine($"SUBCONS: {string.Join(',', contract.SubContractors.Select(x => ToPrettyString(x.OwnedEntity ?? EntityUid.Invalid)))}");
 
             foreach (var (group, criteria) in criteriaControl.Criteria)
@@ -64,7 +64,11 @@ public sealed class ContractManagementSystem : EntitySystem
                     _contractCriteria.TryGetCriteriaDisplayData(criterion, out var maybeData);
                     if (maybeData is { } data)
                     {
-                        shell.WriteLine($"- {data.Description}");
+                        shell.WriteLine($"- ({ToPrettyString(criterion)}) {data.Description}");
+                    }
+                    else
+                    {
+                        shell.WriteLine($"- ({ToPrettyString(criterion)})");
                     }
                 }
             }
@@ -124,16 +128,24 @@ public sealed class ContractManagementSystem : EntitySystem
         shell.WriteLine($"Bound the contract {ToPrettyString(contract)} to {ToPrettyString(session.AttachedEntity.Value)}");
     }
 
-    public EntityUid CreateBoundContract(string contractProto, Mind.Mind owner)
+    public EntityUid CreateUnboundContract(string contractProto)
     {
         var contractEnt = Spawn(contractProto, MapCoordinates.Nullspace);
         DebugTools.Assert(HasComp<ContractComponent>(contractEnt), $"The contract {contractProto} is missing required components!");
 
         var contract = Comp<ContractComponent>(contractEnt);
         contract.Status = ContractStatus.Initiating;
-        contract.OwningContractor = owner;
 
         RaiseLocalEvent(contractEnt, new ContractStatusChangedEvent(ContractStatus.Uninitialized, ContractStatus.Initiating));
+
+        return contractEnt;
+    }
+
+    public EntityUid CreateBoundContract(string contractProto, Mind.Mind owner)
+    {
+        var contractEnt = CreateUnboundContract(contractProto);
+        var contract = Comp<ContractComponent>(contractEnt);
+        contract.OwningContractor = owner;
 
         return contractEnt;
     }

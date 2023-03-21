@@ -17,4 +17,7 @@ public sealed class ContractCriteriaControlComponent : Component
 
     [DataField("criteriaEntities")]
     public Dictionary<string, List<EntityUid>> Criteria = new();
+
+    [DataField("fulfilledCriteria")]
+    public HashSet<string> FulfilledCriteriaGroups = new();
 }
