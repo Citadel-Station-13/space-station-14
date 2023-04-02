@@ -16,7 +16,7 @@ public sealed class CriteriaGroupPrototype : IPrototype
     public string Name { get; } = default!;
 
     [DataField("mode", required: true)]
-    public CriteriaGroupMode Mode { get; } = default!;
+    public CriteriaGroupMode Mode { get; }
 
     [DataField("effects", required: true)]
     public List<CriteriaGroupEffectEvent> Effects { get; } = default!;

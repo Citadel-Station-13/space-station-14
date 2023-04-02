@@ -2,7 +2,6 @@
 using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Prototypes;
 using Content.Server.Administration;
-using Content.Server.Mind;
 using Content.Server.Mind.Components;
 using Content.Shared.Administration;
 using Robust.Server.Player;

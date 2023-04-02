@@ -8,7 +8,6 @@ using Robust.Shared.Console;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Serilog;
 
 namespace Content.Server._Citadel.Contracts.Systems;
 
@@ -41,7 +40,7 @@ public sealed class ContractCriteriaSystem : EntitySystem
             shell.WriteError($"The input '{args[0]}' is not a valid entity ID.");
         }
 
-        if (_contract.TryFinalizeContract(uid, null))
+        if (_contract.TryFinalizeContract(uid))
         {
             shell.WriteLine("Finalized.");
         }
@@ -59,7 +58,7 @@ public sealed class ContractCriteriaSystem : EntitySystem
             shell.WriteError($"The input '{args[0]}' is not a valid entity ID.");
         }
 
-        if (_contract.TryBreachContract(uid, null))
+        if (_contract.TryBreachContract(uid))
         {
             shell.WriteLine("Breached.");
         }
@@ -77,7 +76,7 @@ public sealed class ContractCriteriaSystem : EntitySystem
             shell.WriteError($"The input '{args[0]}' is not a valid entity ID.");
         }
 
-        if (_contract.TryActivateContract(uid, null))
+        if (_contract.TryActivateContract(uid))
         {
             shell.WriteLine("Activated.");
         }
