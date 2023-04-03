@@ -140,11 +140,17 @@ public sealed class ContractManagementSystem : EntitySystem
         return contractEnt;
     }
 
+    public void BindContract(EntityUid contractEnt, Mind.Mind owner)
+    {
+        var contract = Comp<ContractComponent>(contractEnt);
+        DebugTools.AssertNull(contract.OwningContractor);
+        contract.OwningContractor = owner;
+    }
+
     public EntityUid CreateBoundContract(string contractProto, Mind.Mind owner)
     {
         var contractEnt = CreateUnboundContract(contractProto);
-        var contract = Comp<ContractComponent>(contractEnt);
-        contract.OwningContractor = owner;
+        BindContract(contractEnt, owner);
 
         return contractEnt;
     }
