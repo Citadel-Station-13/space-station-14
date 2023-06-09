@@ -1,6 +1,6 @@
-using Content.Server.CombatMode;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Events;
+using Content.Shared.CombatMode;
 using Content.Shared.NPC;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.Map;
@@ -29,7 +29,7 @@ public sealed partial class NPCCombatSystem
             var cdRemaining = weapon.NextAttack - _timing.CurTime;
 
             // If CD remaining then backup.
-            if (cdRemaining < TimeSpan.FromSeconds(1f / weapon.AttackRate) * 0.5f)
+            if (cdRemaining < TimeSpan.FromSeconds(1f / _melee.GetAttackRate(component.Weapon, uid, weapon)) * 0.5f)
                 return;
 
             if (!_physics.TryGetNearestPoints(uid, component.Target, out var pointA, out var pointB))
@@ -69,7 +69,7 @@ public sealed partial class NPCCombatSystem
     {
         if (TryComp<CombatModeComponent>(uid, out var combatMode))
         {
-            combatMode.IsInCombatMode = false;
+            _combat.SetInCombatMode(uid, false, combatMode);
         }
 
         _steering.Unregister(component.Owner);
@@ -79,7 +79,7 @@ public sealed partial class NPCCombatSystem
     {
         if (TryComp<CombatModeComponent>(uid, out var combatMode))
         {
-            combatMode.IsInCombatMode = true;
+            _combat.SetInCombatMode(uid, true, combatMode);
         }
 
         // TODO: Cleanup later, just looking for parity for now.
@@ -142,6 +142,9 @@ public sealed partial class NPCCombatSystem
             component.Status = CombatStatus.TargetUnreachable;
             return;
         }
+
+        // TODO: When I get parallel operators move this as NPC combat shouldn't be handling this.
+        _steering.Register(uid, new EntityCoordinates(component.Target, Vector2.Zero), steering);
 
         if (distance > weapon.Range)
         {

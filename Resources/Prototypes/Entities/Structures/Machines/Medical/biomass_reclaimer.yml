@@ -10,6 +10,7 @@
     sprite: Structures/Machines/Medical/biomass_reclaimer.rsi
     state: icon
     netsync: false
+    snapCardinals: true
   - type: BiomassReclaimer
   - type: Climbable
     delay: 7
@@ -21,3 +22,6 @@
       path: /Audio/Ambience/Objects/reclaimer_ambience.ogg
   - type: Machine
     board: BiomassReclaimerMachineCircuitboard
+  - type: GuideHelp
+    guides:
+    - Cloning

@@ -11,6 +11,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Linq;
+using Robust.Client.GameObjects;
 
 namespace Content.Client.Audio
 {
@@ -41,7 +42,7 @@ namespace Content.Client.Audio
         private float _ambienceVolume = 0.0f;
 
         private static AudioParams _params = AudioParams.Default.WithVariation(0.01f).WithLoop(true).WithAttenuation(Attenuation.LinearDistance);
-            
+
         /// <summary>
         /// How many times we can be playing 1 particular sound at once.
         /// </summary>
@@ -106,7 +107,19 @@ namespace Content.Client.Audio
                 _playingCount.Remove(sound.Sound);
         }
 
-        private void SetAmbienceVolume(float value) => _ambienceVolume = value;
+        private void SetAmbienceVolume(float value)
+        {
+            _ambienceVolume = value;
+
+            foreach (var (comp, values) in _playingSounds)
+            {
+                if (values.Stream == null)
+                    continue;
+
+                var stream = (AudioSystem.PlayingStream) values.Stream;
+                stream.Volume = _params.Volume + comp.Volume + _ambienceVolume;
+            }
+        }
         private void SetCooldown(float value) => _cooldown = value;
         private void SetAmbientCount(int value) => _maxAmbientCount = value;
         private void SetAmbientRange(float value) => _maxAmbientRange = value;
@@ -205,7 +218,7 @@ namespace Content.Client.Audio
             string key;
 
             if (ambientComp.Sound is SoundPathSpecifier path)
-                key = path.Path?.ToString() ?? string.Empty;
+                key = path.Path.ToString();
             else
                 key = ((SoundCollectionSpecifier) ambientComp.Sound).Collection ?? string.Empty;
 
@@ -221,13 +234,18 @@ namespace Content.Client.Audio
         private void ProcessNearbyAmbience(TransformComponent playerXform)
         {
             var query = GetEntityQuery<TransformComponent>();
+            var metaQuery = GetEntityQuery<MetaDataComponent>();
             var mapPos = playerXform.MapPosition;
 
             // Remove out-of-range ambiences
             foreach (var (comp, sound) in _playingSounds)
             {
                 var entity = comp.Owner;
-                if (comp.Enabled && query.TryGetComponent(entity, out var xform) && xform.MapID == playerXform.MapID)
+
+                if (comp.Enabled &&
+                    query.TryGetComponent(entity, out var xform) &&
+                    xform.MapID == playerXform.MapID &&
+                    !metaQuery.GetComponent(entity).EntityPaused)
                 {
                     var distance = (xform.ParentUid == playerXform.ParentUid)
                         ? xform.LocalPosition - playerXform.LocalPosition
@@ -265,7 +283,10 @@ namespace Content.Client.Audio
 
                 foreach (var (_, comp) in sources)
                 {
-                    if (_playingSounds.ContainsKey(comp))
+                    var uid = comp.Owner;
+
+                    if (_playingSounds.ContainsKey(comp) ||
+                        metaQuery.GetComponent(uid).EntityPaused)
                         continue;
 
                     var audioParams = _params
@@ -274,7 +295,7 @@ namespace Content.Client.Audio
                         .WithPlayOffset(_random.NextFloat(0.0f, 100.0f))
                         .WithMaxDistance(comp.Range);
 
-                    var stream = _audio.PlayPvs(comp.Sound, comp.Owner, audioParams);
+                    var stream = _audio.PlayPvs(comp.Sound, uid, audioParams);
                     if (stream == null)
                         continue;
 

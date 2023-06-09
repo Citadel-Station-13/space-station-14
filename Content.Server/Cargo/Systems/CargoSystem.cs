@@ -1,8 +1,8 @@
 using Content.Server.Cargo.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.Cargo;
-using Content.Shared.Cargo.Components;
 using Content.Shared.Containers.ItemSlots;
+using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Cargo.Systems;
@@ -22,20 +22,12 @@ public sealed partial class CargoSystem : SharedCargoSystem
         InitializeConsole();
         InitializeShuttle();
         InitializeTelepad();
-        SubscribeLocalEvent<StationInitializedEvent>(OnStationInit);
     }
 
     public override void Shutdown()
     {
         base.Shutdown();
-        ShutdownShuttle();
-        CleanupShuttle();
-    }
-
-    private void OnStationInit(StationInitializedEvent ev)
-    {
-        EnsureComp<StationBankAccountComponent>(ev.Station);
-        EnsureComp<StationCargoOrderDatabaseComponent>(ev.Station);
+        CleanupCargoShuttle();
     }
 
     public override void Update(float frameTime)
@@ -45,9 +37,22 @@ public sealed partial class CargoSystem : SharedCargoSystem
         UpdateTelepad(frameTime);
     }
 
-    // please don't delete this thank you
-    public void UpdateBankAccount(StationBankAccountComponent component, int balanceAdded)
+    [PublicAPI]
+    public void UpdateBankAccount(EntityUid uid, StationBankAccountComponent component, int balanceAdded)
     {
         component.Balance += balanceAdded;
+        var query = EntityQueryEnumerator<CargoOrderConsoleComponent>();
+
+        while (query.MoveNext(out var oUid, out var oComp))
+        {
+            if (!_uiSystem.IsUiOpen(oUid, CargoConsoleUiKey.Orders))
+                continue;
+
+            var station = _station.GetOwningStation(oUid);
+            if (station != uid)
+                continue;
+
+            UpdateOrderState(oComp, station);
+        }
     }
 }

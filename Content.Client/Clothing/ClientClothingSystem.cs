@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Client.Inventory;
-using Content.Client.Humanoid;
 using Content.Shared.Clothing;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing.EntitySystems;
@@ -12,8 +11,8 @@ using Content.Shared.Item;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
+using Robust.Shared.Serialization.TypeSerializers.Implementations;
 using static Robust.Client.GameObjects.SpriteComponent;
-using static Robust.Shared.GameObjects.SharedSpriteComponent;
 
 namespace Content.Client.Clothing;
 
@@ -53,39 +52,28 @@ public sealed class ClientClothingSystem : ClothingSystem
 
         SubscribeLocalEvent<ClothingComponent, GetEquipmentVisualsEvent>(OnGetVisuals);
 
-        SubscribeLocalEvent<ClientInventoryComponent, VisualsChangedEvent>(OnVisualsChanged);
+        SubscribeLocalEvent<InventoryComponent, VisualsChangedEvent>(OnVisualsChanged);
         SubscribeLocalEvent<SpriteComponent, DidUnequipEvent>(OnDidUnequip);
-        SubscribeLocalEvent<ClientInventoryComponent, AppearanceChangeEvent>(OnAppearanceUpdate);
+        SubscribeLocalEvent<InventoryComponent, AppearanceChangeEvent>(OnAppearanceUpdate);
     }
 
-    private void OnAppearanceUpdate(EntityUid uid, ClientInventoryComponent component, ref AppearanceChangeEvent args)
+    private void OnAppearanceUpdate(EntityUid uid, InventoryComponent component, ref AppearanceChangeEvent args)
     {
         // May need to update jumpsuit stencils if the sex changed. Also required to properly set the stencil on init
-        // when sex is first loaded from the profile.
-        if (!TryComp(uid, out SpriteComponent? sprite) || !sprite.LayerMapTryGet(HumanoidVisualLayers.StencilMask, out var layer))
+        // This is when sex is first loaded from the profile.
+
+        if (!TryComp(uid, out SpriteComponent? sprite) ||
+            !TryComp(uid, out HumanoidAppearanceComponent? humanoid) ||
+            !_inventorySystem.TryGetSlotEntity(uid, "jumpsuit", out var suit, component) ||
+            !TryComp(suit, out ClothingComponent? clothing))
             return;
 
-        if (!TryComp(uid, out HumanoidAppearanceComponent? humanoid)
-            || humanoid.Sex != Sex.Female
-            || !_inventorySystem.TryGetSlotEntity(uid, "jumpsuit", out var suit, component)
-            || !TryComp(suit, out ClothingComponent? clothing))
-        {
-            sprite.LayerSetVisible(layer, false);
-            return;
-        }
-
-        sprite.LayerSetState(layer, clothing.FemaleMask switch
-        {
-            FemaleClothingMask.NoMask => "female_none",
-            FemaleClothingMask.UniformTop => "female_top",
-            _ => "female_full",
-        });
-        sprite.LayerSetVisible(layer, true);
+        SetGenderedMask(sprite, humanoid, clothing);
     }
 
     private void OnGetVisuals(EntityUid uid, ClothingComponent item, GetEquipmentVisualsEvent args)
     {
-        if (!TryComp(args.Equipee, out ClientInventoryComponent? inventory))
+        if (!TryComp(args.Equipee, out InventoryComponent? inventory))
             return;
 
         List<PrototypeLayerData>? layers = null;
@@ -132,7 +120,7 @@ public sealed class ClientClothingSystem : ClothingSystem
         RSI? rsi = null;
 
         if (clothing.RsiPath != null)
-            rsi = _cache.GetResource<RSIResource>(TextureRoot / clothing.RsiPath).RSI;
+            rsi = _cache.GetResource<RSIResource>(SpriteSpecifierSerializer.TextureRoot / clothing.RsiPath).RSI;
         else if (TryComp(uid, out SpriteComponent? sprite))
             rsi = sprite.BaseRSI;
 
@@ -142,9 +130,15 @@ public sealed class ClientClothingSystem : ClothingSystem
         var correctedSlot = slot;
         TemporarySlotMap.TryGetValue(correctedSlot, out correctedSlot);
 
-        var state = (clothing.EquippedPrefix == null)
-            ? $"equipped-{correctedSlot}"
-            : $"{clothing.EquippedPrefix}-equipped-{correctedSlot}";
+
+
+        var state = $"equipped-{correctedSlot}";
+
+        if (clothing.EquippedPrefix != null)
+            state = $"{clothing.EquippedPrefix}-equipped-{correctedSlot}";
+
+        if (clothing.EquippedState != null)
+            state = $"{clothing.EquippedState}";
 
         // species specific
         if (speciesId != null && rsi.TryGetState($"{state}-{speciesId}", out _))
@@ -164,7 +158,7 @@ public sealed class ClientClothingSystem : ClothingSystem
         return true;
     }
 
-    private void OnVisualsChanged(EntityUid uid, ClientInventoryComponent component, VisualsChangedEvent args)
+    private void OnVisualsChanged(EntityUid uid, InventoryComponent component, VisualsChangedEvent args)
     {
         if (!TryComp(args.Item, out ClothingComponent? clothing) || clothing.InSlot == null)
             return;
@@ -174,22 +168,22 @@ public sealed class ClientClothingSystem : ClothingSystem
 
     private void OnDidUnequip(EntityUid uid, SpriteComponent component, DidUnequipEvent args)
     {
-        if (!TryComp(uid, out ClientInventoryComponent? inventory) || !TryComp(uid, out SpriteComponent? sprite))
+        if (!TryComp(uid, out InventoryComponent? inventory) || !TryComp(uid, out InventorySlotsComponent? inventorySlots))
             return;
 
-        if (!inventory.VisualLayerKeys.TryGetValue(args.Slot, out var revealedLayers))
+        if (!inventorySlots.VisualLayerKeys.TryGetValue(args.Slot, out var revealedLayers))
             return;
 
         // Remove old layers. We could also just set them to invisible, but as items may add arbitrary layers, this
         // may eventually bloat the player with lots of invisible layers.
         foreach (var layer in revealedLayers)
         {
-            sprite.RemoveLayer(layer);
+            component.RemoveLayer(layer);
         }
         revealedLayers.Clear();
     }
 
-    public void InitClothing(EntityUid uid, ClientInventoryComponent? component = null, SpriteComponent? sprite = null)
+    public void InitClothing(EntityUid uid, InventoryComponent? component = null, SpriteComponent? sprite = null)
     {
         if (!Resolve(uid, ref sprite, ref component) || !_inventorySystem.TryGetSlots(uid, out var slots, component))
             return;
@@ -211,25 +205,21 @@ public sealed class ClientClothingSystem : ClothingSystem
     }
 
     private void RenderEquipment(EntityUid equipee, EntityUid equipment, string slot,
-        ClientInventoryComponent? inventory = null, SpriteComponent? sprite = null, ClothingComponent? clothingComponent = null)
+        InventoryComponent? inventory = null, SpriteComponent? sprite = null, ClothingComponent? clothingComponent = null,
+        InventorySlotsComponent? inventorySlots = null)
     {
-        if(!Resolve(equipee, ref inventory, ref sprite) || !Resolve(equipment, ref clothingComponent, false))
-            return;
-
-        if (slot == "jumpsuit" && sprite.LayerMapTryGet(HumanoidVisualLayers.StencilMask, out var suitLayer))
+        if (!Resolve(equipee, ref inventory, ref sprite, ref inventorySlots) ||
+           !Resolve(equipment, ref clothingComponent, false))
         {
-            if (TryComp(equipee, out HumanoidAppearanceComponent? humanoid) && humanoid.Sex == Sex.Female)
-            {
-                sprite.LayerSetState(suitLayer, clothingComponent.FemaleMask switch
-                {
-                    FemaleClothingMask.NoMask => "female_none",
-                    FemaleClothingMask.UniformTop => "female_top",
-                    _ => "female_full",
-                });
-                sprite.LayerSetVisible(suitLayer, true);
-            }
-            else
-                sprite.LayerSetVisible(suitLayer, false);
+            return;
+        }
+
+        if (slot == "jumpsuit")
+        {
+            if (!TryComp(equipee, out HumanoidAppearanceComponent? humanoid))
+                return;
+
+            SetGenderedMask(sprite, humanoid, clothingComponent);
         }
 
         if (!_inventorySystem.TryGetSlot(equipee, slot, out var slotDef, inventory))
@@ -237,7 +227,7 @@ public sealed class ClientClothingSystem : ClothingSystem
 
         // Remove old layers. We could also just set them to invisible, but as items may add arbitrary layers, this
         // may eventually bloat the player with lots of invisible layers.
-        if (inventory.VisualLayerKeys.TryGetValue(slot, out var revealedLayers))
+        if (inventorySlots.VisualLayerKeys.TryGetValue(slot, out var revealedLayers))
         {
             foreach (var key in revealedLayers)
             {
@@ -248,11 +238,11 @@ public sealed class ClientClothingSystem : ClothingSystem
         else
         {
             revealedLayers = new();
-            inventory.VisualLayerKeys[slot] = revealedLayers;
+            inventorySlots.VisualLayerKeys[slot] = revealedLayers;
         }
 
         var ev = new GetEquipmentVisualsEvent(equipee, slot);
-        RaiseLocalEvent(equipment, ev, false);
+        RaiseLocalEvent(equipment, ev);
 
         if (ev.Layers.Count == 0)
         {
@@ -305,5 +295,50 @@ public sealed class ClientClothingSystem : ClothingSystem
         }
 
         RaiseLocalEvent(equipment, new EquipmentVisualsUpdatedEvent(equipee, slot, revealedLayers), true);
+    }
+
+
+    /// <summary>
+    ///     Sets a sprite's gendered mask based on gender (obviously).
+    /// </summary>
+    /// <param name="sprite">Sprite to modify</param>
+    /// <param name="humanoid">Humanoid, to get gender from</param>
+    /// <param name="clothing">Clothing component, to get mask sprite type</param>
+    private static void SetGenderedMask(SpriteComponent sprite, HumanoidAppearanceComponent humanoid, ClothingComponent clothing)
+    {
+        if (!sprite.LayerMapTryGet(HumanoidVisualLayers.StencilMask, out var layer))
+            return;
+
+        ClothingMask? mask = null;
+        var prefix = "";
+
+        switch (humanoid.Sex)
+        {
+            case Sex.Male:
+                mask = clothing.MaleMask;
+                prefix = "male_";
+                break;
+            case Sex.Female:
+                mask = clothing.FemaleMask;
+                prefix = "female_";
+                break;
+            case Sex.Unsexed:
+                mask = clothing.UnisexMask;
+                prefix = "unisex_";
+                break;
+        }
+
+        if (mask != null)
+        {
+            sprite.LayerSetState(layer, mask switch
+            {
+                ClothingMask.NoMask => $"{prefix}none",
+                ClothingMask.UniformTop => $"{prefix}top",
+                _ => $"{prefix}full",
+            });
+            sprite.LayerSetVisible(layer, true);
+        }
+        else
+            sprite.LayerSetVisible(layer, false);
     }
 }

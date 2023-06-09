@@ -15,6 +15,16 @@
         ents: []
   - type: StaticPrice
     price: 100
+  - type: Tag
+    tags:
+      - Trash
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 3
+      - ReagentId: Blood
+        Quantity: 10
 
 - type: entity
   id: TorsoVox
@@ -30,6 +40,13 @@
       state: "torso_m"
     - type: BodyPart
       partType: Torso
+    - type: Extractable
+      juiceSolution:
+        reagents:
+        - ReagentId: Fat
+          Quantity: 3
+        - ReagentId: Blood
+          Quantity: 10
 
 - type: entity
   id: HeadVox
@@ -48,14 +65,16 @@
       vital: true
     - type: Input
       context: "ghost"
-    - type: MovementSpeedModifier
-      baseWalkSpeed: 0
-      baseSprintSpeed: 0
-    - type: InputMover
-    - type: GhostOnMove
     - type: Tag
       tags:
         - Head
+    - type: Extractable
+      juiceSolution:
+        reagents:
+        - ReagentId: Fat
+          Quantity: 5
+        - ReagentId: Blood
+          Quantity: 10
 
 - type: entity
   id: LeftArmVox
@@ -136,7 +155,7 @@
     - type: BodyPart
       partType: Leg
       symmetry: Left
-    - type: MovementSpeedModifier
+    - type: MovementBodyPart
 
 - type: entity
   id: RightLegVox
@@ -153,7 +172,7 @@
     - type: BodyPart
       partType: Leg
       symmetry: Right
-    - type: MovementSpeedModifier
+    - type: MovementBodyPart
 
 - type: entity
   id: LeftFootVox

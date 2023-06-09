@@ -9,6 +9,7 @@ using Content.Server.Maps;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Preferences.Managers;
 using Content.Server.ServerUpdates;
+using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
@@ -27,6 +28,9 @@ using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Replays;
+using Robust.Shared.Serialization.Markdown.Mapping;
+using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -34,8 +38,8 @@ namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker : SharedGameTicker
     {
+        [Dependency] private readonly ArrivalsSystem _arrivals = default!;
         [Dependency] private readonly MapLoaderSystem _map = default!;
-        [Dependency] private readonly MobStateSystem _mobState = default!;
         [Dependency] private readonly SharedTransformSystem _transform = default!;
 
         [ViewVariables] private bool _initialized;
@@ -64,7 +68,7 @@ namespace Content.Server.GameTicking
             DebugTools.Assert(_prototypeManager.Index<JobPrototype>(FallbackOverflowJob).Name == FallbackOverflowJobName,
                 "Overflow role does not have the correct name!");
             InitializeGameRules();
-
+            _replay.OnRecordingStarted += OnRecordingStart;
             _initialized = true;
         }
 
@@ -84,6 +88,12 @@ namespace Content.Server.GameTicking
             base.Shutdown();
 
             ShutdownGameRules();
+            _replay.OnRecordingStarted -= OnRecordingStart;
+        }
+
+        private void OnRecordingStart((MappingDataNode, List<object>) data)
+        {
+            data.Item1["roundId"] = new ValueDataNode(RoundId.ToString());
         }
 
         private void SendServerMessage(string message)
@@ -123,5 +133,6 @@ namespace Content.Server.GameTicking
         [Dependency] private readonly ServerUpdateManager _serverUpdates = default!;
         [Dependency] private readonly PlayTimeTrackingSystem _playTimeTrackings = default!;
         [Dependency] private readonly UserDbDataManager _userDb = default!;
+        [Dependency] private readonly IReplayRecordingManager _replay = default!;
     }
 }
