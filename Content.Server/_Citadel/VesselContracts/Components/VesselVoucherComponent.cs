@@ -7,5 +7,14 @@
 [RegisterComponent]
 public sealed class VesselVoucherComponent : Component
 {
-
+    /// <summary>
+    /// Contract that owns this voucher.
+    /// </summary>
+    [DataField("contract")]
+    public EntityUid Contract = EntityUid.Invalid;
+    /// <summary>
+    /// The vessel to be granted by the voucher.
+    /// </summary>
+    [DataField("vesselMap")]
+    public string VesselMap = "/Maps/Shuttles/mining.yml";
 }

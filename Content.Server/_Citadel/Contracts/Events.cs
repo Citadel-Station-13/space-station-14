@@ -49,6 +49,8 @@ public record struct CriteriaDisplayData(string Description);
 public abstract record CriteriaGroupEffectEvent
 {
     public EntityUid Contract = EntityUid.Invalid;
+
+    public virtual string? Describe() { return null; }
 }
 
 /// <summary>

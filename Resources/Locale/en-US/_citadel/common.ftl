@@ -1,0 +1,1 @@
+﻿-bank-currency-name = Thaler

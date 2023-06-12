@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Server._Citadel.Thalers;
 using Content.Server.Administration.Logs;
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Components;
@@ -39,6 +40,20 @@ namespace Content.Server.Mind
         private readonly ISet<Role> _roles = new HashSet<Role>();
 
         private readonly List<Objective> _objectives = new();
+
+        // BEGIN CITADEL EDIT
+        // TODO(lunar): When mind gets ECS'd these fields should be moved into components! This sucks!
+        /// <summary>
+        /// The mind's contracts, if any. This works for all minds, as space carps do still have souls and can
+        /// theoretically (wyci) make a deal with the devil.
+        /// </summary>
+        public HashSet<EntityUid> Contracts = new();
+        /// <summary>
+        /// The mind's bank account, if any. Should only be set up for crew members, space carp don't have rights.
+        /// Or that's how it should be but TODO(Lunar): Spawning code is JANK and there's no nice place to put bank setup.
+        /// </summary>
+        public BankAccount? BankAccount = new();
+        // END CITADEL EDIT
 
         public string Briefing = String.Empty;
 

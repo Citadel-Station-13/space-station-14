@@ -19,6 +19,7 @@ public sealed class ContractManagementSystem : EntitySystem
 {
     [Dependency] private readonly IConsoleHost _consoleHost = default!;
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
+    [Dependency] private readonly ILogManager _log = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
@@ -30,13 +31,27 @@ public sealed class ContractManagementSystem : EntitySystem
         _consoleHost.RegisterCommand("makecontract", MakeContractCommand, MakeContractCommandCompletion);
         _consoleHost.RegisterCommand("lscontracts", ListContractsCommand);
 
+
         SubscribeLocalEvent<CriteriaGroupFinalizeContract>(OnCriteriaGroupFinalizeContract);
         SubscribeLocalEvent<CriteriaGroupBreachContract>(OnCriteriaGroupBreachContract);
+        SubscribeLocalEvent<ContractComponent, ComponentShutdown>(OnContractshutdown);
+    }
+
+    private void OnContractshutdown(EntityUid uid, ContractComponent component, ComponentShutdown args)
+    {
+        if (component.OwningContractor is { } owner)
+            owner.Contracts.Remove(uid);
+
+        foreach (var contractor in component.SubContractors)
+        {
+            contractor.Contracts.Remove(uid);
+        }
     }
 
     private void OnCriteriaGroupBreachContract(CriteriaGroupBreachContract ev)
     {
         TryBreachContract(ev.Contract);
+
     }
 
     private void OnCriteriaGroupFinalizeContract(CriteriaGroupFinalizeContract ev)
@@ -140,11 +155,19 @@ public sealed class ContractManagementSystem : EntitySystem
         return contractEnt;
     }
 
-    public void BindContract(EntityUid contractEnt, Mind.Mind owner)
+    public void BindContract(EntityUid contractEnt, Mind.Mind contractor)
     {
         var contract = Comp<ContractComponent>(contractEnt);
-        DebugTools.AssertNull(contract.OwningContractor);
-        contract.OwningContractor = owner;
+        if (contract.OwningContractor is null)
+        {
+            contract.OwningContractor = contractor;
+        }
+        else
+        {
+            contract.SubContractors.Add(contractor);
+        }
+
+        contractor.Contracts.Add(contractEnt);
     }
 
     public EntityUid CreateBoundContract(string contractProto, Mind.Mind owner)

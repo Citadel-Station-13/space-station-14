@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Prototypes;
 using Content.Server.Administration;
@@ -145,11 +146,13 @@ public sealed class ContractCriteriaSystem : EntitySystem
     private void ActivateCriteriaGroup(EntityUid contractUid, CriteriaGroupPrototype group, ContractCriteriaControlComponent criteriaControlComponent)
     {
         criteriaControlComponent.FulfilledCriteriaGroups.Add(group.ID);
-
-        foreach (var effect in group.Effects)
+        criteriaControlComponent.CriteriaEffects.TryGetValue(group.ID, out var extraEffects);
+        foreach (var effect in group.Effects.Concat(extraEffects ?? new()))
         {
             var ev = effect with { Contract = contractUid };
-            RaiseLocalEvent((object)ev); // Cast is necessary to get a particular overload of RaiseLocalEvent that does downcasting internally.
+            // Cast is necessary to get a particular overload of RaiseLocalEvent that does downcasting internally.
+            // Thanks, jAnkPI.
+            RaiseLocalEvent((object)ev);
         }
     }
 

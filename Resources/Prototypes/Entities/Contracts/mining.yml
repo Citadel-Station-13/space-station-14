@@ -1,0 +1,19 @@
+﻿- type: entity
+  id: CitadelTestingMiningContract
+  parent: CitadelBaseContract
+  name: Test Mining Contract
+  description: A contract that requires nobody dies, and an easy minimum income. This combines a vessel contract and gig.
+  noSpawn: true
+  components:
+    - type: ContractCriteriaControl
+      criteria:
+        Finalizing:
+          - CitadelCriteriaAdminApproval
+        Breaching:
+          - CitadelCriteriaNoDeaths
+      criteriaEffects:
+        Finalizing:
+          - !type:CriteriaGroupAwardCash
+            amount: 200
+    - type: ContractSimpleVesselProvider
+    - type: VesselContract

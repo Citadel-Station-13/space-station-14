@@ -12,12 +12,27 @@ namespace Content.Server._Citadel.Contracts.Components;
 [RegisterComponent, Access(typeof(ContractCriteriaSystem))]
 public sealed class ContractCriteriaControlComponent : Component
 {
+    /// <summary>
+    /// The criteria groups and their associated criteria.
+    /// </summary>
     [DataField("criteria", required: true, customTypeSerializer: typeof(PrototypeIdDictionarySerializer<List<string>, CriteriaGroupPrototype>))]
     public Dictionary<string, List<string>> CriteriaPrototypes = default!;
 
+    /// <summary>
+    /// Additional criteria effects, on top of the ones the groups already have.
+    /// </summary>
+    [DataField("criteriaEffects")]
+    public Dictionary<string, List<CriteriaGroupEffectEvent>> CriteriaEffects = default!;
+
+    /// <summary>
+    /// The actual criteria entities.
+    /// </summary>
     [DataField("criteriaEntities")]
     public Dictionary<string, List<EntityUid>> Criteria = new();
 
+    /// <summary>
+    /// The fulfilled criteria groups.
+    /// </summary>
     [DataField("fulfilledCriteria")]
     public HashSet<string> FulfilledCriteriaGroups = new();
 }
