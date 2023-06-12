@@ -1,9 +1,0 @@
-﻿- type: entity
-  id: CitadelBaseContractCriteria
-  name: Contract Criteria
-  description: |
-    A contract criteria controller entity, manages a criteria for some contract.
-    You probably shouldn't be seeing this.
-  abstract: true
-  components:
-    - type: ContractCriteria

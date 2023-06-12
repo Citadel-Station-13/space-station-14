@@ -1,13 +1,17 @@
+using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind.Components;
 using Content.Server.Speech.Components;
-
 using Content.Shared.Chemistry.Reagent;
 using Content.Server.Ghost.Roles.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.Chemistry.ReagentEffects;
 
 public sealed class MakeSentient : ReagentEffect
 {
+    protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+        => Loc.GetString("reagent-effect-guidebook-make-sentient", ("chance", Probability));
+
     public override void Effect(ReagentEffectArgs args)
     {
         var entityManager = args.EntityManager;
@@ -26,16 +30,18 @@ public sealed class MakeSentient : ReagentEffect
         }
 
         // No idea what anything past this point does
-        if (entityManager.TryGetComponent(uid, out GhostTakeoverAvailableComponent? takeOver))
+        if (entityManager.TryGetComponent(uid, out GhostRoleComponent? ghostRole) ||
+            entityManager.TryGetComponent(uid, out GhostTakeoverAvailableComponent? takeOver))
         {
             return;
         }
 
-        takeOver = entityManager.AddComponent<GhostTakeoverAvailableComponent>(uid);
+        ghostRole = entityManager.AddComponent<GhostRoleComponent>(uid);
+        entityManager.AddComponent<GhostTakeoverAvailableComponent>(uid);
 
         var entityData = entityManager.GetComponent<MetaDataComponent>(uid);
-        takeOver.RoleName = entityData.EntityName;
-        takeOver.RoleDescription = Loc.GetString("ghost-role-information-cognizine-description");
+        ghostRole.RoleName = entityData.EntityName;
+        ghostRole.RoleDescription = Loc.GetString("ghost-role-information-cognizine-description");
     }
 }
 
