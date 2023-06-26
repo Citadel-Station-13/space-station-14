@@ -56,10 +56,11 @@ public sealed class CriteriaMaterialStorageHasMaterialsSystem : EntitySystem
 
         while (q.MoveNext(out var uid, out var cc, out var criteria))
         {
-            if (criteria.Ticking is false || criteria.Satisfied is true)
+            var vessel = vesselContractQuery.GetComponent(cc.OwningContract);
+
+            if (criteria.Ticking is false || criteria.Satisfied is true || vessel.Vessel is null)
                 continue;
 
-            var vessel = vesselContractQuery.GetComponent(cc.OwningContract);
 
             var gridMaybe = _station.GetLargestGrid(Comp<StationDataComponent>(vessel.Vessel!.Value));
 

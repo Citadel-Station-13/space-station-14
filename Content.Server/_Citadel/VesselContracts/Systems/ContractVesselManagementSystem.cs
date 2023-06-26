@@ -82,7 +82,8 @@ public sealed class ContractVesselManagementSystem : EntitySystem
     {
         // failure cases galore, wowee.
         // Syntax is slightly arcane so tl;dr that match is getting the owning entity as a non-nullable EntityUid or else returning.
-        if (!TryComp<ContractComponent>(uid, out var contract) || contract.OwningContractor is not {OwnedEntity: { } owner})
+        if (!TryComp<ContractComponent>(uid, out var contract) ||
+            contract.OwningContractor is not {OwnedEntity: { } owner})
             return;
 
         if (_station.GetOwningStation(owner) is not { } station)
@@ -116,10 +117,8 @@ public sealed class ContractVesselManagementSystem : EntitySystem
         // TODO(lunar): Tell sloth to make this return an enum of conditions instead.
         _shuttle.TryFTLDock(shuttle, Comp<ShuttleComponent>(shuttle), stationGrid);
 
-        _chat.DispatchStationAnnouncement(vessel,
+        _chat.DispatchStationAnnouncement(station,
             $"The vessel for contract #{(int)uid} \"{Name(uid)}\" has been docked. {ContentLocalizationManager.FormatList(contract.SubContractors.Prepend(contract.OwningContractor!).Select(x => x.CharacterName!).ToList())} should report to their vessel.", "Oversight");
-
-        return;
 
         fail:
         Del(_map.GetMapEntityId(holding));
