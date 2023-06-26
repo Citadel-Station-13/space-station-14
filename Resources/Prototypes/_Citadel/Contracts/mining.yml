@@ -1,19 +1,26 @@
 ﻿- type: entity
   id: CitadelTestingMiningContract
   parent: CitadelBaseContract
-  name: Test Mining Contract
+  name: Plasma Acquisition Order
   description: A contract that requires nobody dies, and an easy minimum income. This combines a vessel contract and gig.
   noSpawn: true
   components:
     - type: ContractCriteriaControl
       criteria:
         Finalizing:
-          - CitadelCriteriaAdminApproval
+          - CitadelCriteriaPlasmaMining
         Breaching:
           - CitadelCriteriaNoDeaths
       criteriaEffects:
         Finalizing:
           - !type:CriteriaGroupAwardCash
-            amount: 200
+            amount: 2000
     - type: ContractSimpleVesselProvider
+      vesselConfig:
+        stationProto: CitadelStandardNanotrasenVessel
+        components:
+          - type: Transform
+    - type: ContractSimpleVesselRemover
     - type: VesselContract
+    - type: ContractStartFee
+      cost: 1000

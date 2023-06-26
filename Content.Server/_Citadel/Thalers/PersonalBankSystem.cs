@@ -2,8 +2,11 @@
 using System.Linq;
 using Content.Server._Citadel.Contracts;
 using Content.Server._Citadel.Contracts.Components;
+using Content.Server.Chat.Managers;
+using Content.Server.Chat.Systems;
 using Content.Server.Mind.Components;
 using Content.Server.Station.Systems;
+using Content.Shared.Chat;
 using Content.Shared.FixedPoint;
 using JetBrains.Annotations;
 
@@ -14,10 +17,35 @@ namespace Content.Server._Citadel.Thalers;
 /// </summary>
 public sealed class PersonalBankSystem : EntitySystem
 {
+    [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private readonly IViewVariablesManager _vv = default!;
+
     /// <inheritdoc/>
     public override void Initialize()
     {
         SubscribeLocalEvent<CriteriaGroupAwardCash>(OnAwardCash);
+        // maybe give this it's own system, it's not relevant to banks.
+        SubscribeLocalEvent<ContractStartFeeComponent, ContractTryStatusChange>(OnContractTryStatusChange);
+    }
+
+    private void OnContractTryStatusChange(EntityUid uid, ContractStartFeeComponent component, ref ContractTryStatusChange args)
+    {
+        if (args is not {Old: ContractStatus.Initiating, New: ContractStatus.Active})
+            return; // If we're not still in setup, we don't care.
+
+        var contract = Comp<ContractComponent>(uid);
+
+        if (contract.OwningContractor is null)
+            return;
+
+        var success = TryAdjustBalance(contract.OwningContractor.OwnedEntity!.Value, -component.Cost);
+
+        if (success)
+            return;
+
+        args.Cancelled = true;
+
+        args.FailMessage.AddText(Loc.GetString("citadel-failed-contract-start-not-enough-money", ("userBalance", contract.OwningContractor.BankAccount!.Thalers), ("cost", component.Cost)));
     }
 
     private void OnAwardCash(CriteriaGroupAwardCash ev)
@@ -37,7 +65,7 @@ public sealed class PersonalBankSystem : EntitySystem
     {
         balance = null;
 
-        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp.Mind is not { } mind || mind.BankAccount is not { } account)
+        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account})
             return false;
 
         balance = account.Thalers;
@@ -47,7 +75,7 @@ public sealed class PersonalBankSystem : EntitySystem
     [PublicAPI]
     public bool CanAdjustBalance(EntityUid user, FixedPoint2 amount)
     {
-        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp.Mind is not { } mind || mind.BankAccount is not { } account)
+        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account} mind)
             return false;
 
         var newSum = account.Thalers + amount;
@@ -65,7 +93,7 @@ public sealed class PersonalBankSystem : EntitySystem
     [PublicAPI]
     public bool TryAdjustBalance(EntityUid user, FixedPoint2 amount)
     {
-        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp.Mind is not { } mind || mind.BankAccount is not { } account)
+        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account})
             return false;
 
         if (!CanAdjustBalance(user, amount))
@@ -82,15 +110,15 @@ public sealed class BankAccount
 {
     // TODO(Lunar): FixedPoint2 can't represent more than ~20mil or so. Maybe need a new thing if we expect people to get stupid rich.
     // but having someone's balance overflow into the negatives is FUNNY!!!
+    [ViewVariables(VVAccess.ReadWrite)]
     public FixedPoint2 Thalers = 2500;
 }
 
-
-public sealed record CriteriaGroupAwardCash(FixedPoint2 Amount) : CriteriaGroupEffectEvent
+[PublicAPI]
+public sealed record CriteriaGroupAwardCash() : CriteriaGroupEffectEvent
 {
     [DataField("amount")]
-    public FixedPoint2 Amount = Amount;
-
+    public FixedPoint2 Amount;
     public override string? Describe()
     {
         return Loc.GetString("criteria-group-award-cash-effect-description", ("amount", Amount));

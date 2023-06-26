@@ -1,8 +1,18 @@
 ﻿using Content.Server._Citadel.Contracts.Components;
 using JetBrains.Annotations;
 using Robust.Shared.Console;
+using Robust.Shared.Utility;
 
 namespace Content.Server._Citadel.Contracts;
+
+[ByRefEvent]
+public record struct ContractTryStatusChange(ContractStatus Old, ContractStatus New)
+{
+    public readonly ContractStatus Old = Old; // C# syntax moment, this is assigning the constructor values to the fields.
+    public readonly ContractStatus New = New;
+    public bool Cancelled = false;
+    public readonly FormattedMessage FailMessage = new();
+}
 
 /// <summary>
 /// An event fired upon change in contract status.

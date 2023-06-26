@@ -1,4 +1,6 @@
-﻿namespace Content.Server._Citadel.VesselContracts.Components;
+﻿using Content.Server.Station;
+
+namespace Content.Server._Citadel.VesselContracts.Components;
 
 /// <summary>
 /// This is used for creating and FTLing in a contract vessel, without any of the complexities one would normally want.
@@ -9,4 +11,7 @@ public sealed class ContractSimpleVesselProviderComponent : Component
 {
     [DataField("vesselMap")]
     public string VesselMap = "/Maps/Shuttles/mining.yml";
+
+    [DataField("vesselConfig", required: true)]
+    public StationConfig VesselConfig = default!;
 }

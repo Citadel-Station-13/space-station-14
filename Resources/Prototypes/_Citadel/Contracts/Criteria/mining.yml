@@ -1,0 +1,12 @@
+﻿- type: entity
+  id: CitadelCriteriaPlasmaMining
+  parent: CitadelBaseContractCriteria
+  name: Plasma Sheets Criteria
+  description: A criteria that is satisfied by collecting solid plasma.
+  noSpawn: true
+  components:
+    - type: ContractCriteria
+    - type: CriteriaMaterialStorageHasMaterials
+      material: Plasma
+      amountRange: 100000, 150000
+

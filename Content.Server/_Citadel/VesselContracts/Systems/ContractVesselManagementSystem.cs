@@ -7,6 +7,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Shared.Localizations;
 using Robust.Server.GameObjects;
 using Robust.Server.Maps;
 using Robust.Shared.Map;
@@ -28,49 +29,124 @@ public sealed class ContractVesselManagementSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<ContractSimpleVesselProviderComponent, ContractStatusChangedEvent>(OnContractStatusChanged);
+        SubscribeLocalEvent<ContractSimpleVesselRemoverComponent, ContractStatusChangedEvent>(OnContractStatusChanged);
+        SubscribeLocalEvent<VesselContractComponent, ComponentShutdown>(OnVesselContractShutdown);
+    }
+
+    private void OnVesselContractShutdown(EntityUid uid, VesselContractComponent component, ComponentShutdown args)
+    {
+        _station.DeleteStation(component.Vessel!.Value);
+    }
+
+    private void OnContractStatusChanged(EntityUid uid, ContractSimpleVesselRemoverComponent component, ContractStatusChangedEvent args)
+    {
+        if (args is {Old: ContractStatus.Active, New: ContractStatus.Breached or ContractStatus.Finalized})
+        {
+            component.Active = true;
+        }
+    }
+
+    public void ContractVesselAnnouncement(EntityUid contract, string message)
+    {
+        if (!TryComp<VesselContractComponent>(contract, out var vessel))
+        {
+            throw new ArgumentException("Given entity was not a vessel contract.", nameof(contract));
+        }
+
+        _chat.DispatchStationAnnouncement(vessel.Vessel!.Value, message, sender: "Oversight");
     }
 
     private void OnContractStatusChanged(EntityUid uid, ContractSimpleVesselProviderComponent component, ContractStatusChangedEvent args)
     {
-        if (args.New == ContractStatus.Active && args.Old == ContractStatus.Initiating)
+        switch (args)
         {
-            // failure cases galore, wowee.
-            // Syntax is slightly arcane so tl;dr that match is getting the owning entity as a non-nullable EntityUid or else returning.
-            if (!TryComp<ContractComponent>(uid, out var contract) || contract.OwningContractor is not { OwnedEntity: { } owner})
-                return;
-
-            if (_station.GetOwningStation(owner) is not { } station)
-                return; // Need them to be on a station.
-
-            if (_station.GetLargestGrid(Comp<StationDataComponent>(station)) is not { } stationGrid)
-                return; // Need the grid so we can dock to it.
-
-            var holding = _map.CreateMap();
-
-            var success = _mapLoader.TryLoad(holding, component.VesselMap, out var roots, new MapLoadOptions()
+            case {Old: ContractStatus.Initiating, New: ContractStatus.Active}:
             {
-                LoadMap = false,
-            });
+                HandleContractActivation(uid, component);
+                return;
+            }
+            case {Old: ContractStatus.Active, New: ContractStatus.Finalized}:
+            {
+                ContractVesselAnnouncement(uid, $"Contract #{(int)uid} \"{Name(uid)}\" has been finalized and payment will be processed. Return to your check-in point.");
+                return;
+            }
+            case {Old: ContractStatus.Active, New: ContractStatus.Breached}:
+            {
+                ContractVesselAnnouncement(uid, $"You have breached the terms of contract #{(int)uid} \"{Name(uid)}\". Return to your check-in point immediately.");
+                return;
+            }
+        }
+    }
 
-            if (!success)
-                goto fail; // pain!
-
-            if (roots!.Count != 1)
-                goto fail;
-
-            // Can't go fail for this because we can't tell if it failed outright or prox docked. Result<T,E> when?
-            // TODO(lunar): Tell sloth to make this return an enum of conditions instead.
-            _shuttle.TryFTLDock(roots[0], Comp<ShuttleComponent>(roots[0]), stationGrid);
-
-            Comp<VesselContractComponent>(uid).Vessel = roots[0];
-
-            _chat.DispatchStationAnnouncement(station, $"The vessel for contract {ToPrettyString(uid)} has been docked, if possible.", "Oversight");
-
+    private void HandleContractActivation(EntityUid uid, ContractSimpleVesselProviderComponent component)
+    {
+        // failure cases galore, wowee.
+        // Syntax is slightly arcane so tl;dr that match is getting the owning entity as a non-nullable EntityUid or else returning.
+        if (!TryComp<ContractComponent>(uid, out var contract) || contract.OwningContractor is not {OwnedEntity: { } owner})
             return;
 
-            fail:
-            Del(_map.GetMapEntityId(holding));
+        if (_station.GetOwningStation(owner) is not { } station)
             return;
+
+        if (_station.GetLargestGrid(Comp<StationDataComponent>(station)) is not { } stationGrid)
+            return;
+
+        var holding = _map.CreateMap();
+
+        var success = _mapLoader.TryLoad(holding, component.VesselMap, out var roots, new MapLoadOptions
+        {
+            LoadMap = false,
+        });
+
+        if (!success)
+            goto fail; // pain!
+
+        if (roots!.Count != 1)
+            goto fail;
+
+        var vessel = _station.InitializeNewStation(component.VesselConfig, roots);
+
+        AddComp<ContractedVesselComponent>(vessel).Contract = uid;
+
+        Comp<VesselContractComponent>(uid).Vessel = vessel;
+
+        var shuttle = _station.GetLargestGrid(Comp<StationDataComponent>(vessel))!.Value;
+
+        // Can't go fail for this because we can't tell if it failed outright or prox docked. Result<T,E> when?
+        // TODO(lunar): Tell sloth to make this return an enum of conditions instead.
+        _shuttle.TryFTLDock(shuttle, Comp<ShuttleComponent>(shuttle), stationGrid);
+
+        _chat.DispatchStationAnnouncement(vessel,
+            $"The vessel for contract #{(int)uid} \"{Name(uid)}\" has been docked. {ContentLocalizationManager.FormatList(contract.SubContractors.Prepend(contract.OwningContractor!).Select(x => x.CharacterName!).ToList())} should report to their vessel.", "Oversight");
+
+        return;
+
+        fail:
+        Del(_map.GetMapEntityId(holding));
+        return;
+    }
+
+    public override void Update(float frameTime)
+    {
+        var query = EntityQueryEnumerator<ContractComponent, VesselContractComponent, ContractSimpleVesselRemoverComponent>();
+
+        while (query.MoveNext(out var uid, out var contract, out var vessel, out var comp))
+        {
+            if (!comp.Active)
+                continue;
+
+            var data = Comp<StationDataComponent>(vessel.Vessel!.Value);
+
+            var nearby = _station.GetInStation(data, range: 10.0f);
+
+            if (!nearby.Recipients.Any())
+            {
+                foreach (var grid in data.Grids)
+                {
+                    _station.RemoveGridFromStation(vessel.Vessel!.Value, grid, null, data);
+                    QueueDel(grid);
+                }
+            }
         }
     }
 }

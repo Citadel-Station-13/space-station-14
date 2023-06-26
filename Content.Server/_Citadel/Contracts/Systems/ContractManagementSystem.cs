@@ -51,7 +51,6 @@ public sealed class ContractManagementSystem : EntitySystem
     private void OnCriteriaGroupBreachContract(CriteriaGroupBreachContract ev)
     {
         TryBreachContract(ev.Contract);
-
     }
 
     private void OnCriteriaGroupFinalizeContract(CriteriaGroupFinalizeContract ev)
@@ -178,12 +177,20 @@ public sealed class ContractManagementSystem : EntitySystem
         return contractEnt;
     }
 
-    private void ChangeContractState(EntityUid contractUid, ContractComponent contractComponent,
+    private bool TryChangeContractState(EntityUid contractUid, ContractComponent contractComponent,
         ContractStatus newStatus)
     {
         var oldStatus = contractComponent.Status;
+        var ev = new ContractTryStatusChange(oldStatus, newStatus);
+        RaiseLocalEvent(contractUid, ref ev);
+
+        if (ev.Cancelled)
+            return false;
+
         contractComponent.Status = newStatus;
         RaiseLocalEvent(contractUid, new ContractStatusChangedEvent(oldStatus, newStatus));
+
+        return true;
     }
 
     public bool TryActivateContract(EntityUid contractUid, ContractComponent? contractComponent = null)
@@ -194,8 +201,7 @@ public sealed class ContractManagementSystem : EntitySystem
         if (contractComponent.Status != ContractStatus.Initiating)
             return false;
 
-        ChangeContractState(contractUid, contractComponent, ContractStatus.Active);
-        return true;
+        return TryChangeContractState(contractUid, contractComponent, ContractStatus.Active);
     }
 
     public bool TryFinalizeContract(EntityUid contractUid, ContractComponent? contractComponent = null)
@@ -206,8 +212,7 @@ public sealed class ContractManagementSystem : EntitySystem
         if (contractComponent.Status != ContractStatus.Active)
             return false;
 
-        ChangeContractState(contractUid, contractComponent, ContractStatus.Finalized);
-        return true;
+        return TryChangeContractState(contractUid, contractComponent, ContractStatus.Finalized);
     }
 
     public bool TryBreachContract(EntityUid contractUid, ContractComponent? contractComponent = null)
@@ -218,8 +223,7 @@ public sealed class ContractManagementSystem : EntitySystem
         if (contractComponent.Status != ContractStatus.Active)
             return false;
 
-        ChangeContractState(contractUid, contractComponent, ContractStatus.Breached);
-        return true;
+        return TryChangeContractState(contractUid, contractComponent, ContractStatus.Breached);
     }
 
     public bool TryCancelContract(EntityUid contractUid, ContractComponent? contractComponent)
@@ -230,7 +234,6 @@ public sealed class ContractManagementSystem : EntitySystem
         if (contractComponent.Status is not ContractStatus.Initiating and not ContractStatus.Active)
             return false;
 
-        ChangeContractState(contractUid, contractComponent, ContractStatus.Cancelled);
-        return true;
+        return TryChangeContractState(contractUid, contractComponent, ContractStatus.Cancelled);
     }
 }

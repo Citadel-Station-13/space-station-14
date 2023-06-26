@@ -688,3 +688,6 @@
         - IngotGold1
         - IngotSilver1
         - MaterialBananium1
+    # CITADEL EDIT
+    - type: ValidMaterialStorageCriteriaMarker
+    # END CITADEL EDIT
