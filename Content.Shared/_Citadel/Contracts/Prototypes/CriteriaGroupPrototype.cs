@@ -18,7 +18,7 @@ public sealed class CriteriaGroupPrototype : IPrototype
     [DataField("mode", required: true)]
     public CriteriaGroupMode Mode { get; }
 
-    [DataField("effects", required: true)]
+    [DataField("effects", required: true, serverOnly: true)]
     public List<CriteriaGroupEffectEvent> Effects { get; } = default!;
 }
 
@@ -26,4 +26,15 @@ public enum CriteriaGroupMode
 {
     All,
     Any
+}
+
+/// <summary>
+/// An event fired when a criteria group has been fulfilled.
+/// </summary>
+[ImplicitDataDefinitionForInheritors]
+public abstract record CriteriaGroupEffectEvent
+{
+    public EntityUid Contract = EntityUid.Invalid;
+
+    public virtual string? Describe() { return null; }
 }

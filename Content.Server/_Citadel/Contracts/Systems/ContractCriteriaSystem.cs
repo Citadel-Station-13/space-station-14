@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Prototypes;
 using Content.Server.Administration;
+using Content.Shared._Citadel.Contracts.BUI;
 using Content.Shared.Administration;
 using JetBrains.Annotations;
 using Robust.Shared.Console;

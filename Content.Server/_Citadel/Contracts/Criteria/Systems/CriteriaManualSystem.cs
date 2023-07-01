@@ -1,4 +1,5 @@
 ﻿using Content.Server._Citadel.Contracts.Criteria.Components;
+using Content.Shared._Citadel.Contracts.BUI;
 
 namespace Content.Server._Citadel.Contracts.Criteria.Systems;
 

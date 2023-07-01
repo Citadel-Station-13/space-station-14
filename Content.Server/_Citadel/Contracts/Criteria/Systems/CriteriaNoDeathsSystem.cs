@@ -2,6 +2,7 @@
 using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Criteria.Components;
 using Content.Server._Citadel.Contracts.Systems;
+using Content.Shared._Citadel.Contracts.BUI;
 
 namespace Content.Server._Citadel.Contracts.Criteria.Systems;
 

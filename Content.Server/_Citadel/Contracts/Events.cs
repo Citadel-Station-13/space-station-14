@@ -1,4 +1,6 @@
 ﻿using Content.Server._Citadel.Contracts.Components;
+using Content.Server._Citadel.Contracts.Prototypes;
+using Content.Shared._Citadel.Contracts.BUI;
 using JetBrains.Annotations;
 using Robust.Shared.Console;
 using Robust.Shared.Utility;
@@ -28,6 +30,7 @@ public readonly record struct ContractStatusChangedEvent(ContractStatus Old, Con
 /// <target>Criteria</target>
 /// <broadcast>false</broadcast>
 public readonly record struct CriteriaSetupEvent;
+
 /// <summary>
 /// An event fired when a contract's criteria should start evaluating themselves.
 /// </summary>
@@ -50,22 +53,10 @@ public readonly record struct CriteriaUpdatedEvent;
 [ByRefEvent]
 public record struct CriteriaGetDisplayInfo(CriteriaDisplayData? Info = null);
 
-public record struct CriteriaDisplayData(string Description);
-
-/// <summary>
-/// An event fired when a criteria group has been fulfilled.
-/// </summary>
-[ImplicitDataDefinitionForInheritors]
-public abstract record CriteriaGroupEffectEvent
-{
-    public EntityUid Contract = EntityUid.Invalid;
-
-    public virtual string? Describe() { return null; }
-}
-
 /// <summary>
 /// An event fired when a criteria group being fulfilled breaches the contract.
 /// </summary>
+///
 [UsedImplicitly]
 public sealed record CriteriaGroupBreachContract : CriteriaGroupEffectEvent;
 

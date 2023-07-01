@@ -2,6 +2,7 @@
 using System.Linq;
 using Content.Server._Citadel.Contracts;
 using Content.Server._Citadel.Contracts.Components;
+using Content.Server._Citadel.Contracts.Prototypes;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Mind.Components;

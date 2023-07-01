@@ -6,6 +6,7 @@ using Content.Server._Citadel.VesselContracts.Components;
 using Content.Server.Materials;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Shared._Citadel.Contracts.BUI;
 using Content.Shared.Materials;
 using Robust.Shared.Random;
 
