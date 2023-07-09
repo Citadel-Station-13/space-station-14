@@ -13,7 +13,7 @@ public record struct ContractTryStatusChange(ContractStatus Old, ContractStatus 
     public readonly ContractStatus Old = Old; // C# syntax moment, this is assigning the constructor values to the fields.
     public readonly ContractStatus New = New;
     public bool Cancelled = false;
-    public readonly FormattedMessage FailMessage = new();
+    public readonly FormattedMessage FailMessage = new(); //TODO(lunar): This should use IError in the future.
 }
 
 /// <summary>
@@ -52,6 +52,9 @@ public readonly record struct CriteriaUpdatedEvent;
 /// <broadcast>false</broadcast>
 [ByRefEvent]
 public record struct CriteriaGetDisplayInfo(CriteriaDisplayData? Info = null);
+
+[ByRefEvent]
+public record struct ContractGetDisplayInfo(ContractDisplayData? Info = null);
 
 /// <summary>
 /// An event fired when a criteria group being fulfilled breaches the contract.

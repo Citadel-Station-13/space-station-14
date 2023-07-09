@@ -1,4 +1,5 @@
 ﻿using Robust.Shared.Serialization;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._Citadel.Contracts.BUI;
 
@@ -8,14 +9,21 @@ namespace Content.Shared._Citadel.Contracts.BUI;
 [Serializable, NetSerializable]
 public sealed class ContractListUiState
 {
+    public List<ContractUiState> Contracts = new();
+
 
 }
 
+[NetSerializable, Serializable]
 public sealed class ContractUiState
 {
-    public required Dictionary<string, List<CriteriaDisplayData>> Criteria;
+    public Dictionary<string, List<CriteriaDisplayData>> Criteria = new();
 
-    public required string Description;
+    public ContractDisplayData Data;
 }
 
+[NetSerializable, Serializable]
 public record struct CriteriaDisplayData(string Description);
+
+[NetSerializable, Serializable]
+public record struct ContractDisplayData(FormattedMessage Description);
