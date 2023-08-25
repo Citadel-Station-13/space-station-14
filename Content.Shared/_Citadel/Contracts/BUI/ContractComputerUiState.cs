@@ -1,4 +1,5 @@
-﻿using Robust.Shared.Serialization;
+﻿using Content.Shared.CartridgeLoader;
+using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
 namespace Content.Shared._Citadel.Contracts.BUI;
@@ -9,21 +10,74 @@ namespace Content.Shared._Citadel.Contracts.BUI;
 [Serializable, NetSerializable]
 public sealed class ContractListUiState
 {
-    public List<ContractUiState> Contracts = new();
+    public Dictionary<Guid, ContractUiState> Contracts;
 
-
+    public ContractListUiState(Dictionary<Guid, ContractUiState> contracts)
+    {
+        Contracts = contracts;
+    }
 }
 
 [NetSerializable, Serializable]
-public sealed class ContractUiState
+public sealed record ContractUiState(ContractUiState.ContractUserStatus UserStatus, string Name, string Owner, List<string> Subcontractors, ContractDisplayData Data, ContractStatus Status )
 {
+    public ContractUserStatus UserStatus = UserStatus;
+    public ContractStatus Status = Status;
+    public string Name = Name;
+    public string Owner = Owner;
+    public List<string> Subcontractors = Subcontractors;
     public Dictionary<string, List<CriteriaDisplayData>> Criteria = new();
+    public Dictionary<string, List<FormattedMessage>> Effects = new();
+    public bool Joinable = true;
 
-    public ContractDisplayData Data;
+
+    public ContractDisplayData Data = Data;
+
+    public enum ContractUserStatus
+    {
+        Owner,
+        Subcontractor,
+        OpenToJoin,
+        OpenToOwn,
+    }
 }
 
 [NetSerializable, Serializable]
-public record struct CriteriaDisplayData(string Description);
+public record struct CriteriaDisplayData(FormattedMessage Description);
 
 [NetSerializable, Serializable]
 public record struct ContractDisplayData(FormattedMessage Description);
+
+[NetSerializable, Serializable]
+public sealed class ContractCartridgeUiState : BoundUserInterfaceState
+{
+    public ContractListUiState Contracts;
+
+    public ContractCartridgeUiState(ContractListUiState contracts)
+    {
+        Contracts = contracts;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class ContractsUiMessageEvent : CartridgeMessageEvent
+{
+    public ContractAction Action;
+    public Guid Contract;
+
+    public ContractsUiMessageEvent(ContractAction action, Guid contract)
+    {
+        Action = action;
+        Contract = contract;
+    }
+
+    public enum ContractAction
+    {
+        Sign,
+        Join,
+        Cancel,
+        Leave,
+        Start,
+        Hail
+    }
+}

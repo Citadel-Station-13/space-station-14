@@ -4,10 +4,10 @@
 /// This is used for the "don't die, dumbass" criteria.
 /// </summary>
 [RegisterComponent]
-public sealed class CriteriaNoDeathsComponent : Component
+public sealed partial class CriteriaNoDeathsComponent : Component
 {
     [DataField("description")]
-    public string Description = "Fulfilled by any member of the contracting team dying.";
+    public string Description = "Letting any member of the team die.";
 
     public bool Ticking = false;
 }

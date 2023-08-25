@@ -3,6 +3,7 @@ using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Prototypes;
 using Content.Server.Administration;
 using Content.Server.Mind.Components;
+using Content.Shared._Citadel.Contracts;
 using Content.Shared.Administration;
 using Robust.Server.Player;
 using Robust.Shared.Console;
@@ -15,7 +16,7 @@ namespace Content.Server._Citadel.Contracts.Systems;
 /// <summary>
 /// This handles managing contracts and processing their completion state.
 /// </summary>
-public sealed class ContractManagementSystem : EntitySystem
+public sealed partial class ContractManagementSystem : EntitySystem
 {
     [Dependency] private readonly IConsoleHost _consoleHost = default!;
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
@@ -28,9 +29,6 @@ public sealed class ContractManagementSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
-        _consoleHost.RegisterCommand("makecontract", MakeContractCommand, MakeContractCommandCompletion);
-        _consoleHost.RegisterCommand("lscontracts", ListContractsCommand);
-
 
         SubscribeLocalEvent<CriteriaGroupFinalizeContract>(OnCriteriaGroupFinalizeContract);
         SubscribeLocalEvent<CriteriaGroupBreachContract>(OnCriteriaGroupBreachContract);
@@ -56,89 +54,6 @@ public sealed class ContractManagementSystem : EntitySystem
     private void OnCriteriaGroupFinalizeContract(CriteriaGroupFinalizeContract ev)
     {
         TryFinalizeContract(ev.Contract);
-    }
-
-    [AdminCommand(AdminFlags.Admin)]
-    private void ListContractsCommand(IConsoleShell shell, string argstr, string[] args)
-    {
-        var query = EntityQueryEnumerator<ContractComponent, ContractCriteriaControlComponent>();
-        while (query.MoveNext(out var uid, out var contract, out var criteriaControl))
-        {
-            shell.WriteLine($"{ToPrettyString(uid)}");
-            shell.WriteLine($"STATE: {contract.Status}");
-            shell.WriteLine($"OWNER: {ToPrettyString(contract.OwningContractor?.OwnedEntity ?? EntityUid.Invalid)}");
-            shell.WriteLine($"SUBCONS: {string.Join(',', contract.SubContractors.Select(x => ToPrettyString(x.OwnedEntity ?? EntityUid.Invalid)))}");
-
-            foreach (var (group, criteria) in criteriaControl.Criteria)
-            {
-                shell.WriteLine($"{_proto.Index<CriteriaGroupPrototype>(group).Name} criteria:");
-                foreach (var criterion in criteria)
-                {
-                    _contractCriteria.TryGetCriteriaDisplayData(criterion, out var maybeData);
-                    if (maybeData is { } data)
-                    {
-                        shell.WriteLine($"- ({ToPrettyString(criterion)}) {data.Description}");
-                    }
-                    else
-                    {
-                        shell.WriteLine($"- ({ToPrettyString(criterion)})");
-                    }
-                }
-            }
-            RaiseLocalEvent(new ListContractsConsoleCommandEvent(shell));
-            shell.WriteLine("========");
-        }
-    }
-
-    private CompletionResult MakeContractCommandCompletion(IConsoleShell shell, string[] args)
-    {
-        switch (args.Length)
-        {
-            case 1:
-            {
-                var compName = _componentFactory.GetComponentName(typeof(ContractComponent));
-                var options = IoCManager.Resolve<IPrototypeManager>()
-                    .EnumeratePrototypes<EntityPrototype>()
-                    .Where(p => p.Components.ContainsKey(compName))
-                    .OrderBy(p => p.ID)
-                    .Select(p => p.ID);
-
-                return CompletionResult.FromHintOptions(options, "<preset>");
-            }
-            case 2:
-            {
-                var options = _player.ServerSessions.Select(c => c.Name).OrderBy(c => c);
-                return CompletionResult.FromHintOptions(options, Loc.GetString("cmd-ban-hint"));
-            }
-            default:
-                return CompletionResult.Empty;
-        }
-    }
-
-    [AdminCommand(AdminFlags.Admin)]
-    private void MakeContractCommand(IConsoleShell shell, string argstr, string[] args)
-    {
-        if (args.Length != 2)
-        {
-            shell.WriteError("Invalid number of arguments.");
-            return;
-        }
-
-        if (!_player.TryGetSessionByUsername(args[1], out var session))
-        {
-            shell.WriteError($"Unknown player {args[1]}");
-            return;
-        }
-
-        if (!TryComp<MindComponent>(session.AttachedEntity, out var mind) || mind.Mind is null)
-        {
-            shell.WriteError($"{args[1]}'s entity has no mind! Cannot assign to contract.");
-            return;
-        }
-
-        var contract = CreateBoundContract(args[0], mind.Mind);
-
-        shell.WriteLine($"Bound the contract {ToPrettyString(contract)} to {ToPrettyString(session.AttachedEntity.Value)}");
     }
 
     public EntityUid CreateUnboundContract(string contractProto)
@@ -226,7 +141,7 @@ public sealed class ContractManagementSystem : EntitySystem
         return TryChangeContractState(contractUid, contractComponent, ContractStatus.Breached);
     }
 
-    public bool TryCancelContract(EntityUid contractUid, ContractComponent? contractComponent)
+    public bool TryCancelContract(EntityUid contractUid, ContractComponent? contractComponent = null)
     {
         if (!Resolve(contractUid, ref contractComponent))
             return false;

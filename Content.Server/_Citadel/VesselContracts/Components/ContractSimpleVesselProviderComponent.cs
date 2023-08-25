@@ -7,7 +7,7 @@ namespace Content.Server._Citadel.VesselContracts.Components;
 /// This is to speed up testing.
 /// </summary>
 [RegisterComponent]
-public sealed class ContractSimpleVesselProviderComponent : Component
+public sealed partial class ContractSimpleVesselProviderComponent : Component
 {
     [DataField("vesselMap")]
     public string VesselMap = "/Maps/Shuttles/mining.yml";

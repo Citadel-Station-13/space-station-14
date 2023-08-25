@@ -6,7 +6,7 @@ namespace Content.Server._Citadel.Contracts.Systems;
 /// <summary>
 /// This handles...
 /// </summary>
-public sealed class ContractVVSystem : EntitySystem
+public sealed partial class ContractVVSystem : EntitySystem
 {
     private static readonly (ViewVariablesPath? Path, string[] Segments) EmptyResolve = (null, Array.Empty<string>());
 

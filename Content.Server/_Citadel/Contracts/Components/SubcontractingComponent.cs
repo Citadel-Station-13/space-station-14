@@ -4,7 +4,7 @@
 /// This is used for contracts that may have subcontracts, including controlling the selection of new contracts.
 /// </summary>
 [RegisterComponent]
-public sealed class SubcontractingComponent : Component
+public sealed partial class SubcontractingComponent : Component
 {
     [DataField("categories", required: true)]
     public List<string> Categories = default!;

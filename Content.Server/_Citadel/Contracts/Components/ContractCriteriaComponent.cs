@@ -6,7 +6,7 @@ namespace Content.Server._Citadel.Contracts.Components;
 /// This is used for a contract criteria.
 /// </summary>
 [RegisterComponent, Access(typeof(ContractCriteriaSystem))]
-public sealed class ContractCriteriaComponent : Component
+public sealed partial class ContractCriteriaComponent : Component
 {
     [DataField("owningContract")]
     public EntityUid OwningContract;

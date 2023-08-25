@@ -5,7 +5,7 @@
 /// This is for the voucher given to the contractor.
 /// </summary>
 [RegisterComponent]
-public sealed class VesselVoucherComponent : Component
+public sealed partial class VesselVoucherComponent : Component
 {
     /// <summary>
     /// Contract that owns this voucher.

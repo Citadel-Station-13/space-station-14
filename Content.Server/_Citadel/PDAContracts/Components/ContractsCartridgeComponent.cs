@@ -4,7 +4,7 @@
 /// This is used for the contracts cartridge.
 /// </summary>
 [RegisterComponent]
-public sealed class ContractsCartridgeComponent : Component
+public sealed partial class ContractsCartridgeComponent : Component
 {
 
 }

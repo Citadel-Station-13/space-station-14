@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._Citadel.Thalers;
 using Content.Server.GameTicking;
 using Content.Server.Mind.Components;
 using Content.Server.Objectives;
@@ -23,6 +24,9 @@ namespace Content.Server.Mind
         internal readonly ISet<Role> Roles = new HashSet<Role>();
 
         internal readonly List<Objective> Objectives = new();
+
+        public BankAccount? BankAccount = new();
+        public HashSet<EntityUid> Contracts = new();
 
         public string Briefing = String.Empty;
 

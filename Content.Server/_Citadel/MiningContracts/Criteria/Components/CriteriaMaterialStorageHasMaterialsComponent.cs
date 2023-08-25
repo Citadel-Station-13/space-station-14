@@ -7,7 +7,7 @@ namespace Content.Server._Citadel.MiningContracts.Criteria.Components;
 /// This is used for the materials criteria, i.e. "get 10000 units of steel"
 /// </summary>
 [RegisterComponent]
-public sealed class CriteriaMaterialStorageHasMaterialsComponent : Component
+public sealed partial class CriteriaMaterialStorageHasMaterialsComponent : Component
 {
     [DataField("material", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<MaterialPrototype>))]
     public string Material = default!;

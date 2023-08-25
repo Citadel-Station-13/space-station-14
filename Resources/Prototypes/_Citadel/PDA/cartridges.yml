@@ -1,6 +1,6 @@
 ﻿- type: entity
   parent: BaseItem
-  id: ContractsCartridge
+  id: CitadelContractsCartridge
   name: contractor's cartridge
   description: A program for taking on contracts.
   components:
@@ -12,10 +12,10 @@
       sprite: Objects/Devices/cartridge.rsi
       state: cart-y
     - type: UIFragment
-      ui: !type:NotekeeperUi
+      ui: !type:ContractsCartridgeUi
     - type: Cartridge
       programName: Contracts
       icon:
-        sprite:  Objects/Misc/books.rsi
+        sprite: Objects/Misc/books.rsi
         state: book6
     - type: ContractsCartridge

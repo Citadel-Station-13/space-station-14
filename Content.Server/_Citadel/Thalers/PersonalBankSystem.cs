@@ -7,6 +7,7 @@ using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Mind.Components;
 using Content.Server.Station.Systems;
+using Content.Shared._Citadel.Contracts;
 using Content.Shared.Chat;
 using Content.Shared.FixedPoint;
 using JetBrains.Annotations;
@@ -66,7 +67,7 @@ public sealed class PersonalBankSystem : EntitySystem
     {
         balance = null;
 
-        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account})
+        if (!TryComp<MindContainerComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account})
             return false;
 
         balance = account.Thalers;
@@ -76,7 +77,7 @@ public sealed class PersonalBankSystem : EntitySystem
     [PublicAPI]
     public bool CanAdjustBalance(EntityUid user, FixedPoint2 amount)
     {
-        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account} mind)
+        if (!TryComp<MindContainerComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account} mind)
             return false;
 
         var newSum = account.Thalers + amount;
@@ -94,7 +95,7 @@ public sealed class PersonalBankSystem : EntitySystem
     [PublicAPI]
     public bool TryAdjustBalance(EntityUid user, FixedPoint2 amount)
     {
-        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account})
+        if (!TryComp<MindContainerComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account})
             return false;
 
         if (!CanAdjustBalance(user, amount))
@@ -116,7 +117,7 @@ public sealed class BankAccount
 }
 
 [PublicAPI]
-public sealed record CriteriaGroupAwardCash() : CriteriaGroupEffectEvent
+public sealed partial record CriteriaGroupAwardCash() : CriteriaGroupEffectEvent
 {
     [DataField("amount")]
     public FixedPoint2 Amount;

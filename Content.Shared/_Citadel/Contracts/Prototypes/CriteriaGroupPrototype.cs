@@ -32,7 +32,7 @@ public enum CriteriaGroupMode
 /// An event fired when a criteria group has been fulfilled.
 /// </summary>
 [ImplicitDataDefinitionForInheritors]
-public abstract record CriteriaGroupEffectEvent
+public abstract partial record CriteriaGroupEffectEvent
 {
     public EntityUid Contract = EntityUid.Invalid;
 

@@ -4,7 +4,7 @@
 /// This is used for vessels that have a contract they're part of.
 /// </summary>
 [RegisterComponent]
-public sealed class ContractedVesselComponent : Component
+public sealed partial class ContractedVesselComponent : Component
 {
     [DataField("contract")]
     public EntityUid Contract = default!;

@@ -75,6 +75,7 @@
       - CrewManifestCartridge
       - NotekeeperCartridge
       - NewsReadCartridge
+      - CitadelContractsCartridge
     cartridgeSlot:
       priority: -1
       name: Cartridge

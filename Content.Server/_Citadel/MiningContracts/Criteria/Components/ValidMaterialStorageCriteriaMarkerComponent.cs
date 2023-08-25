@@ -4,7 +4,7 @@
 /// This is used as a marker for CriteriaMaterialStorageHasMaterialsSystem.
 /// </summary>
 [RegisterComponent]
-public sealed class ValidMaterialStorageCriteriaMarkerComponent : Component
+public sealed partial class ValidMaterialStorageCriteriaMarkerComponent : Component
 {
 
 }

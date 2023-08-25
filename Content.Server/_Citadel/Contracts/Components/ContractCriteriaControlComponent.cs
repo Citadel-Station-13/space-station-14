@@ -10,7 +10,7 @@ namespace Content.Server._Citadel.Contracts.Components;
 /// This is used for tracking a contract's finalizing and breaching criteria.
 /// </summary>
 [RegisterComponent, Access(typeof(ContractCriteriaSystem))]
-public sealed class ContractCriteriaControlComponent : Component
+public sealed partial class ContractCriteriaControlComponent : Component
 {
     /// <summary>
     /// The criteria groups and their associated criteria.

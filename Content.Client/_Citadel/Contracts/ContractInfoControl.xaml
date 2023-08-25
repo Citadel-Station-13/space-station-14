@@ -1,0 +1,43 @@
+﻿<BoxContainer
+    Orientation="Vertical"
+    HorizontalExpand="True"
+    xmlns="https://spacestation14.io"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:xNamespace="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:style="clr-namespace:Content.Client.Stylesheets">
+    <PanelContainer Margin="3">
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat BackgroundColor="#25252A"/>
+        </PanelContainer.PanelOverride>
+        <BoxContainer Orientation="Vertical">
+            <RichTextLabel Name="ContractState" HorizontalAlignment="Center" Margin="2"/>
+            <!-- Main info pane -->
+            <SplitContainer Name="SplitUpper" Orientation="Horizontal" ResizeMode="NotResizable">
+                <BoxContainer Orientation="Vertical" Margin="3">
+                    <RichTextLabel Name="ContractName" HorizontalAlignment="Left"/>
+                    <Collapsible Orientation="Vertical">
+                        <CollapsibleHeading Title="Sub-contractors"/>
+                        <CollapsibleBody>
+                            <BoxContainer Name="SubContractorsList"/>
+                        </CollapsibleBody>
+                    </Collapsible>
+                </BoxContainer>
+                <BoxContainer Orientation="Vertical" Margin="3">
+                    <RichTextLabel Name="OwnerName" HorizontalAlignment="Right"/>
+                    <Collapsible  Orientation="Vertical">
+                        <CollapsibleHeading Title="Description" HorizontalAlignment="Right"/>
+                        <CollapsibleBody>
+                            <RichTextLabel Name="Description"/>
+                        </CollapsibleBody>
+                    </Collapsible>
+                </BoxContainer>
+            </SplitContainer>
+            <!-- Actions -->
+            <BoxContainer Margin="2" HorizontalAlignment="Right">
+            <Button Name="MainAction" Text="Action1" StyleClasses="OpenRight"/>
+            <Button Name="SecondaryAction" Text="Action2" StyleClasses="OpenLeft"/>
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+
+</BoxContainer>

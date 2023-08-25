@@ -1,5 +1,6 @@
 ﻿using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Prototypes;
+using Content.Shared._Citadel.Contracts;
 using Content.Shared._Citadel.Contracts.BUI;
 using JetBrains.Annotations;
 using Robust.Shared.Console;
@@ -61,15 +62,10 @@ public record struct ContractGetDisplayInfo(ContractDisplayData? Info = null);
 /// </summary>
 ///
 [UsedImplicitly]
-public sealed record CriteriaGroupBreachContract : CriteriaGroupEffectEvent;
+public sealed partial record CriteriaGroupBreachContract : CriteriaGroupEffectEvent;
 
 /// <summary>
 /// An event fired when a criteria group being fulfilled finalizes the contract.
 /// </summary>
 [UsedImplicitly]
-public sealed record CriteriaGroupFinalizeContract : CriteriaGroupEffectEvent;
-
-/// <summary>
-/// An event fired when listing a contract's details with the lscontracts command.
-/// </summary>
-public readonly record struct ListContractsConsoleCommandEvent(IConsoleShell Shell);
+public sealed partial record CriteriaGroupFinalizeContract : CriteriaGroupEffectEvent;

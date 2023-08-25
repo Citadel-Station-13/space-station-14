@@ -4,7 +4,7 @@
 /// This is used for simple vessel removal.
 /// </summary>
 [RegisterComponent]
-public sealed class ContractSimpleVesselRemoverComponent : Component
+public sealed partial class ContractSimpleVesselRemoverComponent : Component
 {
     [DataField("active")]
     public bool Active = false;

@@ -1,0 +1,6 @@
+﻿<contracts:ContractsCartridgeControl xmlns="https://spacestation14.io"
+                                                  xmlns:contracts="clr-namespace:Content.Client._Citadel.Contracts"
+                                                  VerticalExpand="True"
+                                                  HorizontalExpand="True">
+    <contracts:ContractListControl Name="MainContractList" VerticalExpand="True" Margin="0 4"/>
+</contracts:ContractsCartridgeControl>

@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Prototypes;
 using Content.Server.Administration;
+using Content.Shared._Citadel.Contracts;
 using Content.Shared._Citadel.Contracts.BUI;
 using Content.Shared.Administration;
 using JetBrains.Annotations;
@@ -17,7 +18,7 @@ namespace Content.Server._Citadel.Contracts.Systems;
 /// This handles contract criteria, their setup, and querying them.
 /// </summary>
 [PublicAPI]
-public sealed class ContractCriteriaSystem : EntitySystem
+public sealed partial class ContractCriteriaSystem : EntitySystem
 {
     [Dependency] private readonly IConsoleHost _consoleHost = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
@@ -29,63 +30,6 @@ public sealed class ContractCriteriaSystem : EntitySystem
     {
         SubscribeLocalEvent<ContractCriteriaControlComponent, ContractStatusChangedEvent>(OnContractStatusChanged);
         SubscribeLocalEvent<ContractComponent, CriteriaUpdatedEvent>(OnCriteriaUpdated);
-        _consoleHost.RegisterCommand("finalizecontract", FinalizeContract);
-        _consoleHost.RegisterCommand("breachcontract", BreachContract);
-        _consoleHost.RegisterCommand("activatecontract", ActivateContract);
-    }
-
-    [AdminCommand(AdminFlags.Admin)]
-    private void FinalizeContract(IConsoleShell shell, string argstr, string[] args)
-    {
-        if (!EntityUid.TryParse(args[0], out var uid))
-        {
-            shell.WriteError($"The input '{args[0]}' is not a valid entity ID.");
-        }
-
-        if (_contract.TryFinalizeContract(uid))
-        {
-            shell.WriteLine("Finalized.");
-        }
-        else
-        {
-            shell.WriteError("Failed to finalize!");
-        }
-    }
-
-    [AdminCommand(AdminFlags.Admin)]
-    private void BreachContract(IConsoleShell shell, string argstr, string[] args)
-    {
-        if (!EntityUid.TryParse(args[0], out var uid))
-        {
-            shell.WriteError($"The input '{args[0]}' is not a valid entity ID.");
-        }
-
-        if (_contract.TryBreachContract(uid))
-        {
-            shell.WriteLine("Breached.");
-        }
-        else
-        {
-            shell.WriteError("Failed to breach!");
-        }
-    }
-
-    [AdminCommand(AdminFlags.Admin)]
-    private void ActivateContract(IConsoleShell shell, string argstr, string[] args)
-    {
-        if (!EntityUid.TryParse(args[0], out var uid))
-        {
-            shell.WriteError($"The input '{args[0]}' is not a valid entity ID.");
-        }
-
-        if (_contract.TryActivateContract(uid))
-        {
-            shell.WriteLine("Activated.");
-        }
-        else
-        {
-            shell.WriteError("Failed to activate!");
-        }
     }
 
     #region Event Handling

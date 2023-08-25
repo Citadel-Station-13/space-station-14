@@ -9,6 +9,7 @@ using Content.Server.Station.Systems;
 using Content.Shared._Citadel.Contracts.BUI;
 using Content.Shared.Materials;
 using Robust.Shared.Random;
+using Robust.Shared.Utility;
 
 namespace Content.Server._Citadel.MiningContracts.Criteria.Systems;
 
@@ -37,11 +38,11 @@ public sealed class CriteriaMaterialStorageHasMaterialsSystem : EntitySystem
 
     private void OnGetDisplayInfo(EntityUid uid, CriteriaMaterialStorageHasMaterialsComponent component, ref CriteriaGetDisplayInfo args)
     {
-        args.Info = new CriteriaDisplayData(
+        args.Info = new CriteriaDisplayData(FormattedMessage.FromMarkup(
             Loc.GetString("criteria-material-storage-has-materials-component-display-description",
                 ("material", component.Material),
                 ("amount", component.Amount))
-            );
+            ));
     }
 
     private void OnStartTicking(EntityUid uid, CriteriaMaterialStorageHasMaterialsComponent component, CriteriaStartTickingEvent args)

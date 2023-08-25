@@ -3,13 +3,14 @@ using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Criteria.Components;
 using Content.Server._Citadel.Contracts.Systems;
 using Content.Shared._Citadel.Contracts.BUI;
+using Robust.Shared.Utility;
 
 namespace Content.Server._Citadel.Contracts.Criteria.Systems;
 
 /// <summary>
 /// This handles the "don't die" criteria.
 /// </summary>
-public sealed class CriteriaNoDeathsSystem : EntitySystem
+public sealed partial class CriteriaNoDeathsSystem : EntitySystem
 {
     [Dependency] private readonly ContractCriteriaSystem _criteria = default!;
 
@@ -22,7 +23,7 @@ public sealed class CriteriaNoDeathsSystem : EntitySystem
 
     private void OnGetDisplayInfo(EntityUid uid, CriteriaNoDeathsComponent component, ref CriteriaGetDisplayInfo args)
     {
-        args.Info = new CriteriaDisplayData(component.Description);
+        args.Info = new CriteriaDisplayData(FormattedMessage.FromMarkup(component.Description));
     }
 
     private void OnStartTicking(EntityUid uid, CriteriaNoDeathsComponent component, CriteriaStartTickingEvent args)
@@ -46,7 +47,7 @@ public sealed class CriteriaNoDeathsSystem : EntitySystem
 
             foreach (var mind in contract.SubContractors.Append(contract.OwningContractor))
             {
-                anyDead |= mind?.CharacterDeadIC ?? false;
+                anyDead |= mind is not null && mind.TimeOfDeath is not null;
             }
 
             _criteria.SetCriteriaStatus(uid, anyDead, criteria);
