@@ -28,6 +28,15 @@ public sealed partial class ContractInfoControl : BoxContainer
         _uuid = uuid;
         Update(state);
         MainAction.OnPressed += OnMainAction;
+        SecondaryAction.OnPressed += OnSecondaryAction;
+    }
+
+    private void OnSecondaryAction(BaseButton.ButtonEventArgs obj)
+    {
+        if (_state.UserStatus == ContractUiState.ContractUserStatus.Owner && _state.Status == ContractStatus.Initiating)
+        {
+            OnCancelContract?.Invoke(_uuid);
+        }
     }
 
     private void OnMainAction(BaseButton.ButtonEventArgs obj)
@@ -68,6 +77,7 @@ public sealed partial class ContractInfoControl : BoxContainer
 
     public void Update(ContractUiState state)
     {
+
         _state = state;
         // Set OwnerName
         var ownerName = new FormattedMessage();
@@ -137,7 +147,46 @@ public sealed partial class ContractInfoControl : BoxContainer
             }
         }
 
+        var msg = new FormattedMessage();
+        switch (state.Status)
+        {
+            case ContractStatus.Uninitialized:
+                msg.AddMarkup("[color=green]Available[/color]");
+                break;
+            case ContractStatus.Initiating:
+                msg.AddMarkup("[color=yellow]Initiating[/color]");
+                break;
+            case ContractStatus.Active:
+                msg.AddMarkup("[color=green]Active[/color]");
+                break;
+            case ContractStatus.Finalized:
+                msg.AddMarkup("[color=magenta]Finalized[/color]");
+                break;
+            case ContractStatus.Breached:
+                msg.AddMarkup("[color=red]Breached[/color]");
+                break;
+            case ContractStatus.Cancelled:
+                msg.AddMarkup("[color=red]Cancelled[/color]");
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        ContractState.SetMessage(msg);
+
         Description.SetMessage(descMsg);
+
+        if (state.Status is ContractStatus.Breached or ContractStatus.Finalized or ContractStatus.Cancelled)
+        {
+            MainAction.Disabled = true;
+            SecondaryAction.Disabled = true;
+        }
+        else
+        {
+            MainAction.Disabled = false;
+            SecondaryAction.Disabled = false;
+        }
+
         switch (state.UserStatus)
         {
             case ContractUiState.ContractUserStatus.Owner:
@@ -164,7 +213,16 @@ public sealed partial class ContractInfoControl : BoxContainer
                 throw new ArgumentOutOfRangeException();
         }
 
-        SecondaryAction.Text = "Hail";
-        SecondaryAction.ToolTip = "Hails the owner of the contract in an effort to grab their attention.";
+        if (state.UserStatus == ContractUiState.ContractUserStatus.Owner && state.Status == ContractStatus.Initiating)
+        {
+            SecondaryAction.Text = "Cancel";
+            SecondaryAction.Disabled = false;
+        }
+        else
+        {
+            SecondaryAction.Text = "Hail";
+            SecondaryAction.ToolTip = "Hails the owner of the contract in an effort to grab their attention.";
+            SecondaryAction.Disabled = true;
+        }
     }
 }

@@ -47,7 +47,7 @@ public sealed class PersonalBankSystem : EntitySystem
 
         args.Cancelled = true;
 
-        args.FailMessage.AddText(Loc.GetString("citadel-failed-contract-start-not-enough-money", ("userBalance", contract.OwningContractor.BankAccount!.Thalers), ("cost", component.Cost)));
+        args.FailMessage.AddText($"Not enough money to start the contract, you have {contract.OwningContractor.BankAccount!.Thalers} but need {component.Cost}.");
     }
 
     private void OnAwardCash(CriteriaGroupAwardCash ev)
@@ -123,6 +123,6 @@ public sealed partial record CriteriaGroupAwardCash() : CriteriaGroupEffectEvent
     public FixedPoint2 Amount;
     public override string? Describe()
     {
-        return Loc.GetString("criteria-group-award-cash-effect-description", ("amount", Amount));
+        return Loc.GetString("criteria-group-award-cash-effect-description", ("amount", Amount.Float()));
     }
 }

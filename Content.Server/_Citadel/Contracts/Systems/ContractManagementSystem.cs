@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Prototypes;
 using Content.Server.Administration;
@@ -90,6 +91,20 @@ public sealed partial class ContractManagementSystem : EntitySystem
         BindContract(contractEnt, owner);
 
         return contractEnt;
+    }
+
+    public bool CouldChangeStatusTo(EntityUid contractUid, ContractStatus newStatus, out FormattedMessage? failMsg, ContractComponent? contractComponent = null)
+    {
+        failMsg = null;
+        if (!Resolve(contractUid, ref contractComponent))
+            return false;
+        var ev = new ContractTryStatusChange(contractComponent.Status, newStatus);
+        RaiseLocalEvent(contractUid, ref ev);
+
+        if (ev.Cancelled)
+            failMsg = ev.FailMessage;
+
+        return !ev.Cancelled;
     }
 
     private bool TryChangeContractState(EntityUid contractUid, ContractComponent contractComponent,

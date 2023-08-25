@@ -7,6 +7,7 @@ using Content.Server.Players;
 using Content.Shared._Citadel.Contracts;
 using Content.Shared._Citadel.Contracts.BUI;
 using Content.Shared.CartridgeLoader;
+using Content.Shared.FixedPoint;
 using Robust.Server.Player;
 using Robust.Shared.Utility;
 
@@ -18,12 +19,50 @@ namespace Content.Server._Citadel.PDAContracts.Systems;
 public sealed class ContractsCartridgeSystem : EntitySystem
 {
     [Dependency] private readonly CartridgeLoaderSystem? _cartridgeLoaderSystem = default!;
+    [Dependency] private readonly ContractManagementSystem _contracts = default!;
     [Dependency] private readonly ContractCriteriaSystem _criteria = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
     {
         SubscribeLocalEvent<ContractsCartridgeComponent, CartridgeUiReadyEvent>(OnUiReady);
+        SubscribeLocalEvent<ContractsCartridgeComponent, CartridgeMessageEvent>(OnMessage);
+    }
+
+    private void OnMessage(EntityUid uid, ContractsCartridgeComponent component, CartridgeMessageEvent args)
+    {
+        if (args is not ContractsUiMessageEvent { } ev)
+            return;
+
+        var player = (IPlayerSession) args.Session!;
+        var contract = EntityQuery<ContractComponent>().First(x => x.Uuid == ev.Contract);
+        switch (ev.Action)
+        {
+            case ContractsUiMessageEvent.ContractAction.Sign:
+                if (contract.OwningContractor is not null)
+                    return;
+                _contracts.BindContract(contract.Owner, player.GetMind()!);
+                break;
+            case ContractsUiMessageEvent.ContractAction.Join:
+                _contracts.BindContract(contract.Owner, player.GetMind()!);
+                break;
+            case ContractsUiMessageEvent.ContractAction.Cancel:
+                if (contract.OwningContractor != player.GetMind()!)
+                    return;
+                _contracts.TryCancelContract(contract.Owner);
+                break;
+            case ContractsUiMessageEvent.ContractAction.Leave:
+                break;
+            case ContractsUiMessageEvent.ContractAction.Start:
+                if (contract.OwningContractor != player.GetMind()!)
+                    return;
+                _contracts.TryActivateContract(contract.Owner);
+                break;
+            case ContractsUiMessageEvent.ContractAction.Hail:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     private void OnUiReady(EntityUid uid, ContractsCartridgeComponent component, CartridgeUiReadyEvent args)
@@ -63,6 +102,12 @@ public sealed class ContractsCartridgeSystem : EntitySystem
             var state = new ContractUiState(status, Name(contract), ownerName, subContractorNames,
                 new ContractDisplayData(FormattedMessage.FromUnformatted(Description(contract))), contractComp.Status);
 
+            if (!_contracts.CouldChangeStatusTo(contract, ContractStatus.Active, out var failMsg))
+            {
+                state.Startable = false;
+                state.NoStartReason = failMsg;
+            }
+
             foreach (var (group, criteria) in criteriaComp.Criteria)
             {
                 state.Criteria[group] = new();
@@ -89,7 +134,7 @@ public sealed class ContractsCartridgeSystem : EntitySystem
             contractStates.Add(contractComp.Uuid, state);
         }
 
-        return new ContractListUiState(contractStates);
+        return new ContractListUiState(contractStates, mind.BankAccount?.Thalers ?? FixedPoint2.Zero);
     }
 
     private void UpdateUiState(EntityUid uid, EntityUid loaderUid, IPlayerSession session, ContractsCartridgeComponent? component)

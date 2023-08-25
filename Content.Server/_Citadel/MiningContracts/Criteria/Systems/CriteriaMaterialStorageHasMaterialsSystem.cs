@@ -60,7 +60,7 @@ public sealed class CriteriaMaterialStorageHasMaterialsSystem : EntitySystem
         {
             var vessel = vesselContractQuery.GetComponent(cc.OwningContract);
 
-            if (criteria.Ticking is false || criteria.Satisfied is true || vessel.Vessel is null)
+            if (criteria.Ticking is false || criteria.Satisfied || vessel.Vessel is null)
                 continue;
 
 

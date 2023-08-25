@@ -338,6 +338,7 @@ public sealed class CartridgeLoaderSystem : SharedCartridgeLoaderSystem
     {
         var cartridgeEvent = args.MessageEvent;
         cartridgeEvent.LoaderUid = uid;
+        cartridgeEvent.Session = args.Session;
 
         RelayEvent(component, cartridgeEvent, true);
     }

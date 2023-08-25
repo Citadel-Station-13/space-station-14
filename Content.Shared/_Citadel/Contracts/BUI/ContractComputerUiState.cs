@@ -1,4 +1,5 @@
 ﻿using Content.Shared.CartridgeLoader;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
@@ -11,10 +12,12 @@ namespace Content.Shared._Citadel.Contracts.BUI;
 public sealed class ContractListUiState
 {
     public Dictionary<Guid, ContractUiState> Contracts;
+    public FixedPoint2 BankAccount;
 
-    public ContractListUiState(Dictionary<Guid, ContractUiState> contracts)
+    public ContractListUiState(Dictionary<Guid, ContractUiState> contracts, FixedPoint2 bankAccount)
     {
         Contracts = contracts;
+        BankAccount = bankAccount;
     }
 }
 
@@ -28,8 +31,8 @@ public sealed record ContractUiState(ContractUiState.ContractUserStatus UserStat
     public List<string> Subcontractors = Subcontractors;
     public Dictionary<string, List<CriteriaDisplayData>> Criteria = new();
     public Dictionary<string, List<FormattedMessage>> Effects = new();
-    public bool Joinable = true;
-
+    public bool Startable = true;
+    public FormattedMessage? NoStartReason = null;
 
     public ContractDisplayData Data = Data;
 
