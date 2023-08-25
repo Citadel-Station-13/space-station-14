@@ -38,9 +38,9 @@
     - type: DeviceNetworkRequiresPower
     - type: AtmosDevice
     - type: AtmosMonitor
-      temperatureThreshold: stationTemperature
-      pressureThreshold: stationPressure
-      gasThresholds:
+      temperatureThresholdId: stationTemperature
+      pressureThresholdId: stationPressure
+      gasThresholdPrototypes:
         Oxygen: stationOxygen
         Nitrogen: ignore
         CarbonDioxide: stationCO2
@@ -54,7 +54,6 @@
       tags:
         - GasVent
     - type: Sprite
-      netsync: false
       drawdepth: FloorObjects
       sprite: Structures/Piping/Atmospherics/vent.rsi
       layers:
@@ -95,7 +94,6 @@
   components:
     # TODO ATMOS: Find sprite for this.
     - type: Sprite
-      netsync: false
       drawdepth: FloorObjects
       sprite: Structures/Piping/Atmospherics/vent.rsi
       layers:
@@ -129,9 +127,9 @@
       examinableAddress: true
     - type: DeviceNetworkRequiresPower
     - type: AtmosMonitor
-      temperatureThreshold: stationTemperature
-      pressureThreshold: stationPressure
-      gasThresholds:
+      temperatureThresholdId: stationTemperature
+      pressureThresholdId: stationPressure
+      gasThresholdPrototypes:
         Oxygen: stationOxygen
         Nitrogen: ignore
         CarbonDioxide: stationCO2
@@ -145,7 +143,6 @@
       tags:
         - GasScrubber
     - type: Sprite
-      netsync: false
       drawdepth: FloorObjects
       sprite: Structures/Piping/Atmospherics/scrubber.rsi
       layers:
@@ -187,7 +184,6 @@
   components:
     - type: Sprite
       drawdepth: FloorObjects
-      netsync: false
       sprite: Structures/Piping/Atmospherics/outletinjector.rsi
       layers:
         - state: pipeHalf
@@ -226,7 +222,6 @@
     mode: SnapgridCenter
   components:
     - type: Sprite
-      netsync: false
       sprite: Structures/Piping/Atmospherics/thermomachine.rsi
       snapCardinals: true
     - type: Appearance
@@ -255,6 +250,14 @@
           pipeDirection: South
     - type: Transform
       noRot: false
+    - type: DeviceNetwork
+      deviceNetId: AtmosDevices
+      receiveFrequencyId: AtmosMonitor
+      transmitFrequencyId: AtmosMonitor
+      sendBroadcastAttemptEvent: true
+      examinableAddress: true
+    - type: WiredNetworkConnection
+    - type: PowerSwitch
 
 - type: entity
   parent: BaseGasThermoMachine
@@ -281,11 +284,13 @@
             True: { state: freezerOn }
             False: { state: freezerOff }
     - type: GasThermoMachine
-      mode: Freezer
+      coefficientOfPerformance: -64
     - type: ApcPowerReceiver
       powerDisabled: true #starts off
     - type: Machine
       board: ThermomachineFreezerMachineCircuitBoard
+    - type: DeviceNetwork
+      prefix: device-address-prefix-freezer
 
 - type: entity
   parent: GasThermoMachineFreezer
@@ -322,11 +327,13 @@
             True: { state: heaterOn }
             False: { state: heaterOff }
     - type: GasThermoMachine
-      mode: Heater
+      coefficientOfPerformance: 32
     - type: ApcPowerReceiver
       powerDisabled: true #starts off
     - type: Machine
       board: ThermomachineHeaterMachineCircuitBoard
+    - type: DeviceNetwork
+      prefix: device-address-prefix-heater
 
 - type: entity
   parent: GasThermoMachineHeater

@@ -84,6 +84,7 @@ public sealed partial class MappingSystem : EntitySystem
 
             ev.Action = new InstantAction()
             {
+                ClientExclusive = true,
                 CheckCanInteract = false,
                 Event = actionEvent,
                 DisplayName = Loc.GetString(tileDef.Name),
@@ -97,6 +98,7 @@ public sealed partial class MappingSystem : EntitySystem
         {
             ev.Action = new InstantAction()
             {
+                ClientExclusive = true,
                 CheckCanInteract = false,
                 Event = actionEvent,
                 DisplayName = "action-name-mapping-erase",
@@ -111,6 +113,7 @@ public sealed partial class MappingSystem : EntitySystem
 
         ev.Action = new InstantAction()
         {
+            ClientExclusive = true,
             CheckCanInteract = false,
             Event = actionEvent,
             DisplayName = actionEvent.EntityType,
@@ -138,7 +141,7 @@ public sealed partial class MappingSystem : EntitySystem
     }
 }
 
-public sealed class StartPlacementActionEvent : InstantActionEvent
+public sealed partial class StartPlacementActionEvent : InstantActionEvent
 {
     [DataField("entityType")]
     public string? EntityType;

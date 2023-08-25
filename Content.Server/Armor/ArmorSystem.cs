@@ -6,6 +6,7 @@ using Content.Server.Cargo.Systems;
 using Robust.Shared.Prototypes;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Inventory;
+using Content.Shared.Silicons.Borgs;
 
 namespace Content.Server.Armor
 {
@@ -22,6 +23,7 @@ namespace Content.Server.Armor
             base.Initialize();
 
             SubscribeLocalEvent<ArmorComponent, InventoryRelayedEvent<DamageModifyEvent>>(OnDamageModify);
+            SubscribeLocalEvent<ArmorComponent, BorgModuleRelayedEvent<DamageModifyEvent>>(OnBorgDamageModify);
             SubscribeLocalEvent<ArmorComponent, GetVerbsEvent<ExamineVerb>>(OnArmorVerbExamine);
             SubscribeLocalEvent<ArmorComponent, PriceCalculationEvent>(GetArmorPrice);
         }
@@ -67,6 +69,11 @@ namespace Content.Server.Armor
             args.Args.Damage = DamageSpecifier.ApplyModifierSet(args.Args.Damage, component.Modifiers);
         }
 
+        private void OnBorgDamageModify(EntityUid uid, ArmorComponent component, ref BorgModuleRelayedEvent<DamageModifyEvent> args)
+        {
+            args.Args.Damage = DamageSpecifier.ApplyModifierSet(args.Args.Damage, component.Modifiers);
+        }
+
         private void OnArmorVerbExamine(EntityUid uid, ArmorComponent component, GetVerbsEvent<ExamineVerb> args)
         {
             if (!args.CanInteract || !args.CanAccess)
@@ -85,7 +92,7 @@ namespace Content.Server.Armor
             _examine.AddDetailedExamineVerb(args, component, examineMarkup, Loc.GetString("armor-examinable-verb-text"), "/Textures/Interface/VerbIcons/dot.svg.192dpi.png", Loc.GetString("armor-examinable-verb-message"));
         }
 
-        private static FormattedMessage GetArmorExamine(DamageModifierSet armorModifiers)
+        private FormattedMessage GetArmorExamine(DamageModifierSet armorModifiers)
         {
             var msg = new FormattedMessage();
 

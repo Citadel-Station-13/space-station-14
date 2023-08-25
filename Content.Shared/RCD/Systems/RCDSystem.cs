@@ -237,14 +237,25 @@ public sealed class RCDSystem : EntitySystem
                 if (tile.Tile.IsEmpty)
                     return false;
 
-                //They tried to decon a turf but the turf is blocked
-                if (target == null && IsTileBlocked(tile))
+                //They tried to decon a turf but...
+                if (target == null)
                 {
-                    _popup.PopupClient(Loc.GetString("rcd-component-tile-obstructed-message"), uid, user);
-                    return false;
+                    // the turf is blocked
+                    if (IsTileBlocked(tile))
+                    {
+                        _popup.PopupClient(Loc.GetString("rcd-component-tile-obstructed-message"), uid, user);
+                        return false;
+                    }
+                    // the turf can't be destroyed (planet probably)
+                    var tileDef = (ContentTileDefinition) _tileDefMan[tile.Tile.TypeId];
+                    if (tileDef.Indestructible)
+                    {
+                        _popup.PopupClient(Loc.GetString("rcd-component-tile-indestructible-message"), uid, user);
+                        return false;
+                    }
                 }
                 //They tried to decon a non-turf but it's not in the whitelist
-                if (target != null && !_tag.HasTag(target.Value, "RCDDeconstructWhitelist"))
+                else if (!_tag.HasTag(target.Value, "RCDDeconstructWhitelist"))
                 {
                     _popup.PopupClient(Loc.GetString("rcd-component-deconstruct-target-not-on-whitelist-message"), uid, user);
                     return false;
@@ -302,13 +313,13 @@ public sealed class RCDSystem : EntitySystem
 }
 
 [Serializable, NetSerializable]
-public sealed class RCDDoAfterEvent : DoAfterEvent
+public sealed partial class RCDDoAfterEvent : DoAfterEvent
 {
     [DataField("location", required: true)]
-    public readonly EntityCoordinates Location = default!;
+    public EntityCoordinates Location = default!;
 
     [DataField("startingMode", required: true)]
-    public readonly RcdMode StartingMode = default!;
+    public RcdMode StartingMode = default!;
 
     private RCDDoAfterEvent()
     {

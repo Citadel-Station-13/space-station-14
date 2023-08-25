@@ -4,7 +4,6 @@
   id: PartBase
   components:
   - type: Sprite
-    netsync: false
     sprite: Objects/Materials/parts.rsi
     state: rods
   - type: Item
@@ -45,7 +44,8 @@
     layers:
     - state: rods_5
       map: ["base"]
-#  - type: Item
+  - type: Item
+    size: 30
 #    heldPrefix: rods
   - type: Construction
     graph: MetalRod
@@ -62,6 +62,23 @@
 
 - type: entity
   parent: PartRodMetal
+  id: PartRodMetal10
+  name: metal rod
+  suffix: 10
+  components:
+  - type: Tag
+    tags:
+    - RodMetal1
+    - DroneUsable
+  - type: Sprite
+    state: rods
+  - type: Stack
+    count: 10
+  - type: Item
+    size: 10
+
+- type: entity
+  parent: PartRodMetal
   id: PartRodMetal1
   name: metal rod
   suffix: Single
@@ -74,3 +91,16 @@
     state: rods
   - type: Stack
     count: 1
+  - type: Item
+    size: 1
+
+- type: entity
+  parent: PartRodMetal
+  id: PartRodMetalLingering0
+  suffix: Lingering, 0
+  components:
+  - type: Item
+    size: 0
+  - type: Stack
+    lingering: true
+    count: 0

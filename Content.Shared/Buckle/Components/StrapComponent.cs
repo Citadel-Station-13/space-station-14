@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Alert;
 using Content.Shared.Vehicle;
 using Content.Shared.Whitelist;
@@ -9,7 +10,7 @@ namespace Content.Shared.Buckle.Components;
 
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedBuckleSystem), typeof(SharedVehicleSystem))]
-public sealed class StrapComponent : Component
+public sealed partial class StrapComponent : Component
 {
     /// <summary>
     /// The entities that are currently buckled

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Numerics;
 using Content.Shared.Body.Components;
 using Content.Shared.Destructible;
 using Content.Shared.Hands.Components;
@@ -34,6 +35,7 @@ public abstract class SharedEntityStorageSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
+    [Dependency] private readonly SharedJointSystem _joints = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] protected readonly SharedPopupSystem Popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -261,6 +263,7 @@ public abstract class SharedEntityStorageSystem : EntitySystem
             return true;
         }
 
+        _joints.RecursiveClearJoints(toInsert);
         var inside = EnsureComp<InsideEntityStorageComponent>(toInsert);
         inside.Storage = container;
         return component.Contents.Insert(toInsert, EntityManager);
@@ -329,7 +332,7 @@ public abstract class SharedEntityStorageSystem : EntitySystem
         }
 
         //Checks to see if the opening position, if offset, is inside of a wall.
-        if (component.EnteringOffset != (0, 0) && !HasComp<WallMountComponent>(target)) //if the entering position is offset
+        if (component.EnteringOffset != new Vector2(0, 0) && !HasComp<WallMountComponent>(target)) //if the entering position is offset
         {
             var newCoords = new EntityCoordinates(target, component.EnteringOffset);
             if (!_interaction.InRangeUnobstructed(target, newCoords, 0, collisionMask: component.EnteringOffsetCollisionFlags))
@@ -426,17 +429,17 @@ public abstract class SharedEntityStorageSystem : EntitySystem
             // RemovedMasks needs to be tracked separately for each fixture, using a fixture Id Dictionary. Also the
             // fixture IDs probably cant be automatically generated without causing issues, unless there is some
             // guarantee that they will get deserialized with the same auto-generated ID when saving+loading the map.
-            var fixture = fixtures.Fixtures.Values.First();
+            var fixture = fixtures.Fixtures.First();
 
             if (component.Open)
             {
-                component.RemovedMasks = fixture.CollisionLayer & component.MasksToRemove;
-                _physics.SetCollisionLayer(uid, fixture, fixture.CollisionLayer & ~component.MasksToRemove,
+                component.RemovedMasks = fixture.Value.CollisionLayer & component.MasksToRemove;
+                _physics.SetCollisionLayer(uid, fixture.Key, fixture.Value, fixture.Value.CollisionLayer & ~component.MasksToRemove,
                     manager: fixtures);
             }
             else
             {
-                _physics.SetCollisionLayer(uid, fixture, fixture.CollisionLayer | component.RemovedMasks,
+                _physics.SetCollisionLayer(uid, fixture.Key, fixture.Value, fixture.Value.CollisionLayer | component.RemovedMasks,
                     manager: fixtures);
                 component.RemovedMasks = 0;
             }

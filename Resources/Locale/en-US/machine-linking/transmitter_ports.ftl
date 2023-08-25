@@ -7,6 +7,9 @@ signal-port-description-on-transmitter = This port is invoked whenever the trans
 signal-port-name-off-transmitter = Off
 signal-port-description-off-transmitter = This port is invoked whenever the transmitter is turned off.
 
+signal-port-name-status-transmitter = Status
+signal-port-description-status-transmitter = This port is invoked with HIGH or LOW depending on the transmitter status.
+
 signal-port-name-left = Left
 signal-port-description-left = This port is invoked whenever the lever is moved to the leftmost position.
 
@@ -14,7 +17,7 @@ signal-port-name-right = Right
 signal-port-description-right = This port is invoked whenever the lever is moved to the rightmost position.
 
 signal-port-name-doorstatus = Door status
-signal-port-description-doorstatus = This port is invoked with HIGH when the door opens and LOW when the door closes.
+signal-port-description-doorstatus = This port is invoked with HIGH when the door opens and LOW when the door finishes closing.
 
 signal-port-name-middle = Middle
 signal-port-description-middle = This port is invoked whenever the lever is moved to the neutral position.
@@ -33,3 +36,12 @@ signal-port-description-logic-output-high = This port is invoked whenever the in
 
 signal-port-name-logic-output-low = Low Output
 signal-port-description-logic-output-low = This port is invoked whenever the input has a falling edge.
+
+signal-port-name-air-danger = Danger
+signal-port-description-air-danger = This port is invoked with HIGH when in danger mode and LOW when not.
+
+signal-port-name-air-warning = Warning
+signal-port-description-air-warning = This port is invoked with HIGH when in warning mode and LOW when not.
+
+signal-port-name-air-normal = Normal
+signal-port-description-air-normal = This port is invoked with HIGH when in normal mode and LOW when not.

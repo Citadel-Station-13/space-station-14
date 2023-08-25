@@ -6,6 +6,7 @@ using Content.Server.Afk;
 using Content.Server.Chat.Managers;
 using Content.Server.Connection;
 using Content.Server.Database;
+using Content.Server.Discord;
 using Content.Server.EUI;
 using Content.Server.GhostKick;
 using Content.Server.Info;
@@ -48,7 +49,7 @@ namespace Content.Server.IoC
             IoCManager.Register<IAfkManager, AfkManager>();
             IoCManager.Register<IGameMapManager, GameMapManager>();
             IoCManager.Register<RulesManager, RulesManager>();
-            IoCManager.Register<RoleBanManager, RoleBanManager>();
+            IoCManager.Register<IBanManager, BanManager>();
             IoCManager.Register<ContentNetworkResourceManager>();
             IoCManager.Register<IAdminNotesManager, AdminNotesManager>();
             IoCManager.Register<GhostKickManager>();
@@ -58,6 +59,7 @@ namespace Content.Server.IoC
             IoCManager.Register<UserDbDataManager>();
             IoCManager.Register<ServerInfoManager>();
             IoCManager.Register<PoissonDiskSampler>();
+            IoCManager.Register<DiscordWebhook>();
         }
     }
 }
