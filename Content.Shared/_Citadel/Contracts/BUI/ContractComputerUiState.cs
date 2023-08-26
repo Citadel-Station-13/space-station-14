@@ -81,6 +81,8 @@ public sealed class ContractsUiMessageEvent : CartridgeMessageEvent
         Cancel,
         Leave,
         Start,
-        Hail
+        Hail,
+        // Explicitly does nothing except update the UI.
+        Refresh
     }
 }

@@ -1,8 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server._Citadel.Contracts;
 using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Prototypes;
+using Content.Server._Citadel.PDAContracts.Systems;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Mind.Components;
@@ -11,6 +13,7 @@ using Content.Shared._Citadel.Contracts;
 using Content.Shared.Chat;
 using Content.Shared.FixedPoint;
 using JetBrains.Annotations;
+using Robust.Shared.Toolshed;
 
 namespace Content.Server._Citadel.Thalers;
 
@@ -28,6 +31,14 @@ public sealed class PersonalBankSystem : EntitySystem
         SubscribeLocalEvent<CriteriaGroupAwardCash>(OnAwardCash);
         // maybe give this it's own system, it's not relevant to banks.
         SubscribeLocalEvent<ContractStartFeeComponent, ContractTryStatusChange>(OnContractTryStatusChange);
+        SubscribeLocalEvent<ContractStartFeeComponent, GetContractDescription>(OnGetDescription);
+    }
+
+    private void OnGetDescription(EntityUid uid, ContractStartFeeComponent component, ref GetContractDescription args)
+    {
+        var msg = args.Data.Description;
+        msg.PushNewline();
+        msg.AddText($"This contract costs {component.Cost} Thalers for the main signer to start.");
     }
 
     private void OnContractTryStatusChange(EntityUid uid, ContractStartFeeComponent component, ref ContractTryStatusChange args)
@@ -108,12 +119,18 @@ public sealed class PersonalBankSystem : EntitySystem
 }
 
 [Access(typeof(PersonalBankSystem), typeof(Mind.Mind))]
-public sealed class BankAccount
+public sealed class BankAccount : IToolshedPrettyPrint
 {
     // TODO(Lunar): FixedPoint2 can't represent more than ~20mil or so. Maybe need a new thing if we expect people to get stupid rich.
     // but having someone's balance overflow into the negatives is FUNNY!!!
     [ViewVariables(VVAccess.ReadWrite)]
     public FixedPoint2 Thalers = 2500;
+
+    public string PrettyPrint(ToolshedManager toolshed, out IEnumerable? more, bool moreUsed = false, int? maxOutput = null)
+    {
+        more = null;
+        return $"BankAccount {{ Thalers: {Thalers} }}";
+    }
 }
 
 [PublicAPI]

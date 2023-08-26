@@ -3,6 +3,7 @@ using Content.Server._Citadel.Contracts;
 using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.VesselContracts.Components;
 using Content.Server.Chat.Systems;
+using Content.Server.Mind.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Components;
@@ -41,7 +42,7 @@ public sealed class ContractVesselManagementSystem : EntitySystem
 
     private void OnContractStatusChanged(EntityUid uid, ContractSimpleVesselRemoverComponent component, ContractStatusChangedEvent args)
     {
-        if (args is {Old: ContractStatus.Active, New: ContractStatus.Breached or ContractStatus.Finalized})
+        if (args is {Old: ContractStatus.Active, New: ContractStatus.Breached or ContractStatus.Finalized or ContractStatus.Cancelled})
         {
             component.Active = true;
         }
@@ -55,6 +56,26 @@ public sealed class ContractVesselManagementSystem : EntitySystem
         }
 
         _chat.DispatchStationAnnouncement(vessel.Vessel!.Value, message, sender: "Oversight");
+    }
+
+    public EntityUid? LocateUserVesselContract(EntityUid user)
+    {
+        if (!TryComp<MindContainerComponent>(user, out var mindContainer))
+            return null;
+
+        if (mindContainer.Mind is not { } mind)
+            return null;
+
+        return LocateUserVesselContract(mind);
+    }
+
+    public EntityUid? LocateUserVesselContract(Mind.Mind mind)
+    {
+        var contract = mind.Contracts.Where(HasComp<VesselContractComponent>).FirstOrDefault();
+        if (contract == EntityUid.Invalid)
+            return null;
+
+        return contract;
     }
 
     private void OnContractStatusChanged(EntityUid uid, ContractSimpleVesselProviderComponent component, ContractStatusChangedEvent args)

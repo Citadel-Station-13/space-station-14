@@ -9,6 +9,7 @@
     - type: Contract
     - type: ContractCriteriaControl
       criteria: {}
+    - type: ContractGroups
 
 - type: entity
   id: CitadelTestingContract
@@ -17,6 +18,8 @@
   description: A contract that simply requires nobody dies and admin approval.
   noSpawn: true
   components:
+    - type: ContractGroups
+      groups: [ "Debug" ]
     - type: ContractCriteriaControl
       criteria:
         Finalizing:

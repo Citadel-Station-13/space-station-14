@@ -1,4 +1,5 @@
-﻿using Content.Server._Citadel.Contracts.Criteria.Components;
+﻿using Content.Server._Citadel.Contracts.Components;
+using Content.Server._Citadel.Contracts.Criteria.Components;
 using Content.Shared._Citadel.Contracts.BUI;
 using Robust.Shared.Utility;
 
@@ -17,6 +18,9 @@ public sealed partial class CriteriaManualSystem : EntitySystem
 
     private void OnGetDisplayInfo(EntityUid uid, CriteriaManualComponent component, ref CriteriaGetDisplayInfo args)
     {
-        args.Info = new CriteriaDisplayData(FormattedMessage.FromMarkup(component.Description));
+        var desc = FormattedMessage.FromMarkup(component.Description);
+        if (Comp<ContractCriteriaComponent>(uid).Satisfied)
+            desc.AddText(" [COMPLETE]");
+        args.Info = new CriteriaDisplayData(desc);
     }
 }

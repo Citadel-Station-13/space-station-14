@@ -43,8 +43,8 @@
     stateBaseClosed: mining
     stateDoorOpen: mining_open
     stateDoorClosed: mining_door
-  - type: AccessReader
-    access: [["Salvage"]]
+  #- type: AccessReader
+  #  access: [["Salvage"]]
 
 # Command
 - type: entity

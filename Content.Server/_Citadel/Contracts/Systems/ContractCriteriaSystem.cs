@@ -106,13 +106,13 @@ public sealed partial class ContractCriteriaSystem : EntitySystem
         switch (args)
         {
             // Contract initiated, set up the criteria.
-            case (ContractStatus.Uninitialized, ContractStatus.Initiating):
+            case (_, ContractStatus.Uninitialized, ContractStatus.Initiating):
             {
                 OnContractInitiating(contractUid, criteriaControlComponent);
                 break;
             }
             // Contract active, set up criteria checking.
-            case (ContractStatus.Initiating, ContractStatus.Active):
+            case (_, ContractStatus.Initiating, ContractStatus.Active):
             {
                 OnContractActive(contractUid, criteriaControlComponent);
                 break;

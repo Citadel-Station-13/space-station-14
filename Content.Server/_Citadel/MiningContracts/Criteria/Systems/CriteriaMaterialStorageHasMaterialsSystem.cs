@@ -3,6 +3,7 @@ using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Systems;
 using Content.Server._Citadel.MiningContracts.Criteria.Components;
 using Content.Server._Citadel.VesselContracts.Components;
+using Content.Server._Citadel.VesselContracts.Systems;
 using Content.Server.Materials;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
@@ -21,6 +22,7 @@ public sealed class CriteriaMaterialStorageHasMaterialsSystem : EntitySystem
     [Dependency] private readonly ContractCriteriaSystem _criteria = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly MaterialStorageSystem _material = default!;
+    [Dependency] private readonly ContractVesselManagementSystem _contractVessel = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
     /// <inheritdoc/>
@@ -38,11 +40,16 @@ public sealed class CriteriaMaterialStorageHasMaterialsSystem : EntitySystem
 
     private void OnGetDisplayInfo(EntityUid uid, CriteriaMaterialStorageHasMaterialsComponent component, ref CriteriaGetDisplayInfo args)
     {
-        args.Info = new CriteriaDisplayData(FormattedMessage.FromMarkup(
+        var desc = FormattedMessage.FromMarkup(
             Loc.GetString("criteria-material-storage-has-materials-component-display-description",
                 ("material", component.Material),
                 ("amount", component.Amount))
-            ));
+        );
+
+        if (Comp<ContractCriteriaComponent>(uid).Satisfied)
+            desc.AddText(" [COMPLETE]");
+
+        args.Info = new CriteriaDisplayData(desc);
     }
 
     private void OnStartTicking(EntityUid uid, CriteriaMaterialStorageHasMaterialsComponent component, CriteriaStartTickingEvent args)
@@ -58,11 +65,17 @@ public sealed class CriteriaMaterialStorageHasMaterialsSystem : EntitySystem
 
         while (q.MoveNext(out var uid, out var cc, out var criteria))
         {
-            var vessel = vesselContractQuery.GetComponent(cc.OwningContract);
+            if (Comp<ContractComponent>(cc.OwningContract).OwningContractor is not {} owningContractor)
+                continue;
+
+            if (_contractVessel.LocateUserVesselContract(owningContractor) is not
+                { } vesselUid)
+                continue;
+
+            var vessel = vesselContractQuery.GetComponent(vesselUid);
 
             if (criteria.Ticking is false || criteria.Satisfied || vessel.Vessel is null)
                 continue;
-
 
             var gridMaybe = _station.GetLargestGrid(Comp<StationDataComponent>(vessel.Vessel!.Value));
 

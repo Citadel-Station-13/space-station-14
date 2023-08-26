@@ -1,15 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using Content.Server._Citadel.Contracts.Components;
-using Content.Server._Citadel.Contracts.Prototypes;
-using Content.Server.Administration;
-using Content.Server.Mind.Components;
+﻿using Content.Server._Citadel.Contracts.Components;
 using Content.Shared._Citadel.Contracts;
-using Content.Shared.Administration;
-using Robust.Server.Player;
-using Robust.Shared.Console;
 using Robust.Shared.Map;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Server._Citadel.Contracts.Systems;
@@ -17,16 +8,8 @@ namespace Content.Server._Citadel.Contracts.Systems;
 /// <summary>
 /// This handles managing contracts and processing their completion state.
 /// </summary>
-public sealed partial class ContractManagementSystem : EntitySystem
+public sealed class ContractManagementSystem : EntitySystem
 {
-    [Dependency] private readonly IConsoleHost _consoleHost = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly ILogManager _log = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-
-    [Dependency] private readonly ContractCriteriaSystem _contractCriteria = default!;
-
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -65,7 +48,7 @@ public sealed partial class ContractManagementSystem : EntitySystem
         var contract = Comp<ContractComponent>(contractEnt);
         contract.Status = ContractStatus.Initiating;
 
-        RaiseLocalEvent(contractEnt, new ContractStatusChangedEvent(ContractStatus.Uninitialized, ContractStatus.Initiating));
+        RaiseLocalEvent(contractEnt, new ContractStatusChangedEvent(contractEnt, ContractStatus.Uninitialized, ContractStatus.Initiating), broadcast: true);
 
         return contractEnt;
     }
@@ -76,6 +59,11 @@ public sealed partial class ContractManagementSystem : EntitySystem
         if (contract.OwningContractor is null)
         {
             contract.OwningContractor = contractor;
+            if (contract.AutoStart && contract.Status is ContractStatus.Initiating)
+            {
+                if (!TryChangeContractState(contractEnt, contract, ContractStatus.Active))
+                    TryChangeContractState(contractEnt, contract, ContractStatus.Cancelled);
+            }
         }
         else
         {
@@ -89,6 +77,7 @@ public sealed partial class ContractManagementSystem : EntitySystem
     {
         var contractEnt = CreateUnboundContract(contractProto);
         BindContract(contractEnt, owner);
+
 
         return contractEnt;
     }
@@ -118,7 +107,7 @@ public sealed partial class ContractManagementSystem : EntitySystem
             return false;
 
         contractComponent.Status = newStatus;
-        RaiseLocalEvent(contractUid, new ContractStatusChangedEvent(oldStatus, newStatus));
+        RaiseLocalEvent(contractUid, new ContractStatusChangedEvent(contractUid, oldStatus, newStatus), broadcast: true);
 
         return true;
     }

@@ -18,3 +18,14 @@
     - type: ContractCriteria
     - type: CriteriaManual
       desc: Bother a game admin to fill this out if it's not within a few minutes.
+
+- type: entity
+  id: CitadelCriteriaClear3
+  parent: CitadelBaseContractCriteria
+  name: Admin Approval Criteria
+  description: A criteria that is satisfied when an admin manually approves it.
+  noSpawn: true
+  components:
+    - type: ContractCriteria
+    - type: FinalizeContractsCriteria
+      toClear: 3

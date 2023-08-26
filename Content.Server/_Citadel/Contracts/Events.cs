@@ -22,7 +22,7 @@ public record struct ContractTryStatusChange(ContractStatus Old, ContractStatus 
 /// </summary>
 /// <target>Contract</target>
 /// <broadcast>false</broadcast>
-public readonly record struct ContractStatusChangedEvent(ContractStatus Old, ContractStatus New);
+public readonly record struct ContractStatusChangedEvent(EntityUid Contract, ContractStatus Old, ContractStatus New);
 
 /// <summary>
 /// An event fired when a contract is ready for setup.

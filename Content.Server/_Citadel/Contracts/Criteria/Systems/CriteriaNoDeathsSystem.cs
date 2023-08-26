@@ -23,7 +23,10 @@ public sealed partial class CriteriaNoDeathsSystem : EntitySystem
 
     private void OnGetDisplayInfo(EntityUid uid, CriteriaNoDeathsComponent component, ref CriteriaGetDisplayInfo args)
     {
-        args.Info = new CriteriaDisplayData(FormattedMessage.FromMarkup(component.Description));
+        var desc = FormattedMessage.FromMarkup(component.Description);
+        if (Comp<ContractCriteriaComponent>(uid).Satisfied)
+            desc.AddText(" [COMPLETE]");
+        args.Info = new CriteriaDisplayData(desc);
     }
 
     private void OnStartTicking(EntityUid uid, CriteriaNoDeathsComponent component, CriteriaStartTickingEvent args)

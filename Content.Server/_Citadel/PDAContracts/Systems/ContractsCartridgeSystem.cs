@@ -2,6 +2,7 @@
 using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.Contracts.Systems;
 using Content.Server._Citadel.PDAContracts.Components;
+using Content.Server._Citadel.VesselContracts.Components;
 using Content.Server.CartridgeLoader;
 using Content.Server.Players;
 using Content.Shared._Citadel.Contracts;
@@ -63,6 +64,8 @@ public sealed class ContractsCartridgeSystem : EntitySystem
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        UpdateUiState(uid, args.LoaderUid, player, component);
     }
 
     private void OnUiReady(EntityUid uid, ContractsCartridgeComponent component, CartridgeUiReadyEvent args)
@@ -73,12 +76,29 @@ public sealed class ContractsCartridgeSystem : EntitySystem
     public ContractListUiState GenerateState(EntityUid cart, IPlayerSession user)
     {
         var mind = user.GetMind()!;
-        var conQuery = EntityQueryEnumerator<ContractComponent, ContractCriteriaControlComponent>();
+        var conQuery = EntityQueryEnumerator<ContractComponent, ContractCriteriaControlComponent, ContractGroupsComponent>();
 
         var contractStates = new Dictionary<Guid, ContractUiState>();
 
-        while (conQuery.MoveNext(out var contract, out var contractComp, out var criteriaComp))
+        var lookingFor = new HashSet<string>();
+
+        var noVessel = false;
+
+        if (mind.Contracts.Any(HasComp<VesselContractComponent>))
         {
+            noVessel = true;
+            var vesselContract = mind.Contracts.Where(HasComp<VesselContractComponent>).First();
+            if (TryComp<ContractGroupsComponent>(vesselContract, out var groups))
+            {
+                lookingFor.UnionWith(groups.Groups.Where(x => x != "Vessel"));
+            }
+        }
+
+        while (conQuery.MoveNext(out var contract, out var contractComp, out var criteriaComp, out var contractGroups))
+        {
+            if (!contractGroups.Groups.IsSupersetOf(lookingFor))
+                continue;
+
             var status = ContractUiState.ContractUserStatus.OpenToJoin;
             var subCons = contractComp.SubContractors;
             if (contractComp.OwningContractor is null)
@@ -94,13 +114,22 @@ public sealed class ContractsCartridgeSystem : EntitySystem
                 status = ContractUiState.ContractUserStatus.Owner;
             }
 
+            if (noVessel && contractGroups.Groups.Contains("Vessel") &&
+                status is not ContractUiState.ContractUserStatus.Owner
+                    and not ContractUiState.ContractUserStatus.Subcontractor)
+                continue;
+
             if (contractComp.Status is ContractStatus.Finalized or ContractStatus.Breached && status == ContractUiState.ContractUserStatus.OpenToJoin)
                 continue;
 
             var ownerName = contractComp.OwningContractor?.CharacterName ?? "[INACTIVE]";
             var subContractorNames = contractComp.SubContractors.Select(x => x.CharacterName!).ToList();
+            var contractDesc = FormattedMessage.FromUnformatted(Description(contract));
+            var ev = new GetContractDescription(new ContractDisplayData(contractDesc));
+            RaiseLocalEvent(contract, ref ev);
+
             var state = new ContractUiState(status, Name(contract), ownerName, subContractorNames,
-                new ContractDisplayData(FormattedMessage.FromUnformatted(Description(contract))), contractComp.Status);
+                ev.Data, contractComp.Status);
 
             if (!_contracts.CouldChangeStatusTo(contract, ContractStatus.Active, out var failMsg))
             {
@@ -147,3 +176,6 @@ public sealed class ContractsCartridgeSystem : EntitySystem
         _cartridgeLoaderSystem?.UpdateCartridgeUiState(loaderUid, new ContractCartridgeUiState(innerState));
     }
 }
+
+[ByRefEvent]
+public record struct GetContractDescription(ContractDisplayData Data);

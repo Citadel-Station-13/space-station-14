@@ -10,7 +10,7 @@ namespace Content.Server._Citadel.VesselContracts.Components;
 public sealed partial class ContractSimpleVesselProviderComponent : Component
 {
     [DataField("vesselMap")]
-    public string VesselMap = "/Maps/Shuttles/mining.yml";
+    public string VesselMap = "/Maps/_citadel/mining_vessel_small.yml";
 
     [DataField("vesselConfig", required: true)]
     public StationConfig VesselConfig = default!;

@@ -25,4 +25,7 @@ public sealed partial class ContractComponent : Component
     /// </summary>
     [ViewVariables]
     public List<Mind.Mind> SubContractors = new();
+
+    [DataField("autostart")]
+    public bool AutoStart = false;
 }

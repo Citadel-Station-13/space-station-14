@@ -172,7 +172,14 @@ public sealed partial class ContractInfoControl : BoxContainer
                 throw new ArgumentOutOfRangeException();
         }
 
+        if (state.NoStartReason is { } reason)
+        {
+            msg.PushNewline();
+            msg.AddMessage(reason);
+        }
+
         ContractState.SetMessage(msg);
+
 
         Description.SetMessage(descMsg);
 
