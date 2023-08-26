@@ -1,0 +1,80 @@
+﻿- type: entity
+  id: CitadelTestingMiningContract
+  parent: CitadelBaseContract
+  name: Plasma Acquisition Order With Vessel
+  description: A contract that requires nobody dies, and an easy minimum income. This combines a vessel contract and gig.
+  noSpawn: true
+  components:
+    - type: ContractCriteriaControl
+      criteria:
+        Finalizing:
+          - CitadelCriteriaPlasmaMining
+        Breaching:
+          - CitadelCriteriaNoDeaths
+      criteriaEffects:
+        Finalizing:
+          - !type:CriteriaGroupAwardCash
+            amount: 2000
+    - type: ContractSimpleVesselProvider
+      vesselConfig:
+        stationProto: CitadelStandardNanotrasenVessel
+        components:
+          - type: Transform
+    - type: ContractSimpleVesselRemover
+    - type: VesselContract
+    - type: ContractStartFee
+      cost: 1000
+    - type: ContractGroups
+      groups: [ "Debug", "Mining", "Vessel" ]
+
+- type: entity
+  id: CitadelMiningVesselContract
+  parent: CitadelBaseContract
+  name: Mining Vessel
+  description: >
+    A deposit-loaned vessel meant to be used for a predetermined amount of time.
+    Once purchased, the option to take on mining related contracts becomes available.
+    Upon completion, the deposit will be returned and the vessel will automatically return to base when all personnel have exited.
+  noSpawn: true
+  components:
+    - type: Contract
+      autostart: true
+    - type: ContractSimpleVesselProvider
+      vesselConfig:
+        stationProto: CitadelStandardNanotrasenVessel
+        components:
+          - type: Transform
+    - type: ContractCriteriaControl
+      criteria:
+        Finalizing:
+          - CitadelCriteriaClear3
+      criteriaEffects:
+        Finalizing:
+          - !type:CriteriaGroupAwardCash
+            amount: 1000
+    - type: ContractSimpleVesselRemover
+    - type: VesselContract
+    - type: ContractStartFee
+      cost: 1000
+    - type: ContractGroups
+      groups: [ "Mining", "Vessel" ]
+
+- type: entity
+  id: CitadelPlasmaMiningContract
+  parent: CitadelBaseContract
+  name: Plasma Acquisition Order
+  description: Procure the specified amount of plasma for a payout, using your available vessel.
+  noSpawn: true
+  components:
+    - type: ContractCriteriaControl
+      criteria:
+        Finalizing:
+          - CitadelCriteriaPlasmaMining
+        Breaching:
+          - CitadelCriteriaNoDeaths
+      criteriaEffects:
+        Finalizing:
+          - !type:CriteriaGroupAwardCash
+            amount: 200
+    - type: ContractGroups
+      groups: [ "Mining" ]

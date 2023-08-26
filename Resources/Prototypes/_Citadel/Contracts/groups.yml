@@ -1,0 +1,19 @@
+﻿- type: citadelCriteriaGroup
+  id: Finalizing
+  name: Finalizing
+  mode: All
+  effects:
+    - !type:CriteriaGroupFinalizeContract
+
+- type: citadelCriteriaGroup
+  id: Breaching
+  name: Breaching
+  mode: Any
+  effects:
+    - !type:CriteriaGroupBreachContract
+
+- type: citadelCriteriaGroup
+  id: Optional
+  name: Optional
+  mode: Any
+  effects: []

@@ -11,7 +11,7 @@ namespace Content.Shared.Store.Conditions;
 /// Supports both blacklists and whitelists. This is copypaste because roles
 /// are absolute shitcode. Refactor this later. -emo
 /// </summary>
-public sealed class BuyerAntagCondition : ListingCondition
+public sealed partial class BuyerAntagCondition : ListingCondition
 {
     /// <summary>
     /// A whitelist of antag roles that can purchase this listing. Only one needs to be found.
@@ -29,7 +29,7 @@ public sealed class BuyerAntagCondition : ListingCondition
     {
         var ent = args.EntityManager;
 
-        if (!ent.TryGetComponent<MindComponent>(args.Buyer, out var mind) || mind.Mind == null)
+        if (!ent.TryGetComponent<MindContainerComponent>(args.Buyer, out var mind) || mind.Mind == null)
             return true;
 
         if (Blacklist != null)

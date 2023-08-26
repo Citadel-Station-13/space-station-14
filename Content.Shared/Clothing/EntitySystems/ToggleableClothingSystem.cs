@@ -26,7 +26,6 @@ public sealed class ToggleableClothingSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedStrippableSystem _strippable = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly INetManager _net = default!;
 
     private Queue<EntityUid> _toInsert = new();
 
@@ -309,11 +308,11 @@ public sealed class ToggleableClothingSystem : EntitySystem
     }
 }
 
-public sealed class ToggleClothingEvent : InstantActionEvent
+public sealed partial class ToggleClothingEvent : InstantActionEvent
 {
 }
 
 [Serializable, NetSerializable]
-public sealed class ToggleClothingDoAfterEvent : SimpleDoAfterEvent
+public sealed partial class ToggleClothingDoAfterEvent : SimpleDoAfterEvent
 {
 }

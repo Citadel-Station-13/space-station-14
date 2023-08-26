@@ -127,16 +127,6 @@
     BeepskySmash: 2
 
 - type: reaction
-  id: Bilk
-  reactants:
-    Beer:
-      amount: 1
-    Milk:
-      amount: 1
-  products:
-    Bilk: 2
-
-- type: reaction
   id: BlackRussian
   reactants:
     CoffeeLiqueur:
@@ -345,9 +335,8 @@
   reactants:
     GargleBlaster:
       amount: 1
-    THCOil:
+    THC:
       amount: 1
-      # TODO replace THCOil with Mushroom Hallucinogen once added
   products:
     HippiesDelight: 2
 
@@ -878,6 +867,16 @@
       amount: 1
   products:
     TheMartinez: 6
+
+- type: reaction
+  id: WhiteGilgamesh
+  reactants:
+    Beer:
+      amount: 2
+    Milk:
+      amount: 1
+  products:
+    WhiteGilgamesh: 3
 
 - type: reaction
   id: Cola

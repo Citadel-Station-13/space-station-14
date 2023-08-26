@@ -10,7 +10,7 @@ namespace Content.Server.Tools.Components;
 /// </summary>
 [RegisterComponent]
 [Access(typeof(WeldableSystem))]
-public sealed class WeldableComponent : SharedWeldableComponent
+public sealed partial class WeldableComponent : SharedWeldableComponent
 {
     /// <summary>
     ///     Tool quality for welding.
@@ -25,13 +25,6 @@ public sealed class WeldableComponent : SharedWeldableComponent
     [DataField("weldable")]
     [ViewVariables(VVAccess.ReadWrite)]
     public bool Weldable = true;
-
-    /// <summary>
-    ///     How much fuel does it take to weld/unweld entity.
-    /// </summary>
-    [DataField("fuel")]
-    [ViewVariables(VVAccess.ReadWrite)]
-    public float FuelConsumption = 1f;
 
     /// <summary>
     ///     How much time does it take to weld/unweld entity.

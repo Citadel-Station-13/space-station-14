@@ -1,4 +1,4 @@
-using Content.Server.Administration.Commands;
+using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.UI;
@@ -8,6 +8,7 @@ using Content.Server.Disposal.Tube;
 using Content.Server.Disposal.Tube.Components;
 using Content.Server.EUI;
 using Content.Server.Ghost.Roles;
+using Content.Server.Mind;
 using Content.Server.Mind.Commands;
 using Content.Server.Mind.Components;
 using Content.Server.Players;
@@ -30,6 +31,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Robust.Shared.Toolshed;
 using Robust.Shared.Utility;
 using static Content.Shared.Configurable.ConfigurationComponent;
 
@@ -53,29 +55,45 @@ namespace Content.Server.Administration.Systems
         [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
         [Dependency] private readonly PrayerSystem _prayerSystem = default!;
         [Dependency] private readonly EuiManager _eui = default!;
+        [Dependency] private readonly MindSystem _mindSystem = default!;
+        [Dependency] private readonly ToolshedManager _toolshed = default!;
+        [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
 
         private readonly Dictionary<IPlayerSession, EditSolutionsEui> _openSolutionUis = new();
 
         public override void Initialize()
         {
-            SubscribeLocalEvent<GetVerbsEvent<Verb>>(AddAdminVerbs);
-            SubscribeLocalEvent<GetVerbsEvent<Verb>>(AddDebugVerbs);
-            SubscribeLocalEvent<GetVerbsEvent<Verb>>(AddSmiteVerbs);
-            SubscribeLocalEvent<GetVerbsEvent<Verb>>(AddTricksVerbs);
-            SubscribeLocalEvent<GetVerbsEvent<Verb>>(AddAntagVerbs);
+            SubscribeLocalEvent<GetVerbsEvent<Verb>>(GetVerbs);
             SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
             SubscribeLocalEvent<SolutionContainerManagerComponent, SolutionChangedEvent>(OnSolutionChanged);
         }
 
+        private void GetVerbs(GetVerbsEvent<Verb> ev)
+        {
+            AddAdminVerbs(ev);
+            AddDebugVerbs(ev);
+            AddSmiteVerbs(ev);
+            AddTricksVerbs(ev);
+            AddAntagVerbs(ev);
+        }
+
         private void AddAdminVerbs(GetVerbsEvent<Verb> args)
         {
-            if (!EntityManager.TryGetComponent<ActorComponent?>(args.User, out var actor))
+            if (!EntityManager.TryGetComponent(args.User, out ActorComponent? actor))
                 return;
 
             var player = actor.PlayerSession;
 
             if (_adminManager.IsAdmin(player))
             {
+                Verb mark = new();
+                mark.Text = Loc.GetString("toolshed-verb-mark");
+                mark.Message = Loc.GetString("toolshed-verb-mark-description");
+                mark.Category = VerbCategory.Admin;
+                mark.Act = () => _toolshed.InvokeCommand(player, "=> $marked", Enumerable.Repeat(args.Target, 1), out _);
+                mark.Impact = LogImpact.Low;
+                args.Verbs.Add(mark);
+
                 if (TryComp(args.Target, out ActorComponent? targetActor))
                 {
                     // AdminHelp
@@ -186,8 +204,6 @@ namespace Content.Server.Administration.Systems
                         Category = VerbCategory.Admin,
                         Act = () =>
                         {
-                            if (!TryComp<ActorComponent>(args.Target, out var actor)) return;
-
                             _console.ExecuteCommand(player, $"respawn {actor.PlayerSession.Name}");
                         },
                         ConfirmationPopup = true,
@@ -199,13 +215,13 @@ namespace Content.Server.Administration.Systems
 
         private void AddDebugVerbs(GetVerbsEvent<Verb> args)
         {
-            if (!EntityManager.TryGetComponent<ActorComponent?>(args.User, out var actor))
+            if (!EntityManager.TryGetComponent(args.User, out ActorComponent? actor))
                 return;
 
             var player = actor.PlayerSession;
 
             // Delete verb
-            if (_groupController.CanCommand(player, "deleteentity"))
+            if (_toolshed.ActivePermissionController?.CheckInvokable(new CommandSpec(_toolshed.DefaultEnvironment.GetCommand("delete"), null), player, out _) ?? false)
             {
                 Verb verb = new()
                 {
@@ -220,21 +236,21 @@ namespace Content.Server.Administration.Systems
             }
 
             // Rejuvenate verb
-            if (_groupController.CanCommand(player, "rejuvenate"))
+            if (_toolshed.ActivePermissionController?.CheckInvokable(new CommandSpec(_toolshed.DefaultEnvironment.GetCommand("rejuvenate"), null), player, out _) ?? false)
             {
                 Verb verb = new()
                 {
                     Text = Loc.GetString("rejuvenate-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/rejuvenate.svg.192dpi.png")),
-                    Act = () => RejuvenateCommand.PerformRejuvenate(args.Target),
+                    Act = () => _rejuvenate.PerformRejuvenate(args.Target),
                     Impact = LogImpact.Medium
                 };
                 args.Verbs.Add(verb);
             }
 
             // Control mob verb
-            if (_groupController.CanCommand(player, "controlmob") &&
+            if (_toolshed.ActivePermissionController?.CheckInvokable(new CommandSpec(_toolshed.DefaultEnvironment.GetCommand("mind"), "control"), player, out _) ?? false &&
                 args.User != args.Target)
             {
                 Verb verb = new()
@@ -245,7 +261,12 @@ namespace Content.Server.Administration.Systems
                     Act = () =>
                     {
                         MakeSentientCommand.MakeSentient(args.Target, EntityManager);
-                        player.ContentData()?.Mind?.TransferTo(args.Target, ghostCheckOverride: true);
+
+                        var mind = player.ContentData()?.Mind;
+                        if (mind == null)
+                            return;
+
+                        _mindSystem.TransferTo(mind, args.Target, ghostCheckOverride: true);
                     },
                     Impact = LogImpact.High,
                     ConfirmationPopup = true
@@ -279,7 +300,7 @@ namespace Content.Server.Administration.Systems
             // Make Sentient verb
             if (_groupController.CanCommand(player, "makesentient") &&
                 args.User != args.Target &&
-                !EntityManager.HasComponent<MindComponent>(args.Target))
+                !EntityManager.HasComponent<MindContainerComponent>(args.Target))
             {
                 Verb verb = new()
                 {
@@ -328,7 +349,7 @@ namespace Content.Server.Administration.Systems
 
             // Get Disposal tube direction verb
             if (_groupController.CanCommand(player, "tubeconnections") &&
-                EntityManager.TryGetComponent<DisposalTubeComponent?>(args.Target, out var tube))
+                EntityManager.TryGetComponent(args.Target, out DisposalTubeComponent? tube))
             {
                 Verb verb = new()
                 {
@@ -342,7 +363,7 @@ namespace Content.Server.Administration.Systems
 
             // Make ghost role verb
             if (_groupController.CanCommand(player, "makeghostrole") &&
-                !(EntityManager.GetComponentOrNull<MindComponent>(args.Target)?.HasMind ?? false))
+                !(EntityManager.GetComponentOrNull<MindContainerComponent>(args.Target)?.HasMind ?? false))
             {
                 Verb verb = new();
                 verb.Text = Loc.GetString("make-ghost-role-verb-get-data-text");
@@ -355,7 +376,7 @@ namespace Content.Server.Administration.Systems
             }
 
             if (_groupController.CanAdminMenu(player) &&
-                EntityManager.TryGetComponent<ConfigurationComponent?>(args.Target, out var config))
+                EntityManager.TryGetComponent(args.Target, out ConfigurationComponent? config))
             {
                 Verb verb = new()
                 {

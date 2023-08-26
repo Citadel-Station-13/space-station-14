@@ -1,0 +1,11 @@
+﻿
+- type: entity
+  id: CitadelStandardNanotrasenVessel
+  parent:
+    - BaseStation
+    - BaseStationRecords
+    - BaseStationAlertLevels
+    - BaseStationNanotrasen
+  noSpawn: true
+  components:
+    - type: Transform

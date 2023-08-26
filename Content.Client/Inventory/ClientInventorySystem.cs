@@ -32,7 +32,7 @@ namespace Content.Client.Inventory
         public Action<SlotData>? EntitySlotUpdate = null;
         public Action<SlotData>? OnSlotAdded = null;
         public Action<SlotData>? OnSlotRemoved = null;
-        public Action<InventorySlotsComponent>? OnLinkInventorySlots = null;
+        public Action<EntityUid, InventorySlotsComponent>? OnLinkInventorySlots = null;
         public Action? OnUnlinkInventory = null;
         public Action<SlotSpriteUpdate>? OnSpriteUpdate = null;
 
@@ -91,7 +91,7 @@ namespace Content.Client.Inventory
             UpdateSlot(args.Equipee, component, args.Slot);
             if (args.Equipee != _playerManager.LocalPlayer?.ControlledEntity)
                 return;
-            var update = new SlotSpriteUpdate(args.SlotGroup, args.Slot, null, false);
+            var update = new SlotSpriteUpdate(null, args.SlotGroup, args.Slot, false);
             OnSpriteUpdate?.Invoke(update);
         }
 
@@ -100,8 +100,7 @@ namespace Content.Client.Inventory
             UpdateSlot(args.Equipee, component, args.Slot);
             if (args.Equipee != _playerManager.LocalPlayer?.ControlledEntity)
                 return;
-            var sprite = EntityManager.GetComponentOrNull<SpriteComponent>(args.Equipment);
-            var update = new SlotSpriteUpdate(args.SlotGroup, args.Slot, sprite,
+            var update = new SlotSpriteUpdate(args.Equipment, args.SlotGroup, args.Slot,
                 HasComp<ClientStorageComponent>(args.Equipment));
             OnSpriteUpdate?.Invoke(update);
         }
@@ -138,7 +137,7 @@ namespace Content.Client.Inventory
                 }
             }
 
-            OnLinkInventorySlots?.Invoke(component);
+            OnLinkInventorySlots?.Invoke(uid, component);
         }
 
         public override void Shutdown()
@@ -173,7 +172,7 @@ namespace Content.Client.Inventory
             }
 
             OnUnlinkInventory?.Invoke();
-            OnLinkInventorySlots?.Invoke(component);
+            OnLinkInventorySlots?.Invoke(player.Value, component);
         }
 
         public void SetSlotHighlight(EntityUid owner, InventorySlotsComponent component, string slotName, bool state)
@@ -340,9 +339,9 @@ namespace Content.Client.Inventory
         }
 
         public readonly record struct SlotSpriteUpdate(
+            EntityUid? Entity,
             string Group,
             string Name,
-            SpriteComponent? Sprite,
             bool ShowStorage
         );
     }

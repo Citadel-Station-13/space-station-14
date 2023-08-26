@@ -2,6 +2,7 @@
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
+using Robust.Shared.Players;
 
 namespace Content.Shared.CartridgeLoader;
 
@@ -139,9 +140,11 @@ public sealed class CartridgeDeactivatedEvent : EntityEventArgs
 public sealed class CartridgeUiReadyEvent : EntityEventArgs
 {
     public readonly EntityUid Loader;
+    public readonly ICommonSession Session;
 
-    public CartridgeUiReadyEvent(EntityUid loader)
+    public CartridgeUiReadyEvent(EntityUid loader, ICommonSession session)
     {
         Loader = loader;
+        Session = session;
     }
 }

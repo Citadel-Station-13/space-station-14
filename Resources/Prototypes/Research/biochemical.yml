@@ -8,12 +8,13 @@
     state: beakerlarge
   discipline: Biochemical
   tier: 1
-  cost: 10000
+  cost: 5000
   recipeUnlocks:
   - LargeBeaker
   - Dropper
   - HotplateMachineCircuitboard
   - ChemicalPayload
+  - ClothingEyesGlassesChemical
 
 - type: technology
   id: SurgicalTools
@@ -23,7 +24,7 @@
     state: saw
   discipline: Biochemical
   tier: 1
-  cost: 5000
+  cost: 2500 #this is useless so heavy decrease
   recipeUnlocks:
   - Scalpel
   - Retractor
@@ -40,10 +41,24 @@
     state: icon
   discipline: Biochemical
   tier: 1
-  cost: 10000
+  cost: 7500
   recipeUnlocks:
   - CryostasisBeaker
   - StasisBedMachineCircuitboard
+
+- type: technology
+  id: MechanizedTreatment
+  name: research-technology-mechanized-treatment
+  icon:
+    sprite: Mobs/Silicon/chassis.rsi
+    state: medical
+  discipline: Biochemical
+  tier: 1
+  cost: 7500
+  recipeUnlocks:
+  - BorgModuleDiagnosis
+  - BorgModuleTreatment
+  - BorgModuleDefibrillator
 
 - type: technology
   id: Virology
@@ -102,16 +117,30 @@
 # Tier 3
 
 - type: technology
-  id: Cloning
-  name: research-technology-cloning
+  id: BluespaceChemistry
+  name: research-technology-bluespace-chemistry
   icon:
-    sprite: Structures/Machines/cloning.rsi
-    state: pod_0
+    sprite: Objects/Specific/Chemistry/beaker_bluespace.rsi
+    state: beakerbluespace
   discipline: Biochemical
   tier: 3
-  cost: 15000
+  cost: 10000
   recipeUnlocks:
-  - CloningPodMachineCircuitboard
-  - MedicalScannerMachineCircuitboard
-  - CloningConsoleComputerCircuitboard
-  - BiomassReclaimerMachineCircuitboard
+  - BluespaceBeaker
+  - SyringeBluespace
+
+# look into revisiting this later once medical isn't a hellhole
+#- type: technology
+#  id: Cloning
+#  name: research-technology-cloning
+#  icon:
+#    sprite: Structures/Machines/cloning.rsi
+#    state: pod_0
+#  discipline: Biochemical
+#  tier: 3
+#  cost: 15000
+#  recipeUnlocks:
+#  - CloningPodMachineCircuitboard
+#  - MedicalScannerMachineCircuitboard
+#  - CloningConsoleComputerCircuitboard
+#  - BiomassReclaimerMachineCircuitboard
