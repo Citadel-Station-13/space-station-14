@@ -1,11 +1,11 @@
-using Content.Server._Citadel.Thalers;
-using Content.Server.GameTicking;
-using Content.Server.Mind.Components;
-using Content.Server.Objectives;
-using Robust.Server.Player;
+using Content.Shared._Citadel.Thalers;
+﻿using Content.Shared.GameTicking;
+using Content.Shared.Mind.Components;
+using Content.Shared.Objectives;
 using Robust.Shared.Network;
+using Robust.Shared.Players;
 
-namespace Content.Server.Mind
+namespace Content.Shared.Mind
 {
     /// <summary>
     ///     A mind represents the IC "mind" of a player.
@@ -29,14 +29,14 @@ namespace Content.Server.Mind
         /// <summary>
         ///     The session ID of the player owning this mind.
         /// </summary>
-        [ViewVariables, Access(typeof(MindSystem))]
+        [ViewVariables, Access(typeof(SharedMindSystem))]
         public NetUserId? UserId { get; set; }
 
         /// <summary>
         ///     The session ID of the original owner, if any.
         ///     May end up used for round-end information (as the owner may have abandoned Mind since)
         /// </summary>
-        [ViewVariables, Access(typeof(MindSystem))]
+        [ViewVariables, Access(typeof(SharedMindSystem))]
         public NetUserId? OriginalOwnerUserId { get; set; }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Content.Server.Mind
         [ViewVariables]
         public bool IsVisitingEntity => VisitingEntity != null;
 
-        [ViewVariables, Access(typeof(MindSystem))]
+        [ViewVariables, Access(typeof(SharedMindSystem))]
         public EntityUid? VisitingEntity { get; set; }
 
         [ViewVariables]
@@ -75,7 +75,7 @@ namespace Content.Server.Mind
         ///     The entity currently owned by this mind.
         ///     Can be null.
         /// </summary>
-        [ViewVariables, Access(typeof(MindSystem))]
+        [ViewVariables, Access(typeof(SharedMindSystem))]
         public EntityUid? OwnedEntity { get; set; }
 
         // TODO move objectives out of mind component
@@ -103,7 +103,7 @@ namespace Content.Server.Mind
         ///     The session of the player owning this mind.
         ///     Can be null, in which case the player is currently not logged in.
         /// </summary>
-        [ViewVariables, Access(typeof(MindSystem), typeof(GameTicker))]
-        public IPlayerSession? Session { get; internal set; }
+        [ViewVariables, Access(typeof(SharedMindSystem), typeof(SharedGameTicker))]
+        public ICommonSession? Session { get; set; }
     }
 }
