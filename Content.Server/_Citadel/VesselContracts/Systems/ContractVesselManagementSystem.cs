@@ -3,12 +3,13 @@ using Content.Server._Citadel.Contracts;
 using Content.Server._Citadel.Contracts.Components;
 using Content.Server._Citadel.VesselContracts.Components;
 using Content.Server.Chat.Systems;
-using Content.Server.Mind.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared._Citadel.Contracts;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Localizations;
 using Robust.Server.GameObjects;
 using Robust.Server.Maps;
@@ -69,7 +70,7 @@ public sealed class ContractVesselManagementSystem : EntitySystem
         return LocateUserVesselContract(mind);
     }
 
-    public EntityUid? LocateUserVesselContract(Mind.Mind mind)
+    public EntityUid? LocateUserVesselContract(MindComponent mind)
     {
         var contract = mind.Contracts.Where(HasComp<VesselContractComponent>).FirstOrDefault();
         if (contract == EntityUid.Invalid)

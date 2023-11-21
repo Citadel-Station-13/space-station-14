@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Players;
+﻿using Robust.Shared.Player;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CartridgeLoader;

@@ -1,5 +1,6 @@
 ﻿using Content.Server._Citadel.Contracts.Components;
 using Content.Shared._Citadel.Contracts;
+using Content.Shared.Mind;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
 
@@ -53,7 +54,7 @@ public sealed class ContractManagementSystem : EntitySystem
         return contractEnt;
     }
 
-    public void BindContract(EntityUid contractEnt, Mind.Mind contractor)
+    public void BindContract(EntityUid contractEnt, MindComponent contractor)
     {
         var contract = Comp<ContractComponent>(contractEnt);
         if (contract.OwningContractor is null)
@@ -73,13 +74,27 @@ public sealed class ContractManagementSystem : EntitySystem
         contractor.Contracts.Add(contractEnt);
     }
 
-    public EntityUid CreateBoundContract(string contractProto, Mind.Mind owner)
+    public void BindContract(EntityUid contractEnt, EntityUid? mindID)
+    {
+        if (!TryComp<MindComponent>(mindID, out var mind))
+            throw new Exception("BindContract couldn't get a MindComponent!");
+        BindContract(contractEnt, mind);
+    }
+
+    public EntityUid CreateBoundContract(string contractProto, MindComponent owner)
     {
         var contractEnt = CreateUnboundContract(contractProto);
         BindContract(contractEnt, owner);
 
 
         return contractEnt;
+    }
+
+    public EntityUid CreateBoundContract(string contractProto, EntityUid? mindID)
+    {
+        if (!TryComp<MindComponent>(mindID, out var mind))
+            throw new Exception("CreateBoundContract couldn't get a MindComponent!");
+        return CreateBoundContract(contractProto, mind);
     }
 
     public bool CouldChangeStatusTo(EntityUid contractUid, ContractStatus newStatus, out FormattedMessage? failMsg, ContractComponent? contractComponent = null)

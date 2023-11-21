@@ -5,8 +5,10 @@ using Content.Server.Administration;
 using Content.Server.Players;
 using Content.Shared._Citadel.Contracts;
 using Content.Shared.Administration;
+using Content.Shared.Mind;
+using Content.Shared.Players;
 using Robust.Server.Player;
-using Robust.Shared.Players;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Toolshed;
 using Robust.Shared.Toolshed.TypeParsers;
@@ -32,8 +34,7 @@ public sealed class ContractCommand : ToolshedCommand
     public EntityUid New([PipedArgument] EntityUid contract, [CommandArgument] ICommonSession session)
     {
         _contractManagement ??= GetSys<ContractManagementSystem>();
-        var player = (IPlayerSession) session;
-        _contractManagement.BindContract(contract, player.GetMind()!);
+        _contractManagement.BindContract(contract, session.GetMind());
         return contract;
     }
 
@@ -43,8 +44,7 @@ public sealed class ContractCommand : ToolshedCommand
     {
         _contractManagement ??= GetSys<ContractManagementSystem>();
 
-        var player = (IPlayerSession) session;
-        return _contractManagement.CreateBoundContract(contract.AsType(), player.GetMind()!);
+        return _contractManagement.CreateBoundContract(contract.AsType(), session.GetMind());
     }
 
     [CommandImplementation("list")]
