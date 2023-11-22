@@ -59,20 +59,9 @@ public sealed class ContractVesselManagementSystem : EntitySystem
         _chat.DispatchStationAnnouncement(vessel.Vessel!.Value, message, sender: "Oversight");
     }
 
-    public EntityUid? LocateUserVesselContract(EntityUid user)
+    public EntityUid? LocateUserVesselContract(Entity<MindComponent> mind)
     {
-        if (!TryComp<MindContainerComponent>(user, out var mindContainer))
-            return null;
-
-        if (mindContainer.Mind is not { } mind)
-            return null;
-
-        return LocateUserVesselContract(mind);
-    }
-
-    public EntityUid? LocateUserVesselContract(MindComponent mind)
-    {
-        var contract = mind.Contracts.Where(HasComp<VesselContractComponent>).FirstOrDefault();
+        var contract = mind.Comp.Contracts.Where(HasComp<VesselContractComponent>).FirstOrDefault();
         if (contract == EntityUid.Invalid)
             return null;
 

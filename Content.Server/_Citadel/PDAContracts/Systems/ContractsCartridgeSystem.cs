@@ -24,6 +24,7 @@ public sealed class ContractsCartridgeSystem : EntitySystem
     [Dependency] private readonly CartridgeLoaderSystem? _cartridgeLoaderSystem = default!;
     [Dependency] private readonly ContractManagementSystem _contracts = default!;
     [Dependency] private readonly ContractCriteriaSystem _criteria = default!;
+    [Dependency] private readonly IEntityManager _entManager = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -38,29 +39,29 @@ public sealed class ContractsCartridgeSystem : EntitySystem
             return;
 
         var player = (ICommonSession) args.Session!;
-        var mindID = player.GetMind();
-        if (!TryComp(mindID, out MindComponent? mind))
-            return;
+        var mindID = player.GetMind() ?? throw new NullReferenceException(); //This feels incredibly hacky. We really shouldn't have to. Yknow. *gestures claws around* THIS. -Myr
+        var mindComp = _entManager.EnsureComponent<MindComponent>(mindID);
+        var mind = new Entity<MindComponent>(mindID, mindComp);
         var contract = EntityQuery<ContractComponent>().First(x => x.Uuid == ev.Contract);
         switch (ev.Action)
         {
             case ContractsUiMessageEvent.ContractAction.Sign:
                 if (contract.OwningContractor is not null)
                     return;
-                _contracts.BindContract(contract.Owner, mindID);
+                _contracts.BindContract(contract.Owner, mind);
                 break;
             case ContractsUiMessageEvent.ContractAction.Join:
-                _contracts.BindContract(contract.Owner, mindID);
+                _contracts.BindContract(contract.Owner, mind);
                 break;
             case ContractsUiMessageEvent.ContractAction.Cancel:
-                if (contract.OwningContractor != mind)
+                if (contract.OwningContractor != mind.Comp) //This is more or less the same as mindComp at the moment. When/if GetMind() gets changed upstream to pass an Entity<MindComponent>, mindComp should simply no longer have to exist. -Myr
                     return;
                 _contracts.TryCancelContract(contract.Owner);
                 break;
             case ContractsUiMessageEvent.ContractAction.Leave:
                 break;
             case ContractsUiMessageEvent.ContractAction.Start:
-                if (contract.OwningContractor != mind)
+                if (contract.OwningContractor != mind.Comp)
                     return;
                 _contracts.TryActivateContract(contract.Owner);
                 break;
@@ -80,9 +81,9 @@ public sealed class ContractsCartridgeSystem : EntitySystem
 
     public ContractListUiState GenerateState(EntityUid cart, ICommonSession user)
     {
-        var mindID = user.GetMind()!;
-        if (!TryComp(mindID, out MindComponent? mind))
-            throw new Exception("GenerateState could not get MindComponent from session");
+        var mindID = user.GetMind() ?? throw new NullReferenceException();
+        var mindComp = _entManager.EnsureComponent<MindComponent>(mindID);
+        var mind = new Entity<MindComponent>(mindID, mindComp);
 
         var conQuery = EntityQueryEnumerator<ContractComponent, ContractCriteriaControlComponent, ContractGroupsComponent>();
 
@@ -92,10 +93,10 @@ public sealed class ContractsCartridgeSystem : EntitySystem
 
         var noVessel = false;
 
-        if (mind.Contracts.Any(HasComp<VesselContractComponent>))
+        if (mind.Comp.Contracts.Any(HasComp<VesselContractComponent>))
         {
             noVessel = true;
-            var vesselContract = mind.Contracts.Where(HasComp<VesselContractComponent>).First();
+            var vesselContract = mind.Comp.Contracts.Where(HasComp<VesselContractComponent>).First();
             if (TryComp<ContractGroupsComponent>(vesselContract, out var groups))
             {
                 lookingFor.UnionWith(groups.Groups.Where(x => x != "Vessel"));
@@ -117,7 +118,7 @@ public sealed class ContractsCartridgeSystem : EntitySystem
             {
                 status = ContractUiState.ContractUserStatus.Subcontractor;
             }
-            else if (contractComp.OwningContractor == mind)
+            else if (contractComp.OwningContractor == mind.Comp)
             {
                 status = ContractUiState.ContractUserStatus.Owner;
             }
@@ -171,7 +172,7 @@ public sealed class ContractsCartridgeSystem : EntitySystem
             contractStates.Add(contractComp.Uuid, state);
         }
 
-        return new ContractListUiState(contractStates, mind.BankAccount?.Thalers ?? FixedPoint2.Zero);
+        return new ContractListUiState(contractStates, mind.Comp.BankAccount?.Thalers ?? FixedPoint2.Zero);
     }
 
     private void UpdateUiState(EntityUid uid, EntityUid loaderUid, ICommonSession session, ContractsCartridgeComponent? component)

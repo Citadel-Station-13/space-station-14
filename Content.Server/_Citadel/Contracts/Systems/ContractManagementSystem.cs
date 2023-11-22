@@ -54,7 +54,7 @@ public sealed class ContractManagementSystem : EntitySystem
         return contractEnt;
     }
 
-    public void BindContract(EntityUid contractEnt, MindComponent contractor)
+    public void BindContract(EntityUid contractEnt, Entity<MindComponent> contractor)
     {
         var contract = Comp<ContractComponent>(contractEnt);
         if (contract.OwningContractor is null)
@@ -71,30 +71,16 @@ public sealed class ContractManagementSystem : EntitySystem
             contract.SubContractors.Add(contractor);
         }
 
-        contractor.Contracts.Add(contractEnt);
+        contractor.Comp.Contracts.Add(contractEnt);
     }
 
-    public void BindContract(EntityUid contractEnt, EntityUid? mindID)
-    {
-        if (!TryComp<MindComponent>(mindID, out var mind))
-            throw new Exception("BindContract couldn't get a MindComponent!");
-        BindContract(contractEnt, mind);
-    }
-
-    public EntityUid CreateBoundContract(string contractProto, MindComponent owner)
+    public EntityUid CreateBoundContract(string contractProto, Entity<MindComponent> owner)
     {
         var contractEnt = CreateUnboundContract(contractProto);
         BindContract(contractEnt, owner);
 
 
         return contractEnt;
-    }
-
-    public EntityUid CreateBoundContract(string contractProto, EntityUid? mindID)
-    {
-        if (!TryComp<MindComponent>(mindID, out var mind))
-            throw new Exception("CreateBoundContract couldn't get a MindComponent!");
-        return CreateBoundContract(contractProto, mind);
     }
 
     public bool CouldChangeStatusTo(EntityUid contractUid, ContractStatus newStatus, out FormattedMessage? failMsg, ContractComponent? contractComponent = null)
