@@ -167,7 +167,7 @@ public sealed class PrototypeSaveTest
                     }
 
                     // An entity may also remove components on init -> check no components are missing.
-                    foreach (var (compType, comp) in prototype.Components)
+                    foreach (var compType in prototype.Components.Keys)
                     {
                         Assert.That(compNames, Does.Contain(compType), $"Prototype {prototype.ID} removes component {compType} on spawn.");
                     }
@@ -213,7 +213,7 @@ public sealed class PrototypeSaveTest
                 Assert.Fail($"Uninitialized entities should not be saving entity Uids. Component: {WritingComponent}. Prototype: {Prototype.ID}");
             }
 
-            return new ValueDataNode(value.ToString());
+            return new ValueDataNode(value.Id.ToString());
         }
 
         EntityUid ITypeReader<EntityUid, ValueDataNode>.Read(ISerializationManager serializationManager,
@@ -222,7 +222,7 @@ public sealed class PrototypeSaveTest
             SerializationHookContext hookCtx,
             ISerializationContext? context, ISerializationManager.InstantiationDelegate<EntityUid>? instanceProvider)
         {
-            return EntityUid.Parse(node.Value);
+            return EntityUid.Parse(node.Value, "0");
         }
     }
 }
