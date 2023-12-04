@@ -7,13 +7,14 @@ using Content.Server._Citadel.Contracts.Prototypes;
 using Content.Server._Citadel.PDAContracts.Systems;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
-using Content.Server.Mind.Components;
 using Content.Server.Station.Systems;
 using Content.Shared._Citadel.Contracts;
+using Content.Shared._Citadel.Thalers;
 using Content.Shared.Chat;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.FixedPoint;
 using JetBrains.Annotations;
-using Robust.Shared.Toolshed;
 
 namespace Content.Server._Citadel.Thalers;
 
@@ -78,7 +79,7 @@ public sealed class PersonalBankSystem : EntitySystem
     {
         balance = null;
 
-        if (!TryComp<MindContainerComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account})
+        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp is not {BankAccount: { } account})
             return false;
 
         balance = account.Thalers;
@@ -88,7 +89,7 @@ public sealed class PersonalBankSystem : EntitySystem
     [PublicAPI]
     public bool CanAdjustBalance(EntityUid user, FixedPoint2 amount)
     {
-        if (!TryComp<MindContainerComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account} mind)
+        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp is not {BankAccount: { } account} mind)
             return false;
 
         var newSum = account.Thalers + amount;
@@ -106,7 +107,7 @@ public sealed class PersonalBankSystem : EntitySystem
     [PublicAPI]
     public bool TryAdjustBalance(EntityUid user, FixedPoint2 amount)
     {
-        if (!TryComp<MindContainerComponent>(user, out var mindComp) || mindComp.Mind is not {BankAccount: { } account})
+        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp is not {BankAccount: { } account})
             return false;
 
         if (!CanAdjustBalance(user, amount))
@@ -115,21 +116,6 @@ public sealed class PersonalBankSystem : EntitySystem
         account.Thalers += amount;
 
         return true;
-    }
-}
-
-[Access(typeof(PersonalBankSystem), typeof(Mind.Mind))]
-public sealed class BankAccount : IToolshedPrettyPrint
-{
-    // TODO(Lunar): FixedPoint2 can't represent more than ~20mil or so. Maybe need a new thing if we expect people to get stupid rich.
-    // but having someone's balance overflow into the negatives is FUNNY!!!
-    [ViewVariables(VVAccess.ReadWrite)]
-    public FixedPoint2 Thalers = 2500;
-
-    public string PrettyPrint(ToolshedManager toolshed, out IEnumerable? more, bool moreUsed = false, int? maxOutput = null)
-    {
-        more = null;
-        return $"BankAccount {{ Thalers: {Thalers} }}";
     }
 }
 

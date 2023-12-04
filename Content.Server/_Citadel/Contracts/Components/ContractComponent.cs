@@ -1,5 +1,6 @@
 ﻿using Content.Server._Citadel.Contracts.Systems;
 using Content.Shared._Citadel.Contracts;
+using Content.Shared.Mind;
 
 namespace Content.Server._Citadel.Contracts.Components;
 
@@ -19,12 +20,12 @@ public sealed partial class ContractComponent : Component
     /// The contractor that owns this contract.
     /// </summary>
     [ViewVariables]
-    public Mind.Mind? OwningContractor = default;
+    public MindComponent? OwningContractor = default;
     /// <summary>
     /// All subcontractors for the contract, who signed on or were invited by the owning contractor.
     /// </summary>
     [ViewVariables]
-    public List<Mind.Mind> SubContractors = new();
+    public List<MindComponent> SubContractors = new();
 
     [DataField("autostart")]
     public bool AutoStart = false;

@@ -9,6 +9,7 @@ using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared._Citadel.Contracts.BUI;
 using Content.Shared.Materials;
+using Content.Shared.Mind;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
@@ -68,7 +69,7 @@ public sealed class CriteriaMaterialStorageHasMaterialsSystem : EntitySystem
             if (Comp<ContractComponent>(cc.OwningContract).OwningContractor is not {} owningContractor)
                 continue;
 
-            if (_contractVessel.LocateUserVesselContract(owningContractor) is not
+            if (_contractVessel.LocateUserVesselContract(new Entity<MindComponent>(owningContractor.Owner, owningContractor)) is not
                 { } vesselUid)
                 continue;
 

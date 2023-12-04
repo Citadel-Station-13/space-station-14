@@ -5,8 +5,10 @@ using Content.Server.Administration;
 using Content.Server.Players;
 using Content.Shared._Citadel.Contracts;
 using Content.Shared.Administration;
+using Content.Shared.Mind;
+using Content.Shared.Players;
 using Robust.Server.Player;
-using Robust.Shared.Players;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Toolshed;
 using Robust.Shared.Toolshed.TypeParsers;
@@ -17,6 +19,7 @@ namespace Content.Server._Citadel.Contracts.Toolshed;
 [ToolshedCommand, AdminCommand(AdminFlags.Admin)]
 public sealed class ContractCommand : ToolshedCommand
 {
+    [Dependency] private readonly IEntityManager _entManager = default!;
     private ContractManagementSystem? _contractManagement;
     private ContractCriteriaSystem? _contractCriteria;
 
@@ -32,8 +35,10 @@ public sealed class ContractCommand : ToolshedCommand
     public EntityUid New([PipedArgument] EntityUid contract, [CommandArgument] ICommonSession session)
     {
         _contractManagement ??= GetSys<ContractManagementSystem>();
-        var player = (IPlayerSession) session;
-        _contractManagement.BindContract(contract, player.GetMind()!);
+        var mindID = session.GetMind() ?? throw new NullReferenceException(); //AUGGH AAUHGH UAAAAAAAGGHGG AAAAA -Myr
+        var mindComp = _entManager.EnsureComponent<MindComponent>(mindID);
+        var mind = new Entity<MindComponent>(mindID, mindComp);
+        _contractManagement.BindContract(contract, mind);
         return contract;
     }
 
@@ -42,9 +47,10 @@ public sealed class ContractCommand : ToolshedCommand
     public EntityUid New([PipedArgument] ICommonSession session, [CommandArgument] Prototype<EntityPrototype> contract)
     {
         _contractManagement ??= GetSys<ContractManagementSystem>();
-
-        var player = (IPlayerSession) session;
-        return _contractManagement.CreateBoundContract(contract.AsType(), player.GetMind()!);
+        var mindID = session.GetMind() ?? throw new NullReferenceException();
+        var mindComp = _entManager.EnsureComponent<MindComponent>(mindID);
+        var mind = new Entity<MindComponent>(mindID, mindComp);
+        return _contractManagement.CreateBoundContract(contract.AsType(), mind);
     }
 
     [CommandImplementation("list")]

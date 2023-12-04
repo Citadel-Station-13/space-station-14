@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Players;
+﻿using Robust.Shared.Player;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CartridgeLoader;
@@ -17,6 +17,6 @@ public sealed class CartridgeUiMessage : BoundUserInterfaceMessage
 [Serializable, NetSerializable]
 public abstract class CartridgeMessageEvent : EntityEventArgs
 {
-    public EntityUid LoaderUid;
+    public NetEntity LoaderUid;
     public ICommonSession? Session;
 }

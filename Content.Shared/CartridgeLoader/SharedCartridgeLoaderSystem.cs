@@ -1,15 +1,18 @@
 ﻿using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Containers;
-using Robust.Shared.GameStates;
-using Robust.Shared.Map;
-using Robust.Shared.Players;
+using Robust.Shared.Player;
+using Robust.Shared.Network;
 
 namespace Content.Shared.CartridgeLoader;
 
 public abstract class SharedCartridgeLoaderSystem : EntitySystem
 {
+    public const string InstalledContainerId = "program-container";
+
     [Dependency] private readonly ItemSlotsSystem _itemSlotsSystem = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly INetManager _netMan = default!;
 
     public override void Initialize()
     {
@@ -20,10 +23,6 @@ public abstract class SharedCartridgeLoaderSystem : EntitySystem
 
         SubscribeLocalEvent<CartridgeLoaderComponent, EntInsertedIntoContainerMessage>(OnItemInserted);
         SubscribeLocalEvent<CartridgeLoaderComponent, EntRemovedFromContainerMessage>(OnItemRemoved);
-
-        SubscribeLocalEvent<CartridgeComponent, ComponentGetState>(OnGetState);
-        SubscribeLocalEvent<CartridgeComponent, ComponentHandleState>(OnHandleState);
-
     }
 
     private void OnComponentInit(EntityUid uid, CartridgeLoaderComponent loader, ComponentInit args)
@@ -37,11 +36,8 @@ public abstract class SharedCartridgeLoaderSystem : EntitySystem
     private void OnComponentRemove(EntityUid uid, CartridgeLoaderComponent loader, ComponentRemove args)
     {
         _itemSlotsSystem.RemoveItemSlot(uid, loader.CartridgeSlot);
-
-        foreach (var program in loader.InstalledPrograms)
-        {
-               EntityManager.QueueDeleteEntity(program);
-        }
+        if (_container.TryGetContainer(uid, InstalledContainerId, out var cont))
+            cont.Shutdown(EntityManager, _netMan);
     }
 
     protected virtual void OnItemInserted(EntityUid uid, CartridgeLoaderComponent loader, EntInsertedIntoContainerMessage args)
@@ -52,22 +48,6 @@ public abstract class SharedCartridgeLoaderSystem : EntitySystem
     protected virtual void OnItemRemoved(EntityUid uid, CartridgeLoaderComponent loader, EntRemovedFromContainerMessage args)
     {
         UpdateAppearanceData(uid, loader);
-    }
-
-    private void OnGetState(EntityUid uid, CartridgeComponent component, ref ComponentGetState args)
-    {
-        var state = new CartridgeComponentState();
-        state.InstallationStatus = component.InstallationStatus;
-
-        args.State = state;
-    }
-
-    private void OnHandleState(EntityUid uid, CartridgeComponent component, ref ComponentHandleState args)
-    {
-        if (args.Current is not CartridgeComponentState state)
-            return;
-
-        component.InstallationStatus = state.InstallationStatus;
     }
 
     private void UpdateAppearanceData(EntityUid uid, CartridgeLoaderComponent loader)

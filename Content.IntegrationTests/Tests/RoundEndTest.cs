@@ -16,7 +16,8 @@ namespace Content.IntegrationTests.Tests
             await using var pair = await PoolManager.GetServerClient(new PoolSettings
             {
                 DummyTicker = false,
-                Connected = true
+                Connected = true,
+                Dirty = true
             });
 
             var server = pair.Server;
@@ -120,7 +121,7 @@ namespace Content.IntegrationTests.Tests
                 var currentCount = Thread.VolatileRead(ref eventCount);
                 while (currentCount == Thread.VolatileRead(ref eventCount) && !timeout.IsCompleted)
                 {
-                    await PoolManager.RunTicksSync(pair, 5);
+                    await pair.RunTicksSync(5);
                 }
                 if (timeout.IsCompleted) throw new TimeoutException("Event took too long to trigger");
             }

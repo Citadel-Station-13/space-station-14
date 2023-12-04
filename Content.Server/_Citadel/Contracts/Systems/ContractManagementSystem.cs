@@ -1,5 +1,6 @@
 ﻿using Content.Server._Citadel.Contracts.Components;
 using Content.Shared._Citadel.Contracts;
+using Content.Shared.Mind;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
 
@@ -53,7 +54,7 @@ public sealed class ContractManagementSystem : EntitySystem
         return contractEnt;
     }
 
-    public void BindContract(EntityUid contractEnt, Mind.Mind contractor)
+    public void BindContract(EntityUid contractEnt, Entity<MindComponent> contractor)
     {
         var contract = Comp<ContractComponent>(contractEnt);
         if (contract.OwningContractor is null)
@@ -70,10 +71,10 @@ public sealed class ContractManagementSystem : EntitySystem
             contract.SubContractors.Add(contractor);
         }
 
-        contractor.Contracts.Add(contractEnt);
+        contractor.Comp.Contracts.Add(contractEnt);
     }
 
-    public EntityUid CreateBoundContract(string contractProto, Mind.Mind owner)
+    public EntityUid CreateBoundContract(string contractProto, Entity<MindComponent> owner)
     {
         var contractEnt = CreateUnboundContract(contractProto);
         BindContract(contractEnt, owner);
