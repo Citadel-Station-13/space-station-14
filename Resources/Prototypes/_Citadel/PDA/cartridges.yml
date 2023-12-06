@@ -14,7 +14,7 @@
     - type: UIFragment
       ui: !type:ContractsCartridgeUi
     - type: Cartridge
-      programName: Contracts
+      programName: contracts-program-name
       icon:
         sprite: Objects/Misc/books.rsi
         state: book6

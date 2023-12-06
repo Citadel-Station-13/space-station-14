@@ -25,6 +25,7 @@ public sealed class CriteriaMaterialStorageHasMaterialsSystem : EntitySystem
     [Dependency] private readonly MaterialStorageSystem _material = default!;
     [Dependency] private readonly ContractVesselManagementSystem _contractVessel = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -66,7 +67,10 @@ public sealed class CriteriaMaterialStorageHasMaterialsSystem : EntitySystem
 
         while (q.MoveNext(out var uid, out var cc, out var criteria))
         {
-            if (Comp<ContractComponent>(cc.OwningContract).OwningContractor is not {} owningContractor)
+            if (!_entityManager.TryGetComponent<ContractComponent>(cc.OwningContract, out var owningContractComponent))
+                continue;
+
+            if (owningContractComponent.OwningContractor is not {} owningContractor)
                 continue;
 
             if (_contractVessel.LocateUserVesselContract(new Entity<MindComponent>(owningContractor.Owner, owningContractor)) is not

@@ -1,0 +1,1 @@
+contracts-program-name = Contracts
