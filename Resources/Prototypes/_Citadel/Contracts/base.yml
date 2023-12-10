@@ -5,6 +5,7 @@
     A contract controller entity, manages some given contract.
     You probably shouldn't be seeing this.
   abstract: true
+  save: false
   components:
     - type: Contract
     - type: ContractCriteriaControl

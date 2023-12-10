@@ -1,5 +1,6 @@
 ﻿- type: entity
   id: CitadelBaseContractCriteria
   abstract: true
+  save: false
   components:
     - type: ContractCriteria

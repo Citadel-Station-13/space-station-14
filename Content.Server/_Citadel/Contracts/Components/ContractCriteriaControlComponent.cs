@@ -22,7 +22,7 @@ public sealed partial class ContractCriteriaControlComponent : Component
     /// Additional criteria effects, on top of the ones the groups already have.
     /// </summary>
     [DataField("criteriaEffects")]
-    public Dictionary<string, List<CriteriaGroupEffectEvent>> CriteriaEffects = default!;
+    public Dictionary<string, List<CriteriaGroupEffectEvent>> CriteriaEffects = new();
 
     /// <summary>
     /// The actual criteria entities.

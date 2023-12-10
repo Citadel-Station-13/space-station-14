@@ -38,6 +38,8 @@ public sealed class ContractVesselManagementSystem : EntitySystem
 
     private void OnVesselContractShutdown(EntityUid uid, VesselContractComponent component, ComponentShutdown args)
     {
+        if (component.Vessel == null)
+            return;
         _station.DeleteStation(component.Vessel!.Value);
     }
 

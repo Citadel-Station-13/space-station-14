@@ -1,10 +1,12 @@
-﻿using Content.Shared.FixedPoint;
+﻿using Content.Server.Administration;
+using Content.Shared.Administration;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Toolshed;
 using Robust.Shared.Toolshed.Syntax;
 
 namespace Content.Server._Citadel.Thalers.Toolshed;
 
-[ToolshedCommand]
+[ToolshedCommand, AdminCommand(AdminFlags.Debug)]
 public sealed class BankCommand : ToolshedCommand
 {
     private PersonalBankSystem? _bank;
