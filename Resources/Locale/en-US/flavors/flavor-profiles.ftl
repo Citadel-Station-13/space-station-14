@@ -44,6 +44,9 @@ flavor-base-sharp = sharp
 flavor-base-syrupy = syrupy
 flavor-base-spaceshroom = mysterious
 flavor-base-clean = clean
+flavor-base-alkaline = alkaline
+flavor-base-holy = holy
+flavor-base-horrible = horrible
 
 # lmao
 flavor-base-terrible = terrible
@@ -86,6 +89,7 @@ flavor-complex-dough = like dough
 flavor-complex-sweet-dough = like sweet dough
 flavor-complex-tofu = like tofu
 flavor-complex-miso = like miso
+flavor-complex-lemoon = like laurel
 flavor-complex-muffin = like a muffin
 flavor-complex-peas = like peas
 flavor-complex-pineapple = like pineapple
@@ -180,6 +184,7 @@ flavor-complex-coffee = like coffee
 flavor-complex-milk = like milk
 flavor-complex-tea = like tea
 flavor-complex-ice = like ice
+flavor-complex-mopwata = like stagnant, dirty water
 
 ## Cocktails
 flavor-complex-long-island = suspiciously like iced tea

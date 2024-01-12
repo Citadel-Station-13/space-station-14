@@ -93,7 +93,7 @@ namespace Content.Server.Database
                 .IsUnique();
 
             modelBuilder.Entity<AdminLog>()
-                .HasKey(log => new {log.Id, log.RoundId});
+                .HasKey(log => new {log.RoundId, log.Id});
 
             modelBuilder.Entity<AdminLog>()
                 .Property(log => log.Id);
@@ -111,6 +111,9 @@ namespace Content.Server.Database
                 .HasForeignKey(player => player.PlayerUserId)
                 .HasPrincipalKey(player => player.UserId);
 
+            modelBuilder.Entity<AdminLogPlayer>()
+                .HasIndex(p => p.PlayerUserId);
+
             modelBuilder.Entity<Round>()
                 .HasIndex(round => round.StartDate);
 
@@ -119,7 +122,7 @@ namespace Content.Server.Database
                 .HasDefaultValue(default(DateTime));
 
             modelBuilder.Entity<AdminLogPlayer>()
-                .HasKey(logPlayer => new {logPlayer.PlayerUserId, logPlayer.LogId, logPlayer.RoundId});
+                .HasKey(logPlayer => new {logPlayer.RoundId, logPlayer.LogId, logPlayer.PlayerUserId});
 
             modelBuilder.Entity<ServerBan>()
                 .HasIndex(p => p.PlayerUserId);
@@ -167,6 +170,15 @@ namespace Content.Server.Database
 
             modelBuilder.Entity<ConnectionLog>()
                 .HasIndex(p => p.UserId);
+
+            modelBuilder.Entity<ConnectionLog>()
+                .Property(p => p.ServerId)
+                .HasDefaultValue(0);
+
+            modelBuilder.Entity<ConnectionLog>()
+                .HasOne(p => p.Server)
+                .WithMany(p => p.ConnectionLogs)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // SetNull is necessary for created by/edited by-s here,
             // so you can safely delete admins (GDPR right to erasure) while keeping the notes intact
@@ -494,15 +506,19 @@ namespace Content.Server.Database
 
         [InverseProperty(nameof(Round.Server))]
         public List<Round> Rounds { get; set; } = default!;
+
+        [InverseProperty(nameof(ConnectionLog.Server))]
+        public List<ConnectionLog> ConnectionLogs { get; set; } = default!;
     }
 
     [Index(nameof(Type))]
     public class AdminLog
     {
+        [Key, ForeignKey("Round")] public int RoundId { get; set; }
+
         [Key]
         public int Id { get; set; }
 
-        [Key, ForeignKey("Round")] public int RoundId { get; set; }
         public Round Round { get; set; } = default!;
 
         [Required] public LogType Type { get; set; }
@@ -520,12 +536,13 @@ namespace Content.Server.Database
 
     public class AdminLogPlayer
     {
+        [Required, Key] public int RoundId { get; set; }
+        [Required, Key] public int LogId { get; set; }
+
         [Required, Key, ForeignKey("Player")] public Guid PlayerUserId { get; set; }
         public Player Player { get; set; } = default!;
 
-        [Required, Key] public int LogId { get; set; }
-        [Required, Key] public int RoundId { get; set; }
-        [ForeignKey("LogId,RoundId")] public AdminLog Log { get; set; } = default!;
+        [ForeignKey("RoundId,LogId")] public AdminLog Log { get; set; } = default!;
     }
 
     // Used by SS14.Admin
@@ -749,7 +766,19 @@ namespace Content.Server.Database
 
         public ConnectionDenyReason? Denied { get; set; }
 
+        /// <summary>
+        /// ID of the <see cref="Server"/> that the connection was attempted to.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The default value of this column is set to <c>0</c>, which is the ID of the "<c>unknown</c>" server.
+        /// This is intended for old entries (that didn't track this) and if the server name isn't configured.
+        /// </para>
+        /// </remarks>
+        public int ServerId { get; set; }
+
         public List<ServerBanHit> BanHits { get; set; } = null!;
+        public Server Server { get; set; } = null!;
     }
 
     public enum ConnectionDenyReason : byte
