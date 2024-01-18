@@ -23,7 +23,12 @@ foreach ($unmerged in $refs) {
     $nonlinears = $nonlinears + $parents[1..($parents.Length-1)]
 }
 
+Write-Output "$($refs.Length) unmerged commits. ($($nonlinears.Length) nonlinear)"
+
+$processed = -1
+
 foreach ($unmerged in $refs) {
+    $processed = $processed + 1
     if ($nonlinears -contains $unmerged) {
         Write-Output ("Skipping over {0}, which we'll merge later (non-linear history encountered)." -f $unmerged)
         continue
@@ -42,10 +47,10 @@ foreach ($unmerged in $refs) {
         continue
     }
 
-    git show --format=full --summary $unmerged
+    Write-Output (git show --format=short --compact-summary $unmerged)
 
     $parents = (git log --format=format:%P -n 1 $unmerged) -split '\s+'
-    Write-Output $parents
+    Write-Output "Parents: " $parents
 
     if ($parents.Length -ne 1) {
         $mergedin = $parents[1..($parents.Length-1)]
@@ -60,7 +65,7 @@ foreach ($unmerged in $refs) {
         }
     }
 
-    $response = $host.UI.PromptForChoice("Commit action?", "", $mergeOptions, 0)
+    $response = $host.UI.PromptForChoice("$($refs.Length - $processed) left. Commit action?", "", $mergeOptions, 1)
 
     Switch ($response) {
         2 {
