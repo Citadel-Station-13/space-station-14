@@ -39,6 +39,7 @@
   components:
     - type: Contract
       autostart: true
+    - type: Hangar
     - type: ContractSimpleVesselProvider
       vesselConfig:
         stationProto: CitadelStandardNanotrasenVessel

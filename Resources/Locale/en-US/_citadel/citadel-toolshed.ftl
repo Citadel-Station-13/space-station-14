@@ -1,5 +1,5 @@
-command-description-bank-getthalers = Returns the Thaler count of the target bank account.
-command-description-bank-adjust = Adjusts the Thaler count of the target bank account.
+command-description-bank-getthalers = Returns the Thaler count of the target mind's bank account.
+command-description-bank-adjust = Adjusts the Thaler count of the target mind's bank account.
 
 command-description-contract-new = Creates a new contract of the specified type.
 command-description-contract-bindto = Binds a contract to the mind of a given session.

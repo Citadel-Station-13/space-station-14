@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Content.Server._Citadel.Contracts;
 using Content.Server._Citadel.Contracts.Components;
+using Content.Server._Citadel.Hangars.Components;
 using Content.Server._Citadel.VesselContracts.Components;
 using Content.Server.Chat.Systems;
 using Content.Server.Shuttles.Components;
@@ -127,14 +128,31 @@ public sealed class ContractVesselManagementSystem : EntitySystem
 
         var shuttle = _station.GetLargestGrid(Comp<StationDataComponent>(vessel))!.Value;
 
-        // Can't go fail for this because we can't tell if it failed outright or prox docked. Result<T,E> when?
-        // TODO(lunar): Tell sloth to make this return an enum of conditions instead.
-        _shuttle.TryFTLDock(shuttle, Comp<ShuttleComponent>(shuttle), stationGrid);
+        // Can't go fail for TryFTLDock because we can't tell if it failed outright or prox docked. Result<T,E> when?
+        // TODO(lunar): Tell sloth to make it return an enum of conditions instead.
+        if (TryComp<HangarComponent>(uid, out var hangar) && hangar.HangarMapUid is { } hangarUid)
+        {
 
-        _chat.DispatchStationAnnouncement(station,
-            $"The vessel for contract #{(int)uid} \"{Name(uid)}\" has been docked. {ContentLocalizationManager.FormatList(contract.SubContractors.Prepend(contract.OwningContractor!).Select(x => x.CharacterName!).ToList())} should report to their vessel.", "Oversight");
+            //hangar.HangarMapUid
+            var shuttlecomp = Comp<ShuttleComponent>(shuttle);
+            _shuttle.TryFTLDock(shuttle, shuttlecomp, hangarUid);
+            if (shuttlecomp.Enabled)
+            {
+                _shuttle.Toggle(shuttle, Comp<ShuttleComponent>(shuttle)); // why is shittlecomp disable() not public -bhijn
+                shuttlecomp.Enabled = true; // HACK! HACK! HACK! HACK! TODO: make shuttlecomp disable() public and just use that instead for the love of god this is just horrible -bhijn
+            }
+            //_map.SetMapPaused();
+            _chat.DispatchStationAnnouncement(station, $"The vessel for contract #{(int) uid} \"{Name(uid)}\" has been assigned a dock.");
+        }
+        else
+        {
+            _shuttle.TryFTLDock(shuttle, Comp<ShuttleComponent>(shuttle), stationGrid);
 
-        fail:
+            _chat.DispatchStationAnnouncement(station,
+                $"The vessel for contract #{(int) uid} \"{Name(uid)}\" has been docked. {ContentLocalizationManager.FormatList(contract.SubContractors.Prepend(contract.OwningContractor!).Select(x => x.CharacterName!).ToList())} should report to their vessel.", "Oversight");
+        }
+
+    fail:
         Del(_map.GetMapEntityId(holding));
         return;
     }

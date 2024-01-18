@@ -52,7 +52,7 @@ public sealed class PersonalBankSystem : EntitySystem
         if (contract.OwningContractor is null)
             return;
 
-        var success = TryAdjustBalance(contract.OwningContractor.OwnedEntity!.Value, -component.Cost);
+        var success = TryAdjustBalance(contract.OwningContractor, -component.Cost);
 
         if (success)
             return;
@@ -67,19 +67,23 @@ public sealed class PersonalBankSystem : EntitySystem
         var contract = Comp<ContractComponent>(ev.Contract);
         foreach (var mind in contract.SubContractors.Append(contract.OwningContractor!))
         {
-            if (mind.OwnedEntity is null)
-                continue;
+            //if (mind.OwnedEntity is null)
+                //continue;
 
-            TryAdjustBalance(mind.OwnedEntity.Value, ev.Amount);
+            TryAdjustBalance(mind, ev.Amount);
         }
     }
 
     [PublicAPI]
-    public bool TryGetBalance(EntityUid user, [NotNullWhen(true)] out FixedPoint2? balance)
+    public bool TryGetBalance(MindComponent mind, [NotNullWhen(true)] out FixedPoint2? balance)
     {
-        balance = null;
+        /*balance = null;
 
         if (!TryComp<MindComponent>(user, out var mindComp) || mindComp is not {BankAccount: { } account})
+            return false;*/
+        balance = null;
+
+        if(mind.BankAccount is not {} account)
             return false;
 
         balance = account.Thalers;
@@ -87,9 +91,11 @@ public sealed class PersonalBankSystem : EntitySystem
     }
 
     [PublicAPI]
-    public bool CanAdjustBalance(EntityUid user, FixedPoint2 amount)
+    public bool CanAdjustBalance(MindComponent mind, FixedPoint2 amount)
     {
-        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp is not {BankAccount: { } account} mind)
+        //if (!TryComp<MindComponent>(user, out var mindComp) || mindComp is not {BankAccount: { } account} mind)
+            //return false;
+        if (mind.BankAccount is not { } account)
             return false;
 
         var newSum = account.Thalers + amount;
@@ -105,12 +111,14 @@ public sealed class PersonalBankSystem : EntitySystem
     }
 
     [PublicAPI]
-    public bool TryAdjustBalance(EntityUid user, FixedPoint2 amount)
+    public bool TryAdjustBalance(MindComponent mind, FixedPoint2 amount)
     {
-        if (!TryComp<MindComponent>(user, out var mindComp) || mindComp is not {BankAccount: { } account})
+        //if (!TryComp<MindComponent>(user, out var mindComp) || mindComp is not {BankAccount: { } account})
+            //return false;
+        if (mind.BankAccount is not { } account)
             return false;
 
-        if (!CanAdjustBalance(user, amount))
+        if (!CanAdjustBalance(mind, amount))
             return false;
 
         account.Thalers += amount;
