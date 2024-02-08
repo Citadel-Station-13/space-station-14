@@ -1,0 +1,16 @@
+#Citadel DLC
+#Contractor Softsuit
+- type: entity
+  parent: ClothingOuterEVASuitBase
+  id: ClothingOuterEVASuitContractor
+  name: contractor EVA suit
+  description: "A generic brand softsuit for contracted workers"
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Suits/contractor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Suits/contractor.rsi
+  - type: Tag
+    tags:
+    - SuitEVA
+    - WhitelistChameleon

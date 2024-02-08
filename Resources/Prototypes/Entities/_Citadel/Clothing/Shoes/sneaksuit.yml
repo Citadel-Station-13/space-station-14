@@ -1,0 +1,11 @@
+#Sneaksuit Boots
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsSneaksuitBoots
+  name: sneaksuit boots
+  description: Ultra-quiet boots of sneaky intent.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/sneaksuit_boots.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/sneaksuit_boots.rsi

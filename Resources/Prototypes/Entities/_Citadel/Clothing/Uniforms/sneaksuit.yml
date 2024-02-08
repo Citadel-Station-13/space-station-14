@@ -1,0 +1,11 @@
+#Sneaksuit Jumpsuit
+- type: entity
+  parent: UnsensoredClothingUniformBase
+  id: ClothingUniformJumpsuitSneaksuitJumpsuit
+  name: sneaksuit jumpsuit
+  description: Dapper ware for the quiet gentleman.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Uniforms/Jumpsuit/sneaksuit_jumpsuit.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Uniforms/Jumpsuit/sneaksuit_jumpsuit.rsi

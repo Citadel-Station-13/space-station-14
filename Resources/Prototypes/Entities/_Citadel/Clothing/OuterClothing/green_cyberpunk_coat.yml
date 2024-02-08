@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseCyberpunkGreen
+  name: green cyberpunk coat
+  description: A popular, almost-vogue coat to keep you warm and comA closed coat for the punkiest in the cyberspace from the famous brand Blandevistan.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/green_cyberpunk_coat.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/green_cyberpunk_coat.rsi

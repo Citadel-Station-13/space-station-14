@@ -1,0 +1,16 @@
+#Clockwork Cuirass
+- type: entity
+  parent: ClothingOuterBaseLarge
+  id: ClothingOuterArmorClockworkcuirass
+  name: Clockwork Cuirass
+  description: A cheap imitation of the real thing.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/clockwork_cuirass.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/clockwork_cuirass.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.1
+        Slash: 0.1

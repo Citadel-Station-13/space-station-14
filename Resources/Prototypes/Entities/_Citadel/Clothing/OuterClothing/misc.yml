@@ -1,0 +1,36 @@
+#Citadel DLC
+#Ashen Vestments
+- type: entity
+  parent: ClothingOuterBase
+  id: ClothingOuterAshenrobes
+  name: ashen vestments
+  description: These flowing red robes mark the wearer as a member of the Scori Priesthood. Lightweight and well ventilated, the edges of the fabric are stained with ash.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Misc/ashen_vestments.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Misc/ashen_vestments.rsi
+
+#Ashen Tabard
+- type: entity
+  parent: ClothingOuterBase
+  id: ClothingOuterAshentabard
+  name: ashen tabard
+  description: This style of tabard is sometimes worn by Scori Guardians when not on duty. Other unidentified Scori have been seen wearing them, making the tabard's true significance unclear.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Misc/ashen_tabard.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Misc/ashen_tabard.rsi
+
+#Sisters armor
+- type: entity
+  parent: ClothingOuterBase
+  id: ClothingOuterSistersArmor
+  name: baroque military armor
+  description: This ornately decorated armor has been lovingly adorned with holy symbols. It smells faintly of incense.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/baroque_armor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/baroque_armor.rsi

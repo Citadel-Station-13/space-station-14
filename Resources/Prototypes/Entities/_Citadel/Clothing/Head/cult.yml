@@ -1,0 +1,11 @@
+#Cult Hood Alt
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatHoodCulthoodAlt
+  name: cult hood
+  description: There's no cult without cult hoods.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Hoods/cult.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Hoods/cult.rsi

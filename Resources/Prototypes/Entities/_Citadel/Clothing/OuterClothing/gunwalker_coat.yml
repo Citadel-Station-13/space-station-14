@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseBladerunnerCoat
+  name: gunwalker coat
+  description: A popular, almost-vogue coat to keep you warm and comfortable during the most somber stares up into the sky while lying on a decrepit staircase.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/gunwalker_coat.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/gunwalker_coat.rsi

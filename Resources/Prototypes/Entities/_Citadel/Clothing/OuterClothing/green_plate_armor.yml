@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingOuterArmorBasicPlateArmor
+  id: ClothingOuterBasicPlateArmorGreen
+  name: green plate armor
+  description: A classic suit of plate armor, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/green_plate_armor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/green_plate_armor.rsi

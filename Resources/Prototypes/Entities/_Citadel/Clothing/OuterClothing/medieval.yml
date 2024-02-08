@@ -1,0 +1,85 @@
+#Medieval armor
+
+#Bastard
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalBastard
+  name: hauberk
+  description: A chainmail hauberk worn beneath a dark leather jerkin. Although it grants less protection, it provides greater mobility.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/bastard.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/bastard.rsi
+
+#Crusader armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusader
+  name: bland crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders. It doesn't have any insignia.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader.rsi
+
+#Crusader cross armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusaderCross
+  name: crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders. It doesn't have any insignia.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_cross.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_cross.rsi
+
+#Crusader teutonic armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusaderTeutonic
+  name: teutonic crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_teutonic.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_teutonic.rsi
+
+#Crusader templar armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusaderTemplar
+  name: templar crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_templar.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_templar.rsi
+
+#Crusader hospitaller armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusaderHospitaller
+  name: hospitaller crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_hospitaller.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_hospitaller.rsi
+
+#Crusader dark armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusaderDark
+  name: dark crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders. This one is dark, with no insignia.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_dark.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_dark.rsi

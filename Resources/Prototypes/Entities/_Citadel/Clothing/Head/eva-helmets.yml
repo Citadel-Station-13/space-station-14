@@ -1,0 +1,12 @@
+#Citadel DLC
+#Contractor Softsuit Helmet
+- type: entity
+  parent: ClothingHeadEVAHelmetBase
+  id: ClothingHeadHelmetContractor
+  name: contractor EVA helmet
+  description: A simple EVA helmet for corporate contractors.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/contractor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/contractor.rsi

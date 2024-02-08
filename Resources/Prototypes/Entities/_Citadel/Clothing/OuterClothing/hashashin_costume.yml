@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingOuterBase
+  id: ClothingOuterBaseHashashinCostume
+  name: hashashin costume
+  description: Much like their namesake, modern wearers of this outfit tend to overindulge on hashish.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Suits/hashashin_costume.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Suits/hashashin_costume.rsi

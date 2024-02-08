@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingHeadBaseMedievalHelmet
+  id: ClothingHeadBaseMedievalHelmetBlue
+  name: blue medieval helmet
+  description: A classic metal helmet, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/blue_medieval_helmet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/blue_medieval_helmet.rsi

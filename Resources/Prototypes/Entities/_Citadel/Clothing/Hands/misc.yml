@@ -1,0 +1,64 @@
+#Ante Gloves
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesAnte
+  name: antediluvian gloves
+  description: Silky, soft black material emphasised by metalic outlines and claws, all with a gold-colored sheen. Fashionably niche.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Hands/Gloves/antediluvian_gloves.rsi
+    state: icon
+  - type: Clothing
+    sprite: _Citadel/Clothing/Hands/Gloves/antediluvian_gloves.rsi
+  - type: Fiber
+    fiberMaterial: fibers-synthetic
+    fiberColor: fibers-black
+  - type: FingerprintMask
+
+#Dark Cleric Bracers
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesDarkcleric
+  name: dark cleric bracers
+  description: Treated leather bracers worn by clerics in the service of higher powers.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Hands/Gloves/darkcleric.rsi
+    state: icon
+  - type: Clothing
+    sprite: _Citadel/Clothing/Hands/Gloves/darkcleric.rsi
+  - type: Fiber
+    fiberMaterial: fibers-leather
+    fiberColor: fibers-brown
+
+#Fingerless Armsleeves
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesArmsleevesColor
+  name: Fingerless Sleeves
+  description: A pair of fingerless, full arm sleeves. Perfect for fashion, not so much winter.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Hands/Gloves/armsleeves_color.rsi
+    state: icon
+  - type: Clothing
+    sprite: _Citadel/Clothing/Hands/Gloves/armsleeves_color.rsi
+  - type: Fiber
+    fiberMaterial: fibers
+    fiberColor: fibers-black
+
+#Sisters gauntlets
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesSisters
+  name: baroque military gauntlets
+  description: The silver banding around the wrists of these gloves is inscribed with the names of countless martyrs.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Hands/Gloves/baroque_gloves.rsi
+    state: icon
+  - type: Clothing
+    sprite: _Citadel/Clothing/Hands/Gloves/baroque_gloves.rsi
+  - type: Fiber
+    fiberMaterial: fibers-leather
+    fiberColor: fibers-black

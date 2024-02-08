@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseBrownOvercoat
+  name: brown overcoat
+  description: A brown coat with little style and far more function.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/brown_overcoat.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/brown_overcoat.rsi

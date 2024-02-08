@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingHeadBaseMedievalHelmet
+  id: ClothingHeadBaseMedievalHelmetCrimson
+  name: crimson medieval helmet
+  description: A classic metal helmet, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/crimson_medieval_helmet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/crimson_medieval_helmet.rsi

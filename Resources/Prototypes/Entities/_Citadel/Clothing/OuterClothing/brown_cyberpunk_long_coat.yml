@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseBrownCyberpunkLongCoat
+  name: brown cyberpunk long coat
+  description: A closed coat for the punkiest in the cyberspace from the famous brand Blandevistan. This one has extra length.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/brown_cyberpunk_long_coat.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/brown_cyberpunk_long_coat.rsi

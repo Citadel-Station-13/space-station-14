@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingShoesBase
+  id: ClothingShoesBaseElitePaladinBoots
+  name: elite paladin boots
+  description: These sturdy leather boots have been augmented with tarnished steel plate armor. The soles have been refurbished many times.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/elite_paladin_boots.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/elite_paladin_boots.rsi

@@ -1,0 +1,11 @@
+#Brass Boots
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsClockworktreads
+  name: clockwork treads
+  description: Perpetual motion!
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/clockwork_treads.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/clockwork_treads.rsi

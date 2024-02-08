@@ -1,0 +1,24 @@
+#Brass Helmet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHelmetClockwork
+  name: brass helmet
+  description: A cheap imitation of the real thing.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/brass_helmet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/brass_helmet.rsi
+  - type: IngestionBlocker
+
+#Old Brass Helmet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHelmetClockwork
+  name: old brass helmet
+  description: A cheaper imitation of the real thing.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/brass_helmet_old.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/brass_helmet_old.rsi

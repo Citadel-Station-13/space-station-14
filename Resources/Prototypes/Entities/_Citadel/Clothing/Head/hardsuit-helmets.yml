@@ -1,0 +1,70 @@
+#Citadel DLC
+#When adding new hardsuits, please try to keep the organization consistent with hardsuit.yml (if possible.)
+
+#For now, since locational damage is not a thing, all "combat" hardsuits (with the exception of the deathsquad hardsuit) have the equvilent of a helmet in terms of armor. This is so people don't need to wear both regular, on-station helmets and hardsuits to get full protection.
+#Generally, unless you're adding something like caustic damage, you should probably avoid messing with armor outside of the above scenario.
+
+#Security Cryosuit
+- type: entity
+  parent: ClothingHeadHelmetHardsuitSecurity
+  id: ClothingHeadHelmetHardsuitSecurityCryo
+  noSpawn: true
+  name: security cryosuit helmet
+  description: A reinforced helmet designed for work in especially cold environments. Has an additional layer of armor.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Hardsuits/security-cryo.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Hardsuits/security-cryo.rsi
+
+#Atmospherics Cryosuit
+- type: entity
+  parent: ClothingHeadHelmetHardsuitEngineering
+  id: ClothingHeadHelmetHardsuitAtmosCryo
+  noSpawn: true
+  name: atmos cryosuit helmet
+  description: A reinforced helmet designed for work in especially cold environments. Has improved thermal protection and minor radiation shielding.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Hardsuits/atmospherics-cryo.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Hardsuits/atmospherics-cryo.rsi
+
+#Engineering Cryosuit
+- type: entity
+  parent: ClothingHeadHelmetHardsuitEngineering
+  id: ClothingHeadHelmetHardsuitEngineeringCryo
+  noSpawn: true
+  name: engineering cryosuit helmet
+  description: A reinforced helmet designed for work in especially cold environments. Has radiation shielding
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Hardsuits/engineering-cryo.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Hardsuits/engineering-cryo.rsi
+
+#Mining Cryosuit
+- type: entity
+  parent: ClothingHeadHelmetHardsuitSalvage
+  id: ClothingHeadHelmetHardsuitSalvageCryo
+  noSpawn: true
+  name: mining cryosuit helmet
+  description: A reinforced helmet designed for work in especially cold environments. Has reinforced plating.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Hardsuits/salvage-cryo.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Hardsuits/salvage-cryo.rsi
+
+#Mining suit helmet
+- type: entity
+  parent: ClothingHeadHelmetHardsuitSalvage
+  id: ClothingHeadHelmetHardsuitSalvageCloth
+  noSpawn: true
+  name: miner hood
+  description: An armoured hood for mining in harsh environments.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Hardsuits/mining-suit.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Hardsuits/mining-suit.rsi

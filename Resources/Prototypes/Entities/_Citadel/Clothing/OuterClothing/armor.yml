@@ -1,0 +1,101 @@
+#Citadel DLC
+#Ashlander armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicLamellar
+  name: ashen lamellar panoply
+  description: This worn armor is fashioned out of bronze plates connected by dried sinew. The hammered plates are scuffed by ash and soot.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/lamellar.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/lamellar.rsi
+
+#Ashlander xeno armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicAshlanderxeno
+  name: wyrm chitin armor
+  description: Armor crafted from the chitin of now vanquished invading monsters from the stars. These relic suits are now prized symbols of Scorian victory over the invaders.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/surtxeno.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/surtxeno.rsi
+
+#Replika klbr
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicReplikaklbr
+  name: controller replikant chestplate
+  description: A sloped titanium-composite chest plate fitted for use by 2nd generation biosynthetics. The right shoulder has been painted an imposing shade of red.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/replika_klbr.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/replika_klbr.rsi
+
+#Replika klbr
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicReplikalstr
+  name: combat-engineer replikant chestplate
+  description: A sloped titanium-composite chest plate fitted for use by 2nd generation biosynthetics. This plain-white version is a staple of SbRD's combat-engineer replikants.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/replika_lstr.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/replika_lstr.rsi
+
+#Replika klbr
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicReplikastar
+  name: security-technician replikant chestplate
+  description: A sloped titanium-composite chest plate with a matte black finish, fitted for use by 2nd generation biosynthetics. Comes with red adjustable straps.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/replika_star.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/replika_star.rsi
+
+#Replika klbr
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicReplikastcr
+  name: security-controller replikant chestplate
+  description: A sloped titanium-composite chest plate fitted for use by 2nd generation biosynthetics. This version sports multiple red adjustable straps and a lack of shoulder pads.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/replika_stcr.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/replika_stcr.rsi
+
+#Traumateam chest
+- type: entity
+  parent: ClothingOuterArmorBulletproof
+  id: ClothingOuterArmorBulletproofTraumateam
+  name: corporate EMT armored suit
+  description: An armored medical suit signalling imminent medical bills.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/traumateam.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/traumateam.rsi
+
+#Tau armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorTau
+  name: utilitarian military armor
+  description: This high tech armor serves to protect the user from ranged attacks, rather than melee.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/utilitarian.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/utilitarian.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Piercing: 0.4
+

@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseFurcoat
+  name: furcoat
+  description: The finest hopefully inorganic furs attached to fake leather. The provider has assured it is not of a sapient species origin.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/furcoat.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/furcoat.rsi

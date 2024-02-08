@@ -1,0 +1,21 @@
+- type: entity
+  parent: ClothingEyesBase
+  id: ClothingEyesGlassesWraithspecs
+  name: Brass Spectacles
+  description: A cheap immitation of the real thing
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Eyes/Glasses/wraith_specs.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Eyes/Glasses/wraith_specs.rsi
+
+- type: entity
+  parent: ClothingEyesBase
+  id: ClothingEyesGlassesJudicalvisor
+  name: Judical Visor
+  description: A cheap immitation of the real thing
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Eyes/Glasses/judical_visor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Eyes/Glasses/judical_visor.rsi

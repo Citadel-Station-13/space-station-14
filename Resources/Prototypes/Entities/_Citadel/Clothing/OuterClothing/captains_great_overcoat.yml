@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseCaptainsGreatOvercoat
+  name: captains great overcoat
+  description: A special, light kevlar-woven overcoat meant for more formal, or warm, occasions.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/captains_great_overcoat.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/captains_great_overcoat.rsi

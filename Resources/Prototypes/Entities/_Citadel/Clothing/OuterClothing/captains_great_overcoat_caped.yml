@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseCaptainsGreatOvercoatCaped
+  name: captains great overcoat caped
+  description: A special, light kevlar-woven overcoat meant for more formal, or warm, occasions. This one has a cape attached, signifying the wearer's desire to be wrapped up in a comfy blanky.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/captains_great_overcoat_caped.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/captains_great_overcoat_caped.rsi

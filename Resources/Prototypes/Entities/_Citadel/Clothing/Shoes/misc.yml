@@ -1,0 +1,131 @@
+#Duty Boots
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsDuty
+  name: duty boots
+  description: A pair of steel-toed synthleather boots with a mirror shine.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/altduty.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/altduty.rsi
+
+#Duty Boots Long
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsDutyKnee
+  name: knee-high duty boots
+  description: A pair of steel-toed synthleather boots with a mirror shine. These ones come up to just below the knee.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/altduty_long.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/altduty_long.rsi
+
+#Duty Boots Heel
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsDutyHeel
+  name: heeled knee-high duty boots
+  description: A pair of steel-toed synthleather boots with a mirror shine. These ones feature a pronounced heel and stop just below the knee.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/altduty_heel.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/altduty_heel.rsi
+
+#Antediluvian Heels
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesAntediluvian
+  name: antediluvian heels
+  description: A pair of black-gold heels based on an unknown design. The inside of the shoe has an odd texture, and snugly covers the whole foot.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Misc/ante.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Misc/ante.rsi
+
+#Antediluvian Heels Alt
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesAntediluvianHeels
+  name: antediluvian exposed heels
+  description: A pair of a set of heels recovered with an odd design. This version has toes exposed, granting the wearer elegance, or unsightliness.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Misc/ante_heels.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Misc/ante_heels.rsi
+
+#Antediluvian Heels Alt Exposed
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesAntediluvianHeelsAlt
+  name: antediluvian exposed heels alt
+  description: A pair of a set of heels recovered with an odd design. This version has toes exposed, granting the wearer elegance, or unsightliness. This one has extra gold trimming.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Misc/ante_heels_alt.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Misc/ante_heels_alt.rsi
+
+#Ballet
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBallet
+  name: antheia pointe shoes
+  description: These shoes feature long lace straps and flattened off toes. They originate from the Old Earth art of ballet, which featured many acrobatic and technical moves assisted by these shoes.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Misc/ballet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Misc/ballet.rsi
+
+#Dark Cleric Boots
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesDarkclericBoots
+  name: dark cleric boots
+  description: These well-worn leather boots have seen many a mile in service to a forgotten god.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/darkcleric_boots.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/darkcleric_boots.rsi
+
+#Sisters Boots
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesSistersBoots
+  name: baroque military boots
+  description: Small icons of religious significance have been carved into the soles, spreading holiness wherever the wearer treads.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/baroque_boots.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/baroque_boots.rsi
+
+#Tau Boots
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesTauBoots
+  name: utilitarian military boots
+  description: These boots seem to have been designed for a cloven foot. They're honestly pretty uncomfortable to wear.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/utilitarian.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/utilitarian.rsi
+
+#Tau Shoes
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesTauShoes
+  name: utilitarian shoes
+  description: These shoes seem to have been designed for a cloven foot. They're honestly pretty uncomfortable to wear.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Misc/utilitarian.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Misc/utilitarian.rsi
