@@ -129,3 +129,27 @@
     sprite: _Citadel/Clothing/Shoes/Misc/utilitarian.rsi
   - type: Clothing
     sprite: _Citadel/Clothing/Shoes/Misc/utilitarian.rsi
+
+#Elite Paladin Boots
+- type: entity
+  parent: ClothingShoesBase
+  id: ClothingShoesBaseElitePaladinBoots
+  name: elite paladin boots
+  description: These sturdy leather boots have been augmented with tarnished steel plate armor. The soles have been refurbished many times.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/elite_paladin_boots.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/elite_paladin_boots.rsi
+
+#Sneaksuit Boots
+- type: entity
+  parent: ClothingShoesBaseButcherable
+  id: ClothingShoesBootsSneaksuitBoots
+  name: sneaksuit boots
+  description: Ultra-quiet boots of sneaky intent.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Shoes/Boots/sneaksuit_boots.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Shoes/Boots/sneaksuit_boots.rsi

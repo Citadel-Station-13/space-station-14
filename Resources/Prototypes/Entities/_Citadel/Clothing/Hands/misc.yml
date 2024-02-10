@@ -62,3 +62,18 @@
   - type: Fiber
     fiberMaterial: fibers-leather
     fiberColor: fibers-black
+
+#Sneaksuit Gloves
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesSneaksuitGloves
+  name: sneaksuit gloves
+  description: Tight fitting red gloves.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Hands/Gloves/sneaksuit_gloves.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Hands/Gloves/sneaksuit_gloves.rsi
+  - type: Fiber
+    fiberColor: fibers-red
+  - type: FingerprintMask

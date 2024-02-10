@@ -99,3 +99,15 @@
       coefficients:
         Piercing: 0.4
 
+#Sneaksuit Armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicSneaksuitArmor
+  name: sneaksuit armor vest
+  suffix: slim
+  description: A slim Type I armored vest that provides decent protection against most types of damage.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/sneaksuit_armor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/sneaksuit_armor.rsi
