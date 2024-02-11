@@ -284,3 +284,219 @@
     sprite: _Citadel/Clothing/OuterClothing/Coats/military_surplus_dark_overcoat.rsi
   - type: Clothing
     sprite: _Citadel/Clothing/OuterClothing/Coats/military_surplus_dark_overcoat.rsi
+
+#Bomj Coat
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseBomjCoat
+  name: bomj coat
+  description: A cheap, padded brown coat that's been worn, torn and hopefully not born in. Worn by the poor. The bumps are guaranteed to be drug free, but the same can't be said for the inner coating and space syphilis.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/bomj_coat.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/bomj_coat.rsi
+
+#Boxer Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseBoxerJacket
+  name: boxer jacket
+  description: A sporty jacket worn by athletes.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/boxer_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/boxer_jacket.rsi
+
+#Relatable Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseRelatableJacket
+  name: relatable jacket
+  description: An all white jacket with a shine. It seems easy to identify with the wearer.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/relatable_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/relatable_jacket.rsi
+
+#Violet Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseVioletJacket
+  name: violet jacket
+  description: A suave, smooth jacket with tasteful violet tones. According to the label, it comes with a single free cigarette tucked in an inner pocket, which can guarantee a 'trip to the finest Lunarian brothel for free'. The cigarette is missing.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/violet_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/violet_jacket.rsi
+
+#Fur Bomber Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseFurBomberJacket
+  name: fur bomber jacket
+  description: One of many variations of the famous, six hundred year old Human Air Force design. The fur-bits were theorised to help pilots maintain adequate levels of cool during air-transit.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/fur_bomber_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/fur_bomber_jacket.rsi
+
+#Jamrock Blazer
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseJamrockBlazer
+  name: jamrock blazer
+  description: A perfect blazer to revive disco with, just make sure you have enough vitality to get your tie off the fan. And maybe don't listen to it when it tells you to stick it into a bottle of gasoline.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/jamrock_blazer.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/jamrock_blazer.rsi
+
+#Khaki Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseKhakiJacket
+  name: khaki jacket
+  description: A smooth, clean khaki jacket. It stains instantly. In fact, it looks pre-stained so you don't feel bad when someone inevitably pours a single droplet of schnapps that stays there forever.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/khaki_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/khaki_jacket.rsi
+
+#Motorcycle Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseMotorcycleJacket
+  name: motorcycle jacket
+  description: A recreation of one of the famous Sol-based biwheeled driver assemblies. Patches on the back denote an AI-generated 'biker logo'. It looks unintelligible.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/motorcycle_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/motorcycle_jacket.rsi
+
+#Punk Vest
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBasePunkVest
+  name: punk vest
+  description: For the spiritual rebels that nevertheless wish to conform to standard goth trends. You're totally showing them your anti-authority spunk. Sold by Nanotrasen Gimmick Wardrobes, co-funded by Nanotrasen Security.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/punk_vest.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/punk_vest.rsi
+
+#Maintenance Python Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseMaintenancePythonJacket
+  name: maintenance python jacket
+  description: A jacket resembling the infamous Maintenance Python gang member uniform. It seems to have been treated with a genuine maintenance wear and tear. It stinks of oil.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/maintenance_python_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/maintenance_python_jacket.rsi
+
+#Black Varsity Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseBlackVarsityJacket
+  name: black varsity jacket
+  description: A favorite of jocks everywhere from Sol to Nyx.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/black_varsity_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/black_varsity_jacket.rsi
+
+#Blue Varsity Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseBlueVarsityJacket
+  name: blue varsity jacket
+  description: A favorite of jocks everywhere from Sol to Nyx.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/blue_varsity_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/blue_varsity_jacket.rsi
+
+#Brown Varsity Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseBrownVarsityJacket
+  name: brown varsity jacket
+  description: A favorite of jocks everywhere from Sol to Nyx.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/brown_varsity_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/brown_varsity_jacket.rsi
+
+#Green Varsity Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseGreenVarsityJacket
+  name: green varsity jacket
+  description: A favorite of jocks everywhere from Sol to Nyx.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/green_varsity_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/green_varsity_jacket.rsi
+
+#Purple Varsity Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBasePurpleVarsityJacket
+  name: purple varsity jacket
+  description: A favorite of jocks everywhere from Sol to Nyx.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/purple_varsity_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/purple_varsity_jacket.rsi
+
+#Red Varsity Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseRedVarsityJacket
+  name: red varsity jacket
+  description: A favorite of jocks everywhere from Sol to Nyx.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/red_varsity_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/red_varsity_jacket.rsi
+
+#Worn Letterman Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseWornLettermanJacket
+  name: worn letterman jacket
+  description: A worn varsity letterman jacket. Some of the faded stains around the cuffs are rather suspicious.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/worn_letterman_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/worn_letterman_jacket.rsi
+
+#Well-worn Varsity Jacket
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseWell-wornVarsityJacket
+  name: well-worn varsity jacket
+  description: A worn varsity jacket. The NanoTrasen corporate logo on the back is outdated, suggesting the age of this coat.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/well-worn_varsity_jacket.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/well-worn_varsity_jacket.rsi
