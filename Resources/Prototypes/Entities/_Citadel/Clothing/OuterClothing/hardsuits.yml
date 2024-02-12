@@ -1,0 +1,72 @@
+#Citadel DLC
+#When adding new hardsuits, please try to keep the organization consistent with hardsuit-helmets.yml (if possible.)
+
+#Security Cryosuit
+- type: entity
+  parent: ClothingOuterHardsuitSecurity
+  id: ClothingOuterHardsuitSecurityCryo
+  name: security cryosuit
+  description: A fur-lined suit with built-in heating systems, designed for work in dangerously cold environments. Has an additional layer of armor..
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/security-cryo.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/security-cryo.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitSecurityCryo
+
+#Atmospherics Cryosuit
+- type: entity
+  parent: ClothingOuterHardsuitAtmos
+  id: ClothingOuterHardsuitAtmosCryo
+  name: atmos cryosuit
+  description: A fur-lined suit with built-in heating systems, designed for work in dangerously cold environments. Has improved thermal protection and minor radiation shielding.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/atmospherics-cryo.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/atmospherics-cryo.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitAtmosCryo
+
+#Engineering Cryosuit
+- type: entity
+  parent: ClothingOuterHardsuitEngineering
+  id: ClothingOuterHardsuitEngineeringCryo
+  name: engineering cryosuit
+  description: A fur-lined suit with built-in heating systems, designed for work in dangerously cold environments. Has radiation shielding.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/engineering-cryo.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/engineering-cryo.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitEngineeringCryo
+
+#Mining Cryosuit
+- type: entity
+  parent: ClothingOuterHardsuitSalvage
+  id: ClothingOuterHardsuitSalvageCryo
+  name: mining cryosuit
+  description: A fur-lined suit with built-in heating systems, designed for work in dangerously cold environments. Has reinforced plating.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/salvage-cryo.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/salvage-cryo.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitSalvageCryo
+
+#Mining Fabric Suit
+- type: entity
+  parent: ClothingOuterHardsuitSalvage
+  id: ClothingOuterHardsuitSalvageCloth
+  name: mining suit
+  description: An armoured cloth suit for mining in harsh environments.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/mining-suit.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Hardsuits/mining-suit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitSalvageCloth

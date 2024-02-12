@@ -1,0 +1,95 @@
+#Bard Hat
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatBard
+  name: audacious wide brimmed hat
+  description: A bold leather hat with a brim so wide that it droops. The bright feather of an unknown bird has been stuck into the brim.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Misc/bardhat.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Misc/bardhat.rsi
+
+#Dark Cleric circlet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatDarkcleric
+  name: dark cleric circlet
+  description: A metal circlet worn by clerics in the service of higher powers.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Misc/darkcleric.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Misc/darkcleric.rsi
+
+#Durasteel skull
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatDuraskull
+  name: durasteel skull mask
+  description: The process of working durasteel into such a shape is no small feat. Whoever commissioned this wanted to send a serious message.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Misc/duraskull.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Misc/duraskull.rsi
+
+#Lamellar Helm
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatLamellar
+  name: ashen lamellar helmet
+  description: This bronze helmet is wrapped in Goliath hide. Dull bronze plates connected by dry sinew are mounted to the exterior for protection.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Misc/lamellar.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Misc/lamellar.rsi
+
+#Ashlander xeno armor helmet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatAshlanderxeno
+  name: wyrm chitin helmet
+  description: A helmet forged from the head of an invading monster from the stars. These relic suits are now prized symbols of Scorian victory over the invaders.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Misc/surtxeno.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Misc/surtxeno.rsi
+
+#Sisters helmet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatSistersHelmet
+  name: baroque military helmet
+  description: This sturdy helmet's ornate design belies its technological sophistication.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/baroque_helmet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/baroque_helmet.rsi
+
+#Traumateam helmet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatTraumateam
+  name: corporate EMT helmet
+  description: This sturdy helmet signals a pricy insurance policy.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/traumateam.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/traumateam.rsi
+
+#Tau helmet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatTau
+  name: utilitarian military helmet
+  description: This high tech helmet provides plenty of battlefield telemetry and aim assistance. It is designed to protect the wearer almost exclusively from ranged attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/utilitarian.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/utilitarian.rsi

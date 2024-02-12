@@ -1,0 +1,23 @@
+#Banana Suit
+- type: entity
+  parent: ClothingOuterBase
+  id: ClothingOuterBaseBananaSuit
+  name: banana suit
+  description: There was a period in Old Earth history where this costume was seen as the peak of comedy.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Suits/banana_suit.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Suits/banana_suit.rsi
+
+#Hashashin Costume
+- type: entity
+  parent: ClothingOuterBase
+  id: ClothingOuterBaseHashashinCostume
+  name: hashashin costume
+  description: Much like their namesake, modern wearers of this outfit tend to overindulge on hashish.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Suits/hashashin_costume.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Suits/hashashin_costume.rsi

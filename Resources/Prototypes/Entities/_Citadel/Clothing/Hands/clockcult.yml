@@ -1,0 +1,14 @@
+#Clockwork Gloves
+  type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesClockworkGauntlets
+  name: clockwork gauntlets
+  description: A cheap imitation of the real thing.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Hands/Gloves/clockwork_gauntlets.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Hands/Gloves/clockwork_gauntlets.rsi
+  - type: Fiber
+    fiberColor: fibers-olive
+  - type: FingerprintMask

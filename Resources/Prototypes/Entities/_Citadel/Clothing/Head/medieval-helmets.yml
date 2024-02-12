@@ -1,0 +1,121 @@
+#Medieval helmets
+
+#Crusader helmet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatMedievalCrusader
+  name: great helm
+  description: A classic metal great helm, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/crusader.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/crusader.rsi
+
+#Crusader horned helmet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatMedievalCrusaderHorned
+  name: horned great helm
+  description: Helfen, Wehren, Heilen!
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/crusader_horned.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/crusader_horned.rsi
+
+#Crusader winged helmet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatMedievalCrusaderWinged
+  name: winged great helm
+  description: Helfen, Wehren, Heilen!
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/crusader_winged.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/crusader_winged.rsi
+
+#Elite Paladin Helm
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadBaseElitePaladinHelm
+  name: elite paladin helm
+  description: This tarnished helmet has clearly done its job well for many years of service.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/elite_paladin_helm.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/elite_paladin_helm.rsi
+
+#Red Medieval helmet
+- type: entity
+  parent: ClothingHeadBaseMedievalHelmet
+  id: ClothingHeadBaseMedievalHelmetRed
+  name: red medieval helmet
+  description: A classic metal helmet, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/red_medieval_helmet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/red_medieval_helmet.rsi
+
+#Orange Medieval helmet
+- type: entity
+  parent: ClothingHeadBaseMedievalHelmet
+  id: ClothingHeadBaseMedievalHelmetOrange
+  name: orange medieval helmet
+  description: A classic metal helmet, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/orange_medieval_helmet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/orange_medieval_helmet.rsi
+
+#Medieval Helmet
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadBaseMedievalHelmet
+  name: medieval helmet
+  description: A classic metal helmet, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/medieval_helmet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/medieval_helmet.rsi
+
+#green Medieval helmet
+- type: entity
+  parent: ClothingHeadBaseMedievalHelmet
+  id: ClothingHeadBaseMedievalHelmetGreen
+  name: green medieval helmet
+  description: A classic metal helmet, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/green_medieval_helmet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/green_medieval_helmet.rsi
+
+#Crimson medieval helmet
+- type: entity
+  parent: ClothingHeadBaseMedievalHelmet
+  id: ClothingHeadBaseMedievalHelmetCrimson
+  name: crimson medieval helmet
+  description: A classic metal helmet, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/crimson_medieval_helmet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/crimson_medieval_helmet.rsi
+
+#Blue Medieval helmet
+- type: entity
+  parent: ClothingHeadBaseMedievalHelmet
+  id: ClothingHeadBaseMedievalHelmetBlue
+  name: blue medieval helmet
+  description: A classic metal helmet, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Head/Helmets/blue_medieval_helmet.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Head/Helmets/blue_medieval_helmet.rsi

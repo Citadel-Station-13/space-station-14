@@ -1,0 +1,169 @@
+#Medieval armor
+
+#Bastard
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalBastard
+  name: hauberk
+  description: A chainmail hauberk worn beneath a dark leather jerkin. Although it grants less protection, it provides greater mobility.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/bastard.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/bastard.rsi
+
+#Crusader armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusader
+  name: bland crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders. It doesn't have any insignia.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader.rsi
+
+#Crusader cross armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusaderCross
+  name: crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders. It doesn't have any insignia.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_cross.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_cross.rsi
+
+#Crusader teutonic armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusaderTeutonic
+  name: teutonic crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_teutonic.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_teutonic.rsi
+
+#Crusader templar armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusaderTemplar
+  name: templar crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_templar.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_templar.rsi
+
+#Crusader hospitaller armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusaderHospitaller
+  name: hospitaller crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_hospitaller.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_hospitaller.rsi
+
+#Crusader dark armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicMedievalCrusaderDark
+  name: dark crusader armour
+  description: A classic suit of plate armour, usually worn by crusaders. This one is dark, with no insignia.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_dark.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crusader_dark.rsi
+
+#Elite Paladin Plate
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicElitePaladinPlate
+  name: elite paladin plate
+  description: This tarniThis armor is worn from years of use. A fusion of chainmail and plate, it serves to provide supreme mobility without sacrificing much protection.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/elite_paladin_plate.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/elite_paladin_plate.rsi
+
+#Blue Plate Armor
+- type: entity
+  parent: ClothingOuterArmorBasicPlateArmor
+  id: ClothingOuterBasicPlateArmorBlue
+  name: blue plate armor
+  description: A classic suit of plate armor, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/blue_plate_armor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/blue_plate_armor.rsi
+
+#Crimsom Plate Armor
+- type: entity
+  parent: ClothingOuterArmorBasicPlateArmor
+  id: ClothingOuterBasicPlateArmorCrimson
+  name: crimson plate armor
+  description: A classic suit of plate armor, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crimson_plate_armor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/crimson_plate_armor.rsi
+
+#Orange Plate Armor
+- type: entity
+  parent: ClothingOuterArmorBasicPlateArmor
+  id: ClothingOuterBasicPlateArmorOrange
+  name: orange plate armor
+  description: A classic suit of plate armor, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/orange_plate_armor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/orange_plate_armor.rsi
+
+#Plate Armor
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorBasicPlateArmor
+  name: plate armor
+  description: A classic suit of plate armor, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/plate_armor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/plate_armor.rsi
+
+#Red Plate Armor
+- type: entity
+  parent: ClothingOuterArmorBasicPlateArmor
+  id: ClothingOuterBasicPlateArmorRed
+  name: red plate armor
+  description: A classic suit of plate armor, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/red_plate_armor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/red_plate_armor.rsi
+
+#Green Plate Armor
+- type: entity
+  parent: ClothingOuterArmorBasicPlateArmor
+  id: ClothingOuterBasicPlateArmorGreen
+  name: green plate armor
+  description: A classic suit of plate armor, effective at stopping melee attacks.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Armor/green_plate_armor.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Armor/green_plate_armor.rsi

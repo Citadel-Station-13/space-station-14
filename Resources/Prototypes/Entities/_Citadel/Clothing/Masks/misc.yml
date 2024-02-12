@@ -1,0 +1,12 @@
+#Sneaksuit Mask
+- type: entity
+  parent: ClothingMaskBase
+  id: ClothingMaskSneaksuitBalaclava
+  name: sneaksuit balaclava
+  description: A balaclava for keeping warm on winter days.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Mask/sneaksuit_mask.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Mask/sneaksuit_mask.rsi
+  - type: IdentityBlocker

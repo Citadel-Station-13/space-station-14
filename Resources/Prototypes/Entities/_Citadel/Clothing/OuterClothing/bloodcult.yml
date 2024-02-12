@@ -1,0 +1,11 @@
+#Cult Robes Alt
+- type: entity
+  parent: ClothingOuterBase
+  id: ClothingOuterRobesCultAlt
+  name: cult robes
+  description: There's no cult without classic red/crimson cult robes.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Misc/cultrobes.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Misc/cultrobes.rsi
