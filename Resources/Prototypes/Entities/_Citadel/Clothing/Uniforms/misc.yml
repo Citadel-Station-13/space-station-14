@@ -9,3 +9,15 @@
     sprite: _Citadel/Clothing/Uniforms/Jumpsuit/sneaksuit_jumpsuit.rsi
   - type: Clothing
     sprite: _Citadel/Clothing/Uniforms/Jumpsuit/sneaksuit_jumpsuit.rsi
+
+#Antediluvian Dress
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformBaseAntediluvianDress
+  name: antediluvian dress
+  description: A metalic dress with inner padding, following a similar, scantily-clad fashion trend.  It is unknown whether it served ceremonial or official purpose.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/Uniforms/Misc/antediluvian_dress.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/Uniforms/Misc/antediluvian_dress.rsi

@@ -500,3 +500,15 @@
     sprite: _Citadel/Clothing/OuterClothing/Coats/well-worn_varsity_jacket.rsi
   - type: Clothing
     sprite: _Citadel/Clothing/OuterClothing/Coats/well-worn_varsity_jacket.rsi
+
+#Ragged Coat
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterStorageBaseRaggedCoat
+  name: ragged coat
+  description: Although hopping trains is no longer en vogue, the Frontier has its fill of vagabonds and drifters. Many are stuck wearing the clothes they first brought with them.
+  components:
+  - type: Sprite
+    sprite: _Citadel/Clothing/OuterClothing/Coats/ragged_coat.rsi
+  - type: Clothing
+    sprite: _Citadel/Clothing/OuterClothing/Coats/ragged_coat.rsi
