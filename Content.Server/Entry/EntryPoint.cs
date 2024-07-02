@@ -4,6 +4,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Afk;
 using Content.Server.Chat.Managers;
+using Content.Server._Common.Consent;
 using Content.Server.Connection;
 using Content.Server.Database;
 using Content.Server.Discord.DiscordLink;
@@ -62,6 +63,7 @@ namespace Content.Server.Entry
         [Dependency] private readonly INodeGroupFactory _nodeFactory = default!;
         [Dependency] private readonly IPrototypeManager _proto = default!;
         [Dependency] private readonly IResourceManager _res = default!;
+        [Dependency] private readonly IServerConsentManager _consentManager = default!;
         [Dependency] private readonly IServerDbManager _dbManager = default!;
         [Dependency] private readonly IServerPreferencesManager _preferences = default!;
         [Dependency] private readonly IStatusHost _host = default!;
@@ -165,6 +167,7 @@ namespace Content.Server.Entry
             _connection.PostInit();
             _multiServerKick.Initialize();
             _cvarCtrl.Initialize();
+            _consentManager.Initialize();
         }
 
         public override void Update(ModUpdateLevel level, FrameEventArgs frameEventArgs)
