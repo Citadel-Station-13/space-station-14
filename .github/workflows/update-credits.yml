@@ -13,12 +13,14 @@ jobs:
     if: github.repository == 'Citadel-Station-13/space-station-14'
 
     steps:
-      - uses: actions/checkout@v3.6.0
+      - uses: actions/checkout@v4.2.2
         with:
           ref: master
 
       - name: Get this week's Contributors
         shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: Tools/dump_github_contributors.ps1 > Resources/Credits/GitHub.txt
 
       # TODO
