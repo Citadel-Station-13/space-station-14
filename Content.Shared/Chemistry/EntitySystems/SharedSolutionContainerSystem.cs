@@ -14,6 +14,7 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Content.Shared.Containers;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.Map;
@@ -145,7 +146,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         [NotNullWhen(true)] out Solution? solution,
         bool errorOnMissing = false)
     {
-        if (!TryGetSolution(container, name, out entity))
+        if (!TryGetSolution(container, name, out entity, errorOnMissing: errorOnMissing))
         {
             solution = null;
             return false;
@@ -162,6 +163,12 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         [NotNullWhen(true)] out Entity<SolutionComponent>? entity,
         bool errorOnMissing = false)
     {
+        // use connected container instead of entity from arguments, if it exists.
+        var ev = new GetConnectedContainerEvent();
+        RaiseLocalEvent(container, ref ev);
+        if (ev.ContainerEntity.HasValue)
+            container = ev.ContainerEntity.Value;
+
         EntityUid uid;
         if (name is null)
             uid = container;
@@ -903,11 +910,11 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
 
         if (solution.Volume == 0)
         {
-            msg.AddMarkup(Loc.GetString("scannable-solution-empty-container"));
+            msg.AddMarkupOrThrow(Loc.GetString("scannable-solution-empty-container"));
             return msg;
         }
 
-        msg.AddMarkup(Loc.GetString("scannable-solution-main-text"));
+        msg.AddMarkupOrThrow(Loc.GetString("scannable-solution-main-text"));
 
         var reagentPrototypes = solution.GetReagentPrototypes(PrototypeManager);
 
@@ -919,14 +926,14 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         foreach (var (proto, quantity) in sortedReagentPrototypes)
         {
             msg.PushNewline();
-            msg.AddMarkup(Loc.GetString("scannable-solution-chemical"
+            msg.AddMarkupOrThrow(Loc.GetString("scannable-solution-chemical"
                 , ("type", proto.LocalizedName)
                 , ("color", proto.SubstanceColor.ToHexNoAlpha())
                 , ("amount", quantity)));
         }
 
         msg.PushNewline();
-        msg.AddMarkup(Loc.GetString("scannable-solution-temperature", ("temperature", Math.Round(solution.Temperature))));
+        msg.AddMarkupOrThrow(Loc.GetString("scannable-solution-temperature", ("temperature", Math.Round(solution.Temperature))));
 
         return msg;
     }
