@@ -248,8 +248,11 @@ public sealed partial class MarkingPicker : Control
             _currentMarkings.EnsureSpecies(_currentSpecies, null, _markingManager);
         }
 
+        var markingList = _currentMarkings.GetReverseEnumerator();
+
         // walk backwards through the list for visual purposes
-        foreach (var marking in _currentMarkings.GetReverseEnumerator(_selectedMarkingCategory))
+        //foreach (var marking in _currentMarkings.GetReverseEnumerator(_selectedMarkingCategory))
+        foreach (var marking in markingList)
         {
             if (!_markingManager.TryGetMarking(marking, out var newMarking))
             {

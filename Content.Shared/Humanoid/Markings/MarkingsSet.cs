@@ -51,8 +51,18 @@ public sealed partial class MarkingSet
     [DataField("points")]
     public Dictionary<MarkingCategories, MarkingPoints> Points = new();
 
+
+    /// <summary>
+    ///     Citadel-specific change
+    ///     This keeps track of the actual layering of markings, enabling arbitrary
+    ///     layering of markings, just like the OG MarkingSet, just like chargen in
+    ///     most furry SS13 servers
+    /// </summary>
+    [DataField("anarchiclayers")]
+    public List<Marking> AnarchicLayers = new();
+
     public MarkingSet()
-    {}
+    { }
 
     /// <summary>
     ///     Construct a MarkingSet using a list of markings, and a points
@@ -343,6 +353,21 @@ public sealed partial class MarkingSet
         }
 
         markings.Insert(0, marking);
+
+        // Citadel change - anarchic layer orders for SS13 chargen parity
+        AnarchicLayers.Insert(0, marking);
+        /*var anarchicIndex = 0;
+        foreach (MarkingCategories cat in Markings)
+        {
+            if (cat == category)
+            {
+                AnarchicLayers.Insert(anarchicIndex, marking);
+            }
+            else
+            {
+                anarchicIndex += Markings[cat].Count;
+            }
+        }*/
     }
 
     /// <summary>
@@ -370,6 +395,22 @@ public sealed partial class MarkingSet
 
 
         markings.Add(marking);
+
+        // Citadel change - anarchic layer orders for SS13 chargen parity
+        AnarchicLayers.Add(marking);
+        /*var anarchicIndex = 0;
+        foreach (MarkingCategories cat in Markings)
+        {
+            if (cat == category)
+            {
+                anarchicIndex += Markings[cat].Count - 1;
+                AnarchicLayers.Insert(anarchicIndex, marking);
+            }
+            else
+            {
+                anarchicIndex += Markings[cat].Count;
+            }
+        }*/
     }
 
     /// <summary>
@@ -398,6 +439,8 @@ public sealed partial class MarkingSet
             return;
         }
 
+        AnarchicLayers[AnarchicLayers.IndexOf(markings[index])] = marking; // Citadel change - anarchic layer ordering
+
         markings[index] = marking;
     }
 
@@ -425,6 +468,8 @@ public sealed partial class MarkingSet
             {
                 points.Points++;
             }
+
+            AnarchicLayers.Remove(markings[i]); // Citadel change - anarchic layer ordering
 
             markings.RemoveAt(i);
             return true;
@@ -456,6 +501,8 @@ public sealed partial class MarkingSet
             points.Points++;
         }
 
+        AnarchicLayers.Remove(markings[idx]); // Citadel change - anarchic layer ordering
+
         markings.RemoveAt(idx);
     }
 
@@ -482,6 +529,11 @@ public sealed partial class MarkingSet
 
                 points.Points++;
             }
+        }
+
+        foreach (var marking in Markings[category])
+        {
+            AnarchicLayers.Remove(marking);
         }
 
         Markings.Remove(category);
