@@ -1,4 +1,5 @@
 using Content.Client.DisplacementMap;
+using Content.Shared._Citadel.CCVar;
 using Content.Shared.CCVar;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
@@ -242,9 +243,9 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         var applyUndergarmentTop = censorNudity;
         var applyUndergarmentBottom = censorNudity;
 
-        foreach (var markingList in humanoid.MarkingSet.Markings.Values)
+        if (_configurationManager.GetCVar(CitCVars.ChargenAllowsAnarchy))
         {
-            foreach (var marking in markingList)
+            foreach (var marking in humanoid.MarkingSet.AnarchicLayers)
             {
                 if (_markingManager.TryGetMarking(marking, out var markingPrototype))
                 {
@@ -253,6 +254,23 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
                         applyUndergarmentTop = false;
                     else if (markingPrototype.BodyPart == HumanoidVisualLayers.UndergarmentBottom)
                         applyUndergarmentBottom = false;
+                }
+            }
+        }
+        else
+        {
+            foreach (var markingList in humanoid.MarkingSet.Markings.Values)
+            {
+                foreach (var marking in markingList)
+                {
+                    if (_markingManager.TryGetMarking(marking, out var markingPrototype))
+                    {
+                        ApplyMarking(markingPrototype, marking.MarkingColors, marking.Visible, entity);
+                        if (markingPrototype.BodyPart == HumanoidVisualLayers.UndergarmentTop)
+                            applyUndergarmentTop = false;
+                        else if (markingPrototype.BodyPart == HumanoidVisualLayers.UndergarmentBottom)
+                            applyUndergarmentBottom = false;
+                    }
                 }
             }
         }
