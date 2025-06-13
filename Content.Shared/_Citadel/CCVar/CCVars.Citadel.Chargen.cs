@@ -12,6 +12,6 @@ public sealed partial class CitCVars
     ///     layer ordering of markings
     /// </summary>
     [CVarControl(AdminFlags.Server)]
-    public static readonly CVarDef<bool> ChargenAllowsAnarchy =
-        CVarDef.Create("citadel.chargen.allow_anarchy", true, CVar.SERVER | CVar.REPLICATED);
+    public static readonly CVarDef<bool> ChargenAnarchicLayering =
+        CVarDef.Create("citadel.chargen.anarchic_layering", true, CVar.SERVER | CVar.REPLICATED);
 }

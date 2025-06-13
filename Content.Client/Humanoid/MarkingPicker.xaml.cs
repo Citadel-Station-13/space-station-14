@@ -252,7 +252,7 @@ public sealed partial class MarkingPicker : Control
         }
 
         IEnumerable<Marking> markingList;
-        if (_configManager.GetCVar(CitCVars.ChargenAllowsAnarchy))
+        if (_configManager.GetCVar(CitCVars.ChargenAnarchicLayering))
         {
             markingList = _currentMarkings.AnarchicLayers;
         }
@@ -330,7 +330,7 @@ public sealed partial class MarkingPicker : Control
         CMarkingsUsed[visualDest] = CMarkingsUsed[src];
         CMarkingsUsed[src] = visualTemp;
 
-        if (_configManager.GetCVar(CitCVars.ChargenAllowsAnarchy))
+        if (_configManager.GetCVar(CitCVars.ChargenAnarchicLayering))
         {
             _currentMarkings.ShiftRankAnarchic(places, _currentMarkings.AnarchicLayers[src]);
             return true;
@@ -443,7 +443,7 @@ public sealed partial class MarkingPicker : Control
             colorContainer.AddChild(colorSelector);
 
             Marking targetmarking;
-            if (_configManager.GetCVar(CitCVars.ChargenAllowsAnarchy))
+            if (_configManager.GetCVar(CitCVars.ChargenAnarchicLayering))
             {
                 targetmarking = _currentMarkings.AnarchicLayers[item.ItemIndex];
             }
@@ -487,7 +487,7 @@ public sealed partial class MarkingPicker : Control
         _selectedMarking.IconModulate = _currentMarkingColors[colorIndex];
 
         List<Marking> listing;
-        if (_configManager.GetCVar(CitCVars.ChargenAllowsAnarchy))
+        if (_configManager.GetCVar(CitCVars.ChargenAnarchicLayering))
         {
             listing = _currentMarkings.AnarchicLayers;
         }

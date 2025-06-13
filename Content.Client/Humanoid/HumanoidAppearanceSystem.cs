@@ -243,7 +243,7 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         var applyUndergarmentTop = censorNudity;
         var applyUndergarmentBottom = censorNudity;
 
-        if (_configurationManager.GetCVar(CitCVars.ChargenAllowsAnarchy))
+        if (_configurationManager.GetCVar(CitCVars.ChargenAnarchicLayering))
         {
             foreach (var marking in humanoid.MarkingSet.AnarchicLayers)
             {
