@@ -13,7 +13,6 @@ namespace Content.Shared._Citadel.Overmaps.Components
         ///
         /// TODO: multiz support
         [Access(typeof(SharedOvermapBindingsSystem), Other = AccessPermissions.ReadExecute)]
-        public MapId MapId { get; internal set; } = MapId.Nullspace;
-
+        public List<MapId> MapIds { get; internal set; } = new List<MapId>();
     }
 }
