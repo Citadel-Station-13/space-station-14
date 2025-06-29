@@ -12,5 +12,15 @@ namespace Content.Server._Citadel.Overmaps.Systems
             base.Initialize();
 
         }
+
+        public EntityUid CreateOvermap(OvermapConfig config)
+        {
+            return CreateOvermap(config, OvermapGeneration.DoNothing);
+        }
+
+        public EntityUid CreateOvermap(OvermapConfig config, OvermapGeneration generation)
+        {
+            
+        }
     }
 }

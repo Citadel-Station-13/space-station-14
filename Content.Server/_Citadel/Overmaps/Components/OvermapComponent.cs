@@ -3,7 +3,6 @@ using Robust.Shared.GameStates;
 
 namespace Content.Server._Citadel.Overmaps.Components
 {
-    [RegisterComponent, NetworkedComponent]
     public sealed class OvermapComponent : Component
     {
         [ViewVariables(VVAccess.ReadOnly), Access(typeof(SharedOvermapSystem), Other = AccessPermissions.ReadExecute)]
