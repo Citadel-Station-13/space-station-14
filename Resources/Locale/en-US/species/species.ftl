@@ -1,11 +1,11 @@
 ﻿## Species Names
 
 species-name-human = Human
-#citadel change
+#citadel change - Dwarf -> Grav-Adapted Human
 species-name-dwarf = Human (Grav-Adapted)
-#citadel change
+#citadel change - Reptilian -> Unathi
 species-name-reptilian = Unathi
-#citadel change
+#citadel change - Slime Person -> Promethean
 species-name-slime = Promethean
 species-name-diona = Diona
 #citadel change
