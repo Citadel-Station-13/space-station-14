@@ -1,8 +1,4 @@
-using Robust.Shared.Map;
+namespace Content.Server._Citadel.Overmaps.Events;
 
-namespace Content.Shared._Citadel.Overmaps.Events;
-
-public sealed class OvermapBindingAddedEvent : EntityEventArgs
-{
-    public readonly MapId MapId;
-}
+[ByRefEvent]
+public readonly record struct OvermapBindingAddedEvent(EntityUid MapEntity);

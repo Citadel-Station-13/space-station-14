@@ -1,4 +1,4 @@
-namespace Content.Shared._Citadel.Overmaps.Layers;
+namespace Content.Server._Citadel.Overmaps.Layers;
 
 public sealed class OvermapBundleLayer : OvermapLayer
 {

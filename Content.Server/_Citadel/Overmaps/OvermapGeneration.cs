@@ -1,6 +1,6 @@
 using Content.Shared._Citadel.Overmaps.Prototypes;
 
-namespace Content.Shared._Citadel.Overmaps;
+namespace Content.Server._Citadel.Overmaps;
 
 public sealed class OvermapGeneration
 {
