@@ -1,11 +1,11 @@
 <Document>
-  # Dwarves
+  # Human (Grav-Adapted)
 
   <Box>
     <GuideEntityEmbed Entity="MobDwarf" Caption=""/>
   </Box>
 
-  Dwarves are similar to humans in most respect, but tolerate alcohol better and are healed by it.
+  Human (Grav-Adapted) are similar to humans in most respect, but tolerate alcohol better and are healed by it.
 
 
 </Document>

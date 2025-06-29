@@ -1,12 +1,17 @@
 ﻿## Species Names
 
 species-name-human = Human
-species-name-dwarf = Dwarf
-species-name-reptilian = Reptilian
-species-name-slime = Slime Person
+#citadel change
+species-name-dwarf = Human (Grav-Adapted)
+#citadel change
+species-name-reptilian = Unathi
+#citadel change
+species-name-slime = Promethean
 species-name-diona = Diona
-species-name-arachnid = Arachnid
-species-name-moth = Moth Person
+#citadel change
+species-name-arachnid = Vasilissan
+#citadel change
+species-name-moth = Dnin-Nepid
 species-name-skeleton = Skeleton
 species-name-vox = Vox
 species-name-gingerbread = delicious baked good

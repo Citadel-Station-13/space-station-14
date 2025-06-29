@@ -1,5 +1,5 @@
 <Document>
-  # Arachnids
+  # Vasilissan
 
   <Box>
     <GuideEntityEmbed Entity="MobArachnid" Caption=""/>
@@ -19,7 +19,7 @@
     <GuideEntityEmbed Entity="WallWeb" Caption=""/>
   </Box>
 
-  Arachnids can create Websilk at the cost of getting more hungry. They (and only they) can craft bundles of websilk into various items from clothing and shields to entire walls.
+  Vasilissan can create Websilk at the cost of getting more hungry. They (and only they) can craft bundles of websilk into various items from clothing and shields to entire walls.
 
 
 </Document>
