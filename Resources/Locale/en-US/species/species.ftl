@@ -8,9 +8,9 @@ species-name-reptilian = Unathi
 #citadel change - Slime Person -> Promethean
 species-name-slime = Promethean
 species-name-diona = Diona
-#citadel change
+#citadel change - Arachnid -> Vasilissan
 species-name-arachnid = Vasilissan
-#citadel change
+#citadel change - Moth Person -> Dnin-Nepid
 species-name-moth = Dnin-Nepid
 species-name-skeleton = Skeleton
 species-name-vox = Vox
