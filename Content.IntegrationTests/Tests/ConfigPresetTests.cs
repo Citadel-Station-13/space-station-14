@@ -32,7 +32,7 @@ public sealed class ConfigPresetTests : GameTest
             config.SaveToTomlStream(originalCVarsStream, config.GetRegisteredCVars());
             originalCVarsStream.Position = 0;
 
-            var presets = resources.ContentFindFiles(EntryPoint.ConfigPresetsDir);
+            var presets = resources.ContentFindFiles(EntryPoint.ConfigPresetsDir).Where(x => x.Extension == "toml");
             Assert.Multiple(() =>
             {
                 foreach (var preset in presets)
