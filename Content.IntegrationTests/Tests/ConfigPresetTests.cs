@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Content.Server.Entry;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
@@ -31,7 +32,7 @@ public sealed class ConfigPresetTests
             config.SaveToTomlStream(originalCVarsStream, config.GetRegisteredCVars());
             originalCVarsStream.Position = 0;
 
-            var presets = resources.ContentFindFiles(EntryPoint.ConfigPresetsDir);
+            var presets = resources.ContentFindFiles(EntryPoint.ConfigPresetsDir).Where(x => x.Extension == "toml");
             Assert.Multiple(() =>
             {
                 foreach (var preset in presets)
