@@ -34,7 +34,6 @@ using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using JetBrains.Annotations;
-using Linguini.Shared.Util;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
@@ -88,7 +87,7 @@ public struct SmallRandom : IRobustRandom
         DebugTools.Assert(seed.Length > 0);
 
         // Hex byte string.
-        if (seed.Length == 32 && seed.All(x => x.IsAsciiHexdigit()))
+        if (seed.Length == 32 && seed.All(char.IsAsciiHexDigit))
         {
             return TryFromStringAsHex(seed, out rng);
         }
