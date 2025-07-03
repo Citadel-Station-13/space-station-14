@@ -10,11 +10,8 @@ using YamlDotNet.RepresentationModel;
 namespace Content.IntegrationTests.Tests._Citadel.Utilities;
 
 [TestFixture]
-public sealed class SmallRandomTests : CitadelGameTest
+public sealed class SmallRandomTests
 {
-    [SidedDependency(Side.Server)]
-    private readonly ISerializationManager _ser = default!;
-
     [Test]
     public void IsReproducable()
     {
@@ -40,6 +37,12 @@ public sealed class SmallRandomTests : CitadelGameTest
         Assert.That(myRandom.Next() != myRandom.Next());
         Assert.That(myRandom.Next() != myRandom.Next());
     }
+}
+
+public sealed class SmallRandomSerTest : CitadelGameTest
+{
+    [SidedDependency(Side.Server)]
+    private readonly ISerializationManager _ser = default!;
 
     [Test]
     public void Serialize()
