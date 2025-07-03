@@ -24,36 +24,39 @@ public sealed class ContractsTest : CitadelGameTest
     private readonly ContractSystem _sharedContractSys = default!;
 
     [Test]
-    public void Transitions()
+    public async Task Transitions()
     {
-        var contract = SEntity<CitadelContractComponent>(Spawn(TestContractId));
-
-        // Nobody has signed on, shouldn't be able to sign it.
-        Assert.Multiple(() =>
+        await Server.WaitAssertion(() =>
         {
-            Assert.That(_sharedContractSys.TrySignContract(contract) is TENoPartyA or TENoPartyB);
-            Assert.That(contract.Comp.State is ContractStateUnsigned);
-        });
+            var contract = SEntity<CitadelContractComponent>(Spawn(TestContractId));
 
-        // Should sign on fine.
-        Assert.Multiple(() =>
-        {
-            Assert.That(_sharedContractSys.TrySignOn(contract, Spawn(TestSignerId), Party.PartyA));
-            Assert.That(_sharedContractSys.TrySignOn(contract, Spawn(TestSignerId), Party.PartyB));
-        });
+            // Nobody has signed on, shouldn't be able to sign it.
+            Assert.Multiple(() =>
+            {
+                Assert.That(_sharedContractSys.TrySignContract(contract) is TENoPartyA or TENoPartyB);
+                Assert.That(contract.Comp.State is ContractStateUnsigned);
+            });
 
-        // And contract should be signable now.
-        Assert.Multiple(() =>
-        {
-            Assert.That(_sharedContractSys.TrySignContract(contract), Is.Null);
-            Assert.That(contract.Comp.State is ContractStateSigned);
-        });
+            // Should sign on fine.
+            Assert.Multiple(() =>
+            {
+                Assert.That(_sharedContractSys.TrySignOn(contract, Spawn(TestSignerId), Party.PartyA));
+                Assert.That(_sharedContractSys.TrySignOn(contract, Spawn(TestSignerId), Party.PartyB));
+            });
 
-        // Now we breach it, and blame party B. Poor party B, they're going to owe an amogillion dollars.
-        Assert.Multiple(() =>
-        {
-            Assert.That(_sharedContractSys.TryBreachContract(contract, Party.PartyB), Is.Null);
-            Assert.That(contract.Comp.State is ContractStateBreached { BreachingParty: Party.PartyB });
+            // And contract should be signable now.
+            Assert.Multiple(() =>
+            {
+                Assert.That(_sharedContractSys.TrySignContract(contract), Is.Null);
+                Assert.That(contract.Comp.State is ContractStateSigned);
+            });
+
+            // Now we breach it, and blame party B. Poor party B, they're going to owe an amogillion dollars.
+            Assert.Multiple(() =>
+            {
+                Assert.That(_sharedContractSys.TryBreachContract(contract, Party.PartyB), Is.Null);
+                Assert.That(contract.Comp.State is ContractStateBreached { BreachingParty: Party.PartyB });
+            });
         });
     }
 }
