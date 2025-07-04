@@ -46,12 +46,12 @@ public sealed class SmallRandomTests
     }
 
     [GameTest]
-    public void Serialize([SidedDependency(Side.Server)] ISerializationManager _ser)
+    public void Serialize([SidedDependency(Side.Server)] ISerializationManager ser)
     {
         Assert.That(SmallRandom.TryFromStringAsSeed("colon-three", out var myRandomNullable));
         var myRandom = myRandomNullable!.Value;
 
-        var node = (MappingDataNode)_ser.WriteValue(new SmallRandomTestSer(myRandom));
+        var node = (MappingDataNode)ser.WriteValue(new SmallRandomTestSer(myRandom));
         var document = new YamlStream {new(node.ToYaml())};
         var writer = new StringWriter();
         document.Save(writer);
@@ -62,7 +62,7 @@ public sealed class SmallRandomTests
 
         var mapping = (MappingDataNode) readDocument.Root;
 
-        var parsedMyRandom = _ser.Read<SmallRandomTestSer>(mapping).MyRandom;
+        var parsedMyRandom = ser.Read<SmallRandomTestSer>(mapping).MyRandom;
 
         Assert.That(myRandom.DebugCheckByteEquality(ref parsedMyRandom));
     }

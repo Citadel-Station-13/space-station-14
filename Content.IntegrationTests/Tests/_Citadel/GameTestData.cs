@@ -25,7 +25,7 @@ namespace Content.IntegrationTests.Tests._Citadel;
 [PublicAPI]
 public class GameTestData
 {
-    private bool _pairDirty = false;
+    private bool _pairDirty;
 
     /// <summary>
     ///     Settings for the client/server pair. By default, this gets you a client and server that have connected together.

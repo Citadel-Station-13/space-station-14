@@ -4,12 +4,10 @@
 //
 // This Source Code Form is "Incompatible With Secondary Licenses", as
 // defined by the Mozilla Public License, v. 2.0.
-
 #nullable enable
 using Content.Server._Citadel.Contracts;
 using Content.Shared._Citadel.Contracts.Components;
 using Content.Shared._Citadel.Contracts.Systems;
-using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.Tests._Citadel.Contracts;
 

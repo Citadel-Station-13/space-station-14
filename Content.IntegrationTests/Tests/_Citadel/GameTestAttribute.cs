@@ -4,7 +4,7 @@
 //
 // This Source Code Form is "Incompatible With Secondary Licenses", as
 // defined by the Mozilla Public License, v. 2.0.
-
+#nullable enable
 using System.Collections.Generic;
 using System.Reflection;
 using Content.IntegrationTests.Pair;
@@ -56,12 +56,12 @@ public sealed class GameTestAttribute<TData> : Attribute, ITestBuilder, IImplyFi
             throw new NotSupportedException();
         }
 
-        public object Invoke(object fixture, params object[] args)
+        public object Invoke(object? fixture, params object?[]? args)
         {
             return InnerInvoke(fixture);
         }
 
-        private async Task InnerInvoke(object fixture)
+        private async Task InnerInvoke(object? fixture)
         {
             // We don't use the fixture at all..
             var data = new TData();
@@ -107,7 +107,7 @@ public sealed class GameTestAttribute<TData> : Attribute, ITestBuilder, IImplyFi
         }
     }
 
-    public IEnumerable<TestMethod> BuildFrom(IMethodInfo method, Test suite)
+    public IEnumerable<TestMethod> BuildFrom(IMethodInfo method, Test? suite)
     {
         var innerParams = method.GetParameters();
 
@@ -178,12 +178,12 @@ public sealed class GameTestAttribute : Attribute, ITestBuilder, IImplyFixture, 
             throw new NotSupportedException();
         }
 
-        public object Invoke(object fixture, params object[] args)
+        public object Invoke(object? fixture, params object?[]? args)
         {
             return InnerInvoke(fixture);
         }
 
-        private async Task InnerInvoke(object fixture)
+        private async Task InnerInvoke(object? fixture)
         {
             var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
 
@@ -267,7 +267,7 @@ public sealed class GameTestAttribute : Attribute, ITestBuilder, IImplyFixture, 
         }
     }
 
-    public IEnumerable<TestMethod> BuildFrom(IMethodInfo method, Test suite)
+    public IEnumerable<TestMethod> BuildFrom(IMethodInfo method, Test? suite)
     {
         var innerParams = method.GetParameters();
 
