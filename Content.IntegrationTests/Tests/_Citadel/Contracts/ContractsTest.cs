@@ -1,13 +1,18 @@
-﻿#nullable enable
+﻿// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// This Source Code Form is "Incompatible With Secondary Licenses", as
+// defined by the Mozilla Public License, v. 2.0.
+#nullable enable
 using Content.Server._Citadel.Contracts;
 using Content.Shared._Citadel.Contracts.Components;
 using Content.Shared._Citadel.Contracts.Systems;
-using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.Tests._Citadel.Contracts;
 
 [TestFixture]
-public sealed class ContractsTest : CitadelGameTest
+public sealed class ContractsTest
 {
     private const string TestContractId = "TESTS_CitadelTestContract";
     private const string TestSignerId = "ToyAmongPequeno"; //Suspicious contractors.
@@ -20,41 +25,44 @@ public sealed class ContractsTest : CitadelGameTest
             - type: CitadelContract
         """;
 
-    [System(Side.Server)]
-    private readonly ContractSystem _sharedContractSys = default!;
-
-    [Test]
-    public async Task Transitions()
+    public sealed class ContractsTestData : GameTestData
     {
-        await Server.WaitAssertion(() =>
+        [System(Side.Server)]
+        public readonly ContractSystem SharedContractSys = default!;
+    }
+
+    [GameTest<ContractsTestData>(Description = "Checks that contract state transitions function as expected, i.e. with signing, breaching, etc.")]
+    public async Task Transitions(ContractsTestData data)
+    {
+        await data.Server.WaitAssertion(() =>
         {
-            var contract = SEntity<CitadelContractComponent>(Spawn(TestContractId));
+            var contract = data.SEntity<CitadelContractComponent>(data.SSpawn(TestContractId));
 
             // Nobody has signed on, shouldn't be able to sign it.
             Assert.Multiple(() =>
             {
-                Assert.That(_sharedContractSys.TrySignContract(contract) is TENoPartyA or TENoPartyB);
+                Assert.That(data.SharedContractSys.TrySignContract(contract) is TENoPartyA or TENoPartyB);
                 Assert.That(contract.Comp.State is ContractStateUnsigned);
             });
 
             // Should sign on fine.
             Assert.Multiple(() =>
             {
-                Assert.That(_sharedContractSys.TrySignOn(contract, Spawn(TestSignerId), Party.PartyA));
-                Assert.That(_sharedContractSys.TrySignOn(contract, Spawn(TestSignerId), Party.PartyB));
+                Assert.That(data.SharedContractSys.TrySignOn(contract, data.SSpawn(TestSignerId), Party.PartyA));
+                Assert.That(data.SharedContractSys.TrySignOn(contract, data.SSpawn(TestSignerId), Party.PartyB));
             });
 
             // And contract should be signable now.
             Assert.Multiple(() =>
             {
-                Assert.That(_sharedContractSys.TrySignContract(contract), Is.Null);
+                Assert.That(data.SharedContractSys.TrySignContract(contract), Is.Null);
                 Assert.That(contract.Comp.State is ContractStateSigned);
             });
 
             // Now we breach it, and blame party B. Poor party B, they're going to owe an amogillion dollars.
             Assert.Multiple(() =>
             {
-                Assert.That(_sharedContractSys.TryBreachContract(contract, Party.PartyB), Is.Null);
+                Assert.That(data.SharedContractSys.TryBreachContract(contract, Party.PartyB), Is.Null);
                 Assert.That(contract.Comp.State is ContractStateBreached { BreachingParty: Party.PartyB });
             });
         });

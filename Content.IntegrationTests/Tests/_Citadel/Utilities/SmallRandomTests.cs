@@ -44,20 +44,14 @@ public sealed class SmallRandomTests
         Assert.That(myRandom.Next() != myRandom.Next());
         Assert.That(myRandom.Next() != myRandom.Next());
     }
-}
 
-public sealed class SmallRandomSerTest : CitadelGameTest
-{
-    [SidedDependency(Side.Server)]
-    private readonly ISerializationManager _ser = default!;
-
-    [Test]
-    public void Serialize()
+    [GameTest(Description = "Serializes a SmallRandom and then deserializes it again with YAML serialization, asserting that it remains the same over a round trip.")]
+    public void Serialize([SidedDependency(Side.Server)] ISerializationManager ser)
     {
         Assert.That(SmallRandom.TryFromStringAsSeed("colon-three", out var myRandomNullable));
         var myRandom = myRandomNullable!.Value;
 
-        var node = (MappingDataNode)_ser.WriteValue(new SmallRandomTestSer(myRandom));
+        var node = (MappingDataNode)ser.WriteValue(new SmallRandomTestSer(myRandom));
         var document = new YamlStream {new(node.ToYaml())};
         var writer = new StringWriter();
         document.Save(writer);
@@ -68,12 +62,11 @@ public sealed class SmallRandomSerTest : CitadelGameTest
 
         var mapping = (MappingDataNode) readDocument.Root;
 
-        var parsedMyRandom = _ser.Read<SmallRandomTestSer>(mapping).MyRandom;
+        var parsedMyRandom = ser.Read<SmallRandomTestSer>(mapping).MyRandom;
 
         Assert.That(myRandom.DebugCheckByteEquality(ref parsedMyRandom));
     }
 }
-
 
 [DataDefinition]
 public sealed partial class SmallRandomTestSer
