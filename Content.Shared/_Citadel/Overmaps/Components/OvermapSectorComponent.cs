@@ -1,4 +1,6 @@
-namespace Content.Server._Citadel.Overmaps.Components;
+using Robust.Shared.GameStates;
+
+namespace Content.Shared._Citadel.Overmaps.Components;
 
 /// <summary>
 /// Denotes an overmap entity as being able to be landed in.
@@ -9,7 +11,7 @@ namespace Content.Server._Citadel.Overmaps.Components;
 /// Sectors require map bindings to work. If there are no map bindings,
 /// an exception will be thrown when ships attempt to land.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class OvermapSectorComponent : Component
 {
     /// <summary>
@@ -21,5 +23,6 @@ public sealed partial class OvermapSectorComponent : Component
     /// (handled on the entity's side); two sectors may not overlap
     /// by this manner.
     /// </summary>
+    [ViewVariables, AutoNetworkedField]
     public float influenceRange { get; set; } = 5.0f;
 }
