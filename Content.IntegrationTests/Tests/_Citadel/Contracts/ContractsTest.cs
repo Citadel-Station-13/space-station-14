@@ -31,7 +31,7 @@ public sealed class ContractsTest
     {
         await data.Server.WaitAssertion(() =>
         {
-            var contract = data.SEntity<CitadelContractComponent>(data.Spawn(TestContractId));
+            var contract = data.SEntity<CitadelContractComponent>(data.SSpawn(TestContractId));
 
             // Nobody has signed on, shouldn't be able to sign it.
             Assert.Multiple(() =>
@@ -43,8 +43,8 @@ public sealed class ContractsTest
             // Should sign on fine.
             Assert.Multiple(() =>
             {
-                Assert.That(data.SharedContractSys.TrySignOn(contract, data.Spawn(TestSignerId), Party.PartyA));
-                Assert.That(data.SharedContractSys.TrySignOn(contract, data.Spawn(TestSignerId), Party.PartyB));
+                Assert.That(data.SharedContractSys.TrySignOn(contract, data.SSpawn(TestSignerId), Party.PartyA));
+                Assert.That(data.SharedContractSys.TrySignOn(contract, data.SSpawn(TestSignerId), Party.PartyB));
             });
 
             // And contract should be signable now.

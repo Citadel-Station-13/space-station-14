@@ -61,16 +61,26 @@ public sealed class GameTestAttribute<TData> : Attribute, ITestBuilder, IImplyFi
 
             await data.DoSetup();
 
-            if (inner.ReturnType.IsType(typeof(Task)))
+            try
             {
-                await (Task)inner.Invoke(fixture, data)!;
+                if (inner.ReturnType.IsType(typeof(Task)))
+                {
+                    await (Task)inner.Invoke(fixture, data)!;
+                }
+                else
+                {
+                    inner.Invoke(fixture, data);
+                }
             }
-            else
+            catch (Exception)
             {
-                inner.Invoke(fixture, data);
+                data.MarkDirty();
+                throw;
             }
-
-            await data.DoTeardown();
+            finally
+            {
+                await data.DoTeardown();
+            }
         }
 
         public ITypeInfo TypeInfo => new TypeWrapper(((Func<Task>)(HackToLookAsync)).GetType());
@@ -208,19 +218,29 @@ public sealed class GameTestAttribute : Attribute, ITestBuilder, IImplyFixture, 
                 }
             }
 
-            if (inner.ReturnType.IsType(typeof(Task)))
+            try
             {
-                await (Task)inner.Invoke(fixture, args.ToArray())!;
+                if (inner.ReturnType.IsType(typeof(Task)))
+                {
+                    await (Task)inner.Invoke(fixture, args.ToArray())!;
+                }
+                else
+                {
+                    inner.Invoke(fixture, args.ToArray());
+                }
             }
-            else
+            catch (Exception)
             {
-                inner.Invoke(fixture, args.ToArray());
+                dirty.Set();
+                throw;
             }
-
-            if (!dirty.IsDirty)
-                await pair.CleanReturnAsync();
-            else
-                await pair.DisposeAsync();
+            finally
+            {
+                if (!dirty.IsDirty)
+                    await pair.CleanReturnAsync();
+                else
+                    await pair.DisposeAsync();
+            }
         }
 
         public ITypeInfo TypeInfo => new TypeWrapper(((Func<Task>)(HackToLookAsync)).GetType());

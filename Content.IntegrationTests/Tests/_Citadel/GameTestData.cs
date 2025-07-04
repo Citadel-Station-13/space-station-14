@@ -8,6 +8,7 @@
 #nullable enable
 using System.Reflection;
 using Content.IntegrationTests.Pair;
+using JetBrains.Annotations;
 using Robust.Shared.Analyzers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
@@ -21,26 +22,58 @@ namespace Content.IntegrationTests.Tests._Citadel;
 ///     Can also be used in lieu of a parent class if you don't need much.
 /// </summary>
 [Virtual]
+[PublicAPI]
 public class GameTestData
 {
     private bool _pairDirty = false;
 
+    /// <summary>
+    ///     Settings for the client/server pair. By default, this gets you a client and server that have connected together.
+    /// </summary>
+    public virtual PoolSettings PoolSettings => new() { Connected = true };
+
+    /// <summary>
+    ///     The client and server pair.
+    /// </summary>
     public TestPair Pair { get; private set; } = default!; // NULLABILITY: This is always set during test setup.
+    /// <summary>
+    ///     The game server instance.
+    /// </summary>
     public RobustIntegrationTest.ServerIntegrationInstance Server => Pair.Server;
+    /// <summary>
+    ///     The game client instance.
+    /// </summary>
     public RobustIntegrationTest.ClientIntegrationInstance Client => Pair.Client;
+
+    /// <summary>
+    ///     The test player, if any.
+    /// </summary>
     public ICommonSession? Player => Pair.Player;
 
+    /// <summary>
+    ///     The server-side entity manager.
+    /// </summary>
     public IEntityManager SEntMan => Server.EntMan;
+    /// <summary>
+    ///     The client-side entity manager.
+    /// </summary>
+    public IEntityManager CEntMan => Server.EntMan;
 
+    /// <summary>
+    ///     Marks the test pair as dirty, ensuring it is returned as such.
+    /// </summary>
     public void MarkDirty()
     {
         _pairDirty = true;
     }
 
+    /// <summary>
+    ///     Internal function to do initial setup. Don't use this..
+    /// </summary>
     public async Task DoSetup()
     {
         _pairDirty = false;
-        Pair = await PoolManager.GetServerClient(new PoolSettings {Connected = true});
+        Pair = await PoolManager.GetServerClient(PoolSettings);
 
         foreach (var field in GetType().GetAllFields())
         {
@@ -71,6 +104,9 @@ public class GameTestData
         }
     }
 
+    /// <summary>
+    ///     Internal function to do post-test teardown. Don't use this..
+    /// </summary>
     public async Task DoTeardown()
     {
         if (!_pairDirty)
@@ -79,36 +115,89 @@ public class GameTestData
             await Pair.DisposeAsync();
     }
 
+    /// <summary>
+    ///     Converts a server EntityUid into the client-side equivalent entity.
+    /// </summary>
     public EntityUid ToClientUid(EntityUid serverUid)
     {
         return Pair.ToClientUid(serverUid);
     }
 
+    /// <summary>
+    ///     Converts a client EntityUid into the server-side equivalent entity.
+    /// </summary>
     public EntityUid ToServerUid(EntityUid clientUid)
     {
         return Pair.ToServerUid(clientUid);
     }
 
+    /// <summary>
+    ///     Retrieves the given entitysystem from the server.
+    /// </summary>
     public T GetSysServer<T>()
         where T : EntitySystem
     {
         return Server.EntMan.System<T>();
     }
 
+    /// <summary>
+    ///     Retrieves the given entitysystem from the client.
+    /// </summary>
+    public T GetSysClient<T>()
+        where T : EntitySystem
+    {
+        return Client.EntMan.System<T>();
+    }
+
+    /// <summary>
+    ///     Retrieves the given component from an entity, from the server.
+    /// </summary>
     public T SComp<T>(EntityUid target)
         where T : IComponent
     {
         return SEntMan.GetComponent<T>(target);
     }
 
+    /// <summary>
+    ///     Retrieves the given component from an entity, from the client.
+    /// </summary>
+    public T CComp<T>(EntityUid target)
+        where T : IComponent
+    {
+        return CEntMan.GetComponent<T>(target);
+    }
+
+    /// <summary>
+    ///     Pairs an EntityUid with the given component, from the server.
+    /// </summary>
     public Entity<T> SEntity<T>(EntityUid target)
         where T : IComponent
     {
         return new(target, SEntMan.GetComponent<T>(target));
     }
 
-    public EntityUid Spawn(string id)
+    /// <summary>
+    ///     Pairs an EntityUid with the given component, from the client.
+    /// </summary>
+    public Entity<T> CEntity<T>(EntityUid target)
+        where T : IComponent
+    {
+        return new(target, CEntMan.GetComponent<T>(target));
+    }
+
+    /// <summary>
+    ///     Spawns an entity on the server.
+    /// </summary>
+    public EntityUid SSpawn(string id)
     {
         return SEntMan.Spawn(id);
+    }
+
+    /// <summary>
+    ///     Spawns an entity on the client.
+    /// </summary>
+    public EntityUid CSpawn(string id)
+    {
+        return CEntMan.Spawn(id);
     }
 }
