@@ -45,7 +45,7 @@ public sealed class SmallRandomTests
         Assert.That(myRandom.Next() != myRandom.Next());
     }
 
-    [GameTest]
+    [GameTest(Description = "Serializes a SmallRandom and then deserializes it again with YAML serialization, asserting that it remains the same over a round trip.")]
     public void Serialize([SidedDependency(Side.Server)] ISerializationManager ser)
     {
         Assert.That(SmallRandom.TryFromStringAsSeed("colon-three", out var myRandomNullable));

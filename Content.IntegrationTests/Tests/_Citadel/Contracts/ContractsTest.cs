@@ -31,7 +31,7 @@ public sealed class ContractsTest
         public readonly ContractSystem SharedContractSys = default!;
     }
 
-    [GameTest<ContractsTestData>]
+    [GameTest<ContractsTestData>(Description = "Checks that contract state transitions function as expected, i.e. with signing, breaching, etc.")]
     public async Task Transitions(ContractsTestData data)
     {
         await data.Server.WaitAssertion(() =>
