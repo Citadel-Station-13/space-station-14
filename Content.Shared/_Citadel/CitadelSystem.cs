@@ -5,9 +5,4 @@
 /// </summary>
 public abstract class CitadelSystem : EntitySystem
 {
-    /// <inheritdoc/>
-    public override void Initialize()
-    {
-
-    }
 }

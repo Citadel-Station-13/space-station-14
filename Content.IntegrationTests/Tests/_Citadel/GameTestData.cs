@@ -188,7 +188,7 @@ public class GameTestData
     /// <summary>
     ///     Spawns an entity on the server.
     /// </summary>
-    public EntityUid SSpawn(string id)
+    public EntityUid SSpawn(string? id)
     {
         return SEntMan.Spawn(id);
     }
@@ -196,7 +196,7 @@ public class GameTestData
     /// <summary>
     ///     Spawns an entity on the client.
     /// </summary>
-    public EntityUid CSpawn(string id)
+    public EntityUid CSpawn(string? id)
     {
         return CEntMan.Spawn(id);
     }

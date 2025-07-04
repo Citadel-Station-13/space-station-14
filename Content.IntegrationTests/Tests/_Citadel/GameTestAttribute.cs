@@ -11,6 +11,7 @@ using Content.IntegrationTests.Pair;
 using JetBrains.Annotations;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
+using Robust.UnitTesting;
 
 namespace Content.IntegrationTests.Tests._Citadel;
 
@@ -29,10 +30,15 @@ public sealed class GameTestAttribute<TData> : Attribute, ITestBuilder, IImplyFi
     public string? Description { get; set; }
 
     /// <summary>
+    ///     Which side to run the inner test code on, if not the test thread.
+    /// </summary>
+    public Side RunOnSide { get; set; } = Side.Neither;
+
+    /// <summary>
     ///     Evil magic that allows us to cleanly wrap a test method.
     ///     This is used instead of a 'simple' closure because of the need to preserve the object being invoked on.
     /// </summary>
-    private sealed class TestDataBasedWrapper(IMethodInfo inner) : IMethodInfo
+    private sealed class TestDataBasedWrapper(IMethodInfo inner, GameTestAttribute<TData> attribute) : IMethodInfo
     {
         public T[] GetCustomAttributes<T>(bool inherit) where T : class
         {
@@ -73,13 +79,31 @@ public sealed class GameTestAttribute<TData> : Attribute, ITestBuilder, IImplyFi
 
             try
             {
-                if (inner.ReturnType.IsType(typeof(Task)))
+                async Task DoRun()
                 {
-                    await (Task)inner.Invoke(fixture, data)!;
+                    if (inner.ReturnType.IsType(typeof(Task)))
+                    {
+                        await (Task)inner.Invoke(fixture, data)!;
+                    }
+                    else
+                    {
+                        inner.Invoke(fixture, data);
+                    }
+                }
+
+                if (attribute.RunOnSide is { } side)
+                {
+                    RobustIntegrationTest.IntegrationInstance
+                        instance = side == Side.Client ? data.Pair.Client : data.Pair.Server;
+
+                    await instance.WaitAssertion(() =>
+                    {
+                        DoRun().Wait();
+                    });
                 }
                 else
                 {
-                    inner.Invoke(fixture, data);
+                    await DoRun();
                 }
             }
             catch (Exception)
@@ -116,7 +140,7 @@ public sealed class GameTestAttribute<TData> : Attribute, ITestBuilder, IImplyFi
 
         if (innerParams.Length == 1 && innerParams[0].ParameterType.IsAssignableTo(typeof(GameTestData)))
         {
-            var wrapper = new TestDataBasedWrapper(method);
+            var wrapper = new TestDataBasedWrapper(method, this);
 
             return new[] { new TestMethod(wrapper, null) };
         }
@@ -153,10 +177,15 @@ public sealed class GameTestAttribute : Attribute, ITestBuilder, IImplyFixture, 
     public string? Description { get; set; }
 
     /// <summary>
+    ///     Which side to run the inner test code on, if not the test thread.
+    /// </summary>
+    public Side RunOnSide { get; set; }  = Side.Neither;
+
+    /// <summary>
     ///     Evil magic that allows us to cleanly wrap a test method.
     ///     This is used instead of a 'simple' closure because of the need to preserve the object being invoked on.
     /// </summary>
-    private sealed class AttributeBasedWrapper(IMethodInfo inner) : IMethodInfo
+    private sealed class AttributeBasedWrapper(IMethodInfo inner, GameTestAttribute attribute) : IMethodInfo
     {
         public T[] GetCustomAttributes<T>(bool inherit) where T : class
         {
@@ -230,16 +259,36 @@ public sealed class GameTestAttribute : Attribute, ITestBuilder, IImplyFixture, 
                 }
             }
 
+
             try
             {
-                if (inner.ReturnType.IsType(typeof(Task)))
+                async Task DoRun()
                 {
-                    await (Task)inner.Invoke(fixture, args.ToArray())!;
+                    if (inner.ReturnType.IsType(typeof(Task)))
+                    {
+                        await (Task)inner.Invoke(fixture, args.ToArray())!;
+                    }
+                    else
+                    {
+                        inner.Invoke(fixture, args.ToArray());
+                    }
+                }
+
+                if (attribute.RunOnSide is { } side)
+                {
+                    RobustIntegrationTest.IntegrationInstance
+                        instance = side == Side.Client ? pair.Client : pair.Server;
+
+                    await instance.WaitAssertion(() =>
+                    {
+                        DoRun().Wait();
+                    });
                 }
                 else
                 {
-                    inner.Invoke(fixture, args.ToArray());
+                    await DoRun();
                 }
+
             }
             catch (Exception)
             {
@@ -282,7 +331,7 @@ public sealed class GameTestAttribute : Attribute, ITestBuilder, IImplyFixture, 
         }
         else
         {
-            var wrapper = new AttributeBasedWrapper(method);
+            var wrapper = new AttributeBasedWrapper(method, this);
 
             return new[] { new TestMethod(wrapper, null) };
         }

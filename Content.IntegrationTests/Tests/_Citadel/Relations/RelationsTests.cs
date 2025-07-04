@@ -1,0 +1,36 @@
+using Content.Shared._Citadel.Relations;
+using Content.Shared._Citadel.Relations.Testing;
+
+namespace Content.IntegrationTests.Tests._Citadel.Relations;
+
+[TestFixture]
+public sealed class RelationsTests
+{
+    private const string TestFamilyMemberId = "TESTS_CitadelRelationsTestChild";
+    [TestPrototypes]
+    public const string Prototypes = $"""
+        - type: entity
+          id: {TestFamilyMemberId}
+          components:
+            - type: TestRelation
+        """;
+    public sealed class ParentChildRelationData : GameTestData
+    {
+        [System(Side.Server)] public TestRelationSystem Relation = default!;
+    }
+
+    [GameTest<ParentChildRelationData>(RunOnSide = Side.Server)]
+    public void ParentChildRelation(ParentChildRelationData data)
+    {
+        var grandchild = data.SSpawn(TestFamilyMemberId);
+        var child = data.SSpawn(TestFamilyMemberId);
+        var parent = data.SSpawn(TestFamilyMemberId);
+
+        data.Relation.MakeRelated(child, parent);
+        data.Relation.MakeRelated(grandchild, child);
+
+        Assert.That(data.Relation.GetParent(child) == parent);
+
+        Assert.That(data.Relation.GetParent(grandchild) == child);
+    }
+}
