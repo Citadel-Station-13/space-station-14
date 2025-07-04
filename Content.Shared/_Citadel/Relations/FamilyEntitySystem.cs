@@ -1,3 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+//     License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// This Source Code Form is "Incompatible With Secondary Licenses", as
+// defined by the Mozilla Public License, v. 2.0.
+
 using System.Diagnostics.CodeAnalysis;
 using Robust.Shared.Utility;
 
@@ -77,4 +84,13 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     {
         return Comp<TParent>(parent).Children;
     }
+}
+
+/// <summary>
+///     Defines what happens when a relation is dissolved, i.e. an entity is deleted and relations need repaired.
+/// </summary>
+public enum RelationDissolveBehavior : byte
+{
+    Clear,
+    Reparent,
 }
