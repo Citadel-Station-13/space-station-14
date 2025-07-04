@@ -13,6 +13,11 @@ namespace Content.Server._Citadel.Overmaps.Systems
 
         }
 
+        /// <summary>
+        /// Creates an overmap, without performing generation on it.
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public EntityUid CreateOvermap(OvermapConfig config)
         {
             return CreateOvermap(config, OvermapGeneration.DoNothing);
@@ -20,7 +25,7 @@ namespace Content.Server._Citadel.Overmaps.Systems
 
         public EntityUid CreateOvermap(OvermapConfig config, OvermapGeneration generation)
         {
-            
+
         }
     }
 }

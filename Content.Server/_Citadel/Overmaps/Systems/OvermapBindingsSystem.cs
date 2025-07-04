@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server._Citadel.Overmaps.Components;
+using Content.Server._Citadel.Overmaps.Events;
 using Content.Shared._Citadel.Overmaps.Systems;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Utility;
@@ -56,14 +57,56 @@ public sealed class OvermapBindingsSystem : SharedOvermapBindingsSystem
         }
     }
 
-    public void AddBoundMapId(EntityUid overmapEntity, EntityUid mapId)
+    /// <summary>
+    /// Adds a binding to an overmap entity.
+    /// This will fail if the entity does not have an OvermapBindingsComponent.
+    /// </summary>
+    /// <param name="overmapEntity"></param>
+    /// <param name="mapId"></param>
+    /// <returns>'true' if the binding is on the overmap entity at the end of the call,
+    /// including if it was already there.</returns>
+    public bool AddBoundMapId(EntityUid overmapEntity, EntityUid mapId)
     {
-        // TODO: impl
+        if (_overmapBindingsQuery.TryGetComponent(overmapEntity, out var comp))
+        {
+            if (comp.BoundMapEntities.Contains(mapId))
+            {
+                return true;
+            }
+
+            comp.BoundMapEntities.Add(mapId);
+            var sig = new OvermapBindingAddedEvent(mapId);
+            RaiseLocalEvent(overmapEntity, ref sig, true);
+            _sectorLookup.Add(mapId, overmapEntity);
+            return true;
+        }
+
+        return false;
     }
 
-    public void RemoveBoundMapId(EntityUid overmapEntity, EntityUid mapId)
+    /// <summary>
+    /// Ensures a binding is not on an overmap entity.
+    /// </summary>
+    /// <param name="overmapEntity"></param>
+    /// <param name="mapId"></param>
+    /// <returns>'true' if the binding is not on the overmap entity at the end of the call,
+    /// including if it never existed.</returns>
+    public bool RemoveBoundMapId(EntityUid overmapEntity, EntityUid mapId)
     {
-        // TODO: impl
+        if (_overmapBindingsQuery.TryGetComponent(overmapEntity, out var comp))
+        {
+            if (!comp.BoundMapEntities.Contains(mapId))
+            {
+                return true;
+            }
+
+            comp.BoundMapEntities.Remove(mapId);
+            var sig = new OvermapBindingRemovedEvent(mapId);
+            _sectorLookup.Remove(mapId);
+            RaiseLocalEvent(overmapEntity, ref sig, true);
+        }
+
+        return true;
     }
 
     public bool TryGetOvermapEntityByMap([NotNullWhen(true)] EntityUid? mapId,
@@ -85,6 +128,7 @@ public sealed class OvermapBindingsSystem : SharedOvermapBindingsSystem
     {
         if (_overmapBindingsQuery.TryGetComponent(entity, out var overmapBindings))
         {
+            // TODO: this should be random
             mapEntityOut = overmapBindings.BoundMapEntities.FirstOrNull();
             return true;
         }

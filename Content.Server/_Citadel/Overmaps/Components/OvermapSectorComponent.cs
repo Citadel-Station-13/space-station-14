@@ -12,5 +12,14 @@ namespace Content.Server._Citadel.Overmaps.Components;
 [RegisterComponent]
 public sealed partial class OvermapSectorComponent : Component
 {
-
+    /// <summary>
+    /// Range where we automatically capture a contacting entity
+    /// that's dropping out of overmap, if it's an ephemerally
+    /// travelling entity.
+    ///
+    /// That entity's influence range will also be taken into account
+    /// (handled on the entity's side); two sectors may not overlap
+    /// by this manner.
+    /// </summary>
+    public float influenceRange { get; set; } = 5.0f;
 }
