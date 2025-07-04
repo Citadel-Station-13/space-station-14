@@ -44,15 +44,9 @@ public sealed class SmallRandomTests
         Assert.That(myRandom.Next() != myRandom.Next());
         Assert.That(myRandom.Next() != myRandom.Next());
     }
-}
 
-public sealed class SmallRandomSerTest : CitadelGameTest
-{
-    [SidedDependency(Side.Server)]
-    private readonly ISerializationManager _ser = default!;
-
-    [Test]
-    public void Serialize()
+    [GameTest]
+    public void Serialize([SidedDependency(Side.Server)] ISerializationManager _ser)
     {
         Assert.That(SmallRandom.TryFromStringAsSeed("colon-three", out var myRandomNullable));
         var myRandom = myRandomNullable!.Value;
@@ -73,7 +67,6 @@ public sealed class SmallRandomSerTest : CitadelGameTest
         Assert.That(myRandom.DebugCheckByteEquality(ref parsedMyRandom));
     }
 }
-
 
 [DataDefinition]
 public sealed partial class SmallRandomTestSer
