@@ -192,7 +192,6 @@ public class GameTestData
     {
         return SEntMan.Spawn(id);
     }
-
     /// <summary>
     ///     Spawns an entity on the client.
     /// </summary>
@@ -200,4 +199,21 @@ public class GameTestData
     {
         return CEntMan.Spawn(id);
     }
+
+    /// <summary>
+    ///     Deletes an entity on the server immediately.
+    /// </summary>
+    public void SDeleteNow(EntityUid id)
+    {
+        SEntMan.DeleteEntity(id);
+    }
+
+    /// <summary>
+    ///     Deletes an entity on the client immediately.
+    /// </summary>
+    public void CDeleteNow(EntityUid id)
+    {
+        CEntMan.DeleteEntity(id);
+    }
+
 }

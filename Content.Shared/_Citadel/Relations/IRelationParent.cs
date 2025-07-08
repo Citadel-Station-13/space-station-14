@@ -12,6 +12,6 @@ namespace Content.Shared._Citadel.Relations;
 /// </summary>
 public interface IRelationParent
 {
-    public HashSet<EntityUid> Children { get; }
+    public HashSet<EntityUid> Children { get; set;  }
 }
 

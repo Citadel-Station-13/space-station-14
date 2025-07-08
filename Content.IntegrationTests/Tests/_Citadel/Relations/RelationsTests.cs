@@ -36,8 +36,44 @@ public sealed class RelationsTests
         data.Relation.MakeRelated(child, parent);
         data.Relation.MakeRelated(grandchild, child);
 
-        Assert.That(data.Relation.GetParent(child) == parent);
+        Assert.Multiple(() =>
+        {
+            Assert.That(data.Relation.GetParent(child), Is.EqualTo(parent));
+            Assert.That(data.Relation.GetParent(grandchild), Is.EqualTo(child));
+        });
+    }
 
-        Assert.That(data.Relation.GetParent(grandchild) == child);
+    [GameTest<ParentChildRelationData>(RunOnSide = Side.Server)]
+    public void DeleteChildren(ParentChildRelationData data)
+    {
+        {
+            var child = data.SSpawn(TestFamilyMemberId);
+            var parent = data.SSpawn(TestFamilyMemberId);
+
+            data.Relation.MakeRelated(child, parent);
+
+            var childComp = data.SComp<TestRelationComponent>(child);
+
+            data.SDeleteNow(parent);
+
+            Assert.That(childComp.Parent, Is.EqualTo(null));
+
+            data.SDeleteNow(child);
+        }
+
+        {
+            var child = data.SSpawn(TestFamilyMemberId);
+            var parent = data.SSpawn(TestFamilyMemberId);
+
+            data.Relation.MakeRelated(child, parent);
+
+            var parentComp = data.SComp<TestRelationComponent>(parent);
+
+            data.SDeleteNow(child);
+
+            Assert.That(parentComp.Children, Does.Not.Contain(child));
+
+            data.SDeleteNow(parent);
+        }
     }
 }

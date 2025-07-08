@@ -6,6 +6,7 @@
 // defined by the Mozilla Public License, v. 2.0.
 
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 using Robust.Shared.Utility;
 
 namespace Content.Shared._Citadel.Relations;
@@ -18,6 +19,84 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     where TParent : IRelationParent, IComponent
 {
     /// <summary>
+    ///     Event fired when a child is seperated from its parent.
+    /// </summary>
+    /// <remarks>
+    ///     If received from one of the family bulk actions like deletion of the parent,
+    ///     the Parent and Children values will never be in a state of partial resolution.
+    /// </remarks>
+    [PublicAPI]
+    public record struct SeperatedEvent(EntityUid? Child, EntityUid? Parent);
+
+    /// <summary>
+    ///     Event fired when a child is joined with a parent.
+    /// </summary>
+    /// <remarks>
+    ///     If received from one of the family bulk actions like deletion of the parent,
+    ///     the Parent and Children values will never be in a state of partial resolution.
+    /// </remarks>
+    [PublicAPI]
+    public record struct JoinedEvent(EntityUid? Child, EntityUid? Parent);
+
+    protected EntityQuery<TChild> ChildQuery { get; private set; }
+    protected EntityQuery<TParent> ParentQuery { get; private set; }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        if (typeof(TChild) != typeof(TParent))
+            SubscribeLocalEvent<TChild, ComponentShutdown>(OnChildShutdown);
+        if (typeof(TChild) != typeof(TParent))
+            SubscribeLocalEvent<TParent, ComponentShutdown>(OnParentShutdown);
+        if (typeof(TChild) == typeof(TParent))
+            SubscribeLocalEvent<TChild, ComponentShutdown>(OnMixedShutdown);
+
+        ChildQuery = GetEntityQuery<TChild>();
+        ParentQuery = GetEntityQuery<TParent>();
+    }
+
+    private void OnMixedShutdown(Entity<TChild> ent, ref ComponentShutdown args)
+    {
+        OnChildShutdown(ent, ref args);
+        OnParentShutdown(new Entity<TParent>(ent, (TParent)(object)ent.Comp), ref args);
+    }
+
+    private void OnParentShutdown(Entity<TParent> parent, ref ComponentShutdown args)
+    {
+        if (parent.Comp.Children.Count == 0)
+            return;
+
+        var children = parent.Comp.Children;
+
+        parent.Comp.Children = new HashSet<EntityUid>(); // clear.
+
+        foreach (var child in children)
+        {
+            var childComp = ChildQuery.Comp(child);
+            childComp.Parent = null;
+
+            RaiseLocalEvent(child, new SeperatedEvent(child, parent));
+            RaiseLocalEvent(parent, new SeperatedEvent(child, parent));
+        }
+    }
+
+    private void OnChildShutdown(Entity<TChild> child, ref ComponentShutdown args)
+    {
+        if (child.Comp.Parent is null)
+            return;
+
+        var parent = ParentQuery.Get(child.Comp.Parent.Value);
+
+        // ReSharper disable once RedundantAssignment
+        var removed = parent.Comp.Children.Remove(child);
+
+        RaiseLocalEvent(child, new SeperatedEvent(child, parent));
+        RaiseLocalEvent(parent, new SeperatedEvent(child, parent));
+
+        DebugTools.Assert(removed);
+    }
+
+    /// <summary>
     ///     Makes the given child and parent related, given the child is not already related to another parent.
     /// </summary>
     /// <param name="child">The child in the relation.</param>
@@ -28,12 +107,15 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
 
         child.Comp.Parent = parent;
         parent.Comp.Children.Add(child);
+
+        RaiseLocalEvent(child, new JoinedEvent(child, parent));
+        RaiseLocalEvent(parent, new JoinedEvent(child, parent));
     }
 
     /// <inheritdoc cref="M:Content.Shared._Citadel.Relations.FamilyEntitySystem`2.MakeRelated(Robust.Shared.GameObjects.Entity{`0},Robust.Shared.GameObjects.Entity{`1})"/>
     public void MakeRelated(EntityUid child, EntityUid parent)
     {
-        MakeRelated(new Entity<TChild>(child, Comp<TChild>(child)), new Entity<TParent>(parent, Comp<TParent>(parent)));
+        MakeRelated(ChildQuery.Get(child), ParentQuery.Get(parent));
     }
 
     /// <summary>
@@ -52,7 +134,7 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     /// <inheritdoc cref="M:Content.Shared._Citadel.Relations.FamilyEntitySystem`2.TryGetParent(Robust.Shared.GameObjects.Entity{`0},System.Nullable{Robust.Shared.GameObjects.EntityUid}@)"/>
     public bool TryGetParent(EntityUid child, [NotNullWhen(true)] out EntityUid? parent)
     {
-        return TryGetParent(new Entity<TChild>(child, Comp<TChild>(child)), out parent);
+        return TryGetParent(ChildQuery.Get(child), out parent);
     }
 
     /// <summary>
@@ -68,7 +150,7 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     /// <inheritdoc cref="M:Content.Shared._Citadel.Relations.FamilyEntitySystem`2.GetParent(Robust.Shared.GameObjects.Entity{`0})"/>
     public EntityUid GetParent(EntityUid child)
     {
-        return Comp<TChild>(child).Parent!.Value;
+        return ChildQuery.Comp(child).Parent!.Value;
     }
 
     /// <summary>
@@ -82,15 +164,6 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     /// <inheritdoc cref="M:Content.Shared._Citadel.Relations.FamilyEntitySystem`2.GetChildren(Robust.Shared.GameObjects.Entity{`1})"/>
     public IReadOnlySet<EntityUid> GetChildren(EntityUid parent)
     {
-        return Comp<TParent>(parent).Children;
+        return ParentQuery.Comp(parent).Children;
     }
-}
-
-/// <summary>
-///     Defines what happens when a relation is dissolved, i.e. an entity is deleted and relations need repaired.
-/// </summary>
-public enum RelationDissolveBehavior : byte
-{
-    Clear,
-    Reparent,
 }

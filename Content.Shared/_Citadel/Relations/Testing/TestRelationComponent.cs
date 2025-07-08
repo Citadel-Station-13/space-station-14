@@ -14,7 +14,7 @@ namespace Content.Shared._Citadel.Relations.Testing;
 public sealed partial class TestRelationComponent : Component, IRelationParent, IRelationChild
 {
     [DataField]
-    public HashSet<EntityUid> Children { get; private set; } = new();
+    public HashSet<EntityUid> Children { get; set; } = new();
     [DataField]
     public EntityUid? Parent { get; set; } = null;
 }
