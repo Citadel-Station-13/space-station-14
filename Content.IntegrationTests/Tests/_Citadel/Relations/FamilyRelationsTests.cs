@@ -11,7 +11,7 @@ using Content.Shared._Citadel.Relations.Testing;
 namespace Content.IntegrationTests.Tests._Citadel.Relations;
 
 [TestFixture]
-public sealed class RelationsTests
+public sealed class FamilyRelationsTests
 {
     private const string TestFamilyMemberId = "TESTS_CitadelRelationsTestChild";
     [TestPrototypes]
@@ -21,13 +21,13 @@ public sealed class RelationsTests
           components:
             - type: TestRelation
         """;
-    public sealed class ParentChildRelationData : GameTestData
+    public sealed class FamilyRelationData : GameTestData
     {
         [System(Side.Server)] public TestRelationSystem Relation = default!;
     }
 
-    [GameTest<ParentChildRelationData>(RunOnSide = Side.Server)]
-    public void ParentChildRelation(ParentChildRelationData data)
+    [GameTest<FamilyRelationData>(RunOnSide = Side.Server)]
+    public void CreateFamilyRelations(FamilyRelationData data)
     {
         var grandchild = data.SSpawn(TestFamilyMemberId);
         var child = data.SSpawn(TestFamilyMemberId);
@@ -43,8 +43,8 @@ public sealed class RelationsTests
         });
     }
 
-    [GameTest<ParentChildRelationData>(RunOnSide = Side.Server)]
-    public void DeleteChildren(ParentChildRelationData data)
+    [GameTest<FamilyRelationData>(RunOnSide = Side.Server)]
+    public void DeletionHandled(FamilyRelationData data)
     {
         {
             var child = data.SSpawn(TestFamilyMemberId);

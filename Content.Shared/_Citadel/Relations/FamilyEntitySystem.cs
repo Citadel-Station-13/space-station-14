@@ -14,6 +14,9 @@ namespace Content.Shared._Citadel.Relations;
 /// <summary>
 ///     An interface implementable on EntitySystems to indicate they manage a given family (parent-child) relation.
 /// </summary>
+/// <remarks>
+///     This base class has a non-empty initialize and as such base.Initialize() must be called.
+/// </remarks>
 public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     where TChild : IRelationChild, IComponent
     where TParent : IRelationParent, IComponent
@@ -38,7 +41,9 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     [PublicAPI]
     public record struct JoinedEvent(EntityUid? Child, EntityUid? Parent);
 
+    [PublicAPI]
     protected EntityQuery<TChild> ChildQuery { get; private set; }
+    [PublicAPI]
     protected EntityQuery<TParent> ParentQuery { get; private set; }
 
     public override void Initialize()
@@ -101,6 +106,7 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     /// </summary>
     /// <param name="child">The child in the relation.</param>
     /// <param name="parent">The parent in the relation.</param>
+    [PublicAPI]
     public void MakeRelated(Entity<TChild> child, Entity<TParent> parent)
     {
         DebugTools.Assert(child.Comp.Parent == null);
@@ -113,6 +119,7 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     }
 
     /// <inheritdoc cref="M:Content.Shared._Citadel.Relations.FamilyEntitySystem`2.MakeRelated(Robust.Shared.GameObjects.Entity{`0},Robust.Shared.GameObjects.Entity{`1})"/>
+    [PublicAPI]
     public void MakeRelated(EntityUid child, EntityUid parent)
     {
         MakeRelated(ChildQuery.Get(child), ParentQuery.Get(parent));
@@ -124,6 +131,7 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     /// <param name="child">The child to get relation of.</param>
     /// <param name="parent">The found parent, if any.</param>
     /// <returns>Whether a parent was found.</returns>
+    [PublicAPI]
     public bool TryGetParent(Entity<TChild> child, [NotNullWhen(true)] out EntityUid? parent)
     {
         parent = child.Comp.Parent;
@@ -132,6 +140,7 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     }
 
     /// <inheritdoc cref="M:Content.Shared._Citadel.Relations.FamilyEntitySystem`2.TryGetParent(Robust.Shared.GameObjects.Entity{`0},System.Nullable{Robust.Shared.GameObjects.EntityUid}@)"/>
+    [PublicAPI]
     public bool TryGetParent(EntityUid child, [NotNullWhen(true)] out EntityUid? parent)
     {
         return TryGetParent(ChildQuery.Get(child), out parent);
@@ -142,12 +151,14 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     /// </summary>
     /// <param name="child">The child to get relation of.</param>
     /// <returns>The parent entity.</returns>
+    [PublicAPI]
     public EntityUid GetParent(Entity<TChild> child)
     {
         return child.Comp.Parent!.Value;
     }
 
     /// <inheritdoc cref="M:Content.Shared._Citadel.Relations.FamilyEntitySystem`2.GetParent(Robust.Shared.GameObjects.Entity{`0})"/>
+    [PublicAPI]
     public EntityUid GetParent(EntityUid child)
     {
         return ChildQuery.Comp(child).Parent!.Value;
@@ -156,12 +167,14 @@ public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
     /// <summary>
     ///     Retrieves all children of the given parent.
     /// </summary>
+    [PublicAPI]
     public IReadOnlySet<EntityUid> GetChildren(Entity<TParent> parent)
     {
         return parent.Comp.Children;
     }
 
     /// <inheritdoc cref="M:Content.Shared._Citadel.Relations.FamilyEntitySystem`2.GetChildren(Robust.Shared.GameObjects.Entity{`1})"/>
+    [PublicAPI]
     public IReadOnlySet<EntityUid> GetChildren(EntityUid parent)
     {
         return ParentQuery.Comp(parent).Children;
