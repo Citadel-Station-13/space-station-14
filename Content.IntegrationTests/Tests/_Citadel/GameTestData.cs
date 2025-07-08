@@ -6,6 +6,7 @@
 // defined by the Mozilla Public License, v. 2.0.
 
 #nullable enable
+using System.Collections.Generic;
 using System.Reflection;
 using Content.IntegrationTests.Pair;
 using JetBrains.Annotations;
@@ -26,6 +27,9 @@ namespace Content.IntegrationTests.Tests._Citadel;
 public class GameTestData
 {
     private bool _pairDirty;
+
+    private List<EntityUid> _serverEntitiesToClean = new();
+    private List<EntityUid> _clientEntitiesToClean = new();
 
     /// <summary>
     ///     Settings for the client/server pair. By default, this gets you a client and server that have connected together.
@@ -109,10 +113,40 @@ public class GameTestData
     /// </summary>
     public async Task DoTeardown()
     {
-        if (!_pairDirty)
-            await Pair.CleanReturnAsync();
-        else
-            await Pair.DisposeAsync();
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                foreach (var junk in _serverEntitiesToClean)
+                {
+                    if (!SEntMan.Deleted(junk))
+                        SEntMan.DeleteEntity(junk);
+                }
+            });
+
+
+            await Client.WaitAssertion(() =>
+            {
+                foreach (var junk in _clientEntitiesToClean)
+                {
+                    if (!CEntMan.Deleted(junk))
+                        CEntMan.DeleteEntity(junk);
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            _pairDirty = true;
+            throw;
+        }
+        finally
+        {
+            if (!_pairDirty)
+                await Pair.CleanReturnAsync();
+            else
+                await Pair.DisposeAsync();
+        }
+
     }
 
     /// <summary>
@@ -188,16 +222,38 @@ public class GameTestData
     /// <summary>
     ///     Spawns an entity on the server.
     /// </summary>
-    public EntityUid SSpawn(string id)
+    /// <remarks>This tracks the entity for post-test cleanup.</remarks>
+    public EntityUid SSpawn(string? id)
     {
-        return SEntMan.Spawn(id);
+        var res = SEntMan.Spawn(id);
+        _serverEntitiesToClean.Add(res);
+        return res;
     }
-
     /// <summary>
     ///     Spawns an entity on the client.
     /// </summary>
-    public EntityUid CSpawn(string id)
+    /// <remarks>This tracks the entity for post-test cleanup.</remarks>
+    public EntityUid CSpawn(string? id)
     {
-        return CEntMan.Spawn(id);
+        var res = CEntMan.Spawn(id);
+        _clientEntitiesToClean.Add(res);
+        return res;
     }
+
+    /// <summary>
+    ///     Deletes an entity on the server immediately.
+    /// </summary>
+    public void SDeleteNow(EntityUid id)
+    {
+        SEntMan.DeleteEntity(id);
+    }
+
+    /// <summary>
+    ///     Deletes an entity on the client immediately.
+    /// </summary>
+    public void CDeleteNow(EntityUid id)
+    {
+        CEntMan.DeleteEntity(id);
+    }
+
 }

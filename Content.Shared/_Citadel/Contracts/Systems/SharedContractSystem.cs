@@ -5,14 +5,8 @@ namespace Content.Shared._Citadel.Contracts.Systems;
 /// <summary>
 /// This handles core contract logic like state transitions.
 /// </summary>
-public abstract class SharedContractSystem : EntitySystem
+public abstract class SharedContractSystem : CitadelSystem
 {
-    /// <inheritdoc/>
-    public override void Initialize()
-    {
-
-    }
-
     private void Transition(Entity<CitadelContractComponent> ent, ContractState newState)
     {
         var oldState = ent.Comp.State;
