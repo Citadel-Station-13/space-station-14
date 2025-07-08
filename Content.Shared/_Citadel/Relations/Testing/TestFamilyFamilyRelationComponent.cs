@@ -11,7 +11,7 @@ namespace Content.Shared._Citadel.Relations.Testing;
 /// This is used for...
 /// </summary>
 [RegisterComponent]
-public sealed partial class TestRelationComponent : Component, IRelationParent, IRelationChild
+public sealed partial class TestFamilyFamilyRelationComponent : Component, IFamilyRelationParent, IFamilyRelationChild
 {
     [DataField]
     public HashSet<EntityUid> Children { get; set; } = new();

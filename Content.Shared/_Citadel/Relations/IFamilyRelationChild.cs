@@ -8,10 +8,10 @@
 namespace Content.Shared._Citadel.Relations;
 
 /// <summary>
-///     Indicates a component manages a parent-child relationship, as the parent.
+///     Indicates a component manages a parent-child relationship, as the child.
 /// </summary>
-public interface IRelationParent
+public interface IFamilyRelationChild
 {
-    public HashSet<EntityUid> Children { get; set;  }
+    public EntityUid? Parent { get; set; }
 }
 

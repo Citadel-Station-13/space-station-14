@@ -23,7 +23,7 @@ public sealed class FamilyRelationsTests
         """;
     public sealed class FamilyRelationData : GameTestData
     {
-        [System(Side.Server)] public TestRelationSystem Relation = default!;
+        [System(Side.Server)] public TestFamilyRelationSystem FamilyRelation = default!;
     }
 
     [GameTest<FamilyRelationData>(RunOnSide = Side.Server)]
@@ -33,13 +33,13 @@ public sealed class FamilyRelationsTests
         var child = data.SSpawn(TestFamilyMemberId);
         var parent = data.SSpawn(TestFamilyMemberId);
 
-        data.Relation.MakeRelated(child, parent);
-        data.Relation.MakeRelated(grandchild, child);
+        data.FamilyRelation.MakeRelated(child, parent);
+        data.FamilyRelation.MakeRelated(grandchild, child);
 
         Assert.Multiple(() =>
         {
-            Assert.That(data.Relation.GetParent(child), Is.EqualTo(parent));
-            Assert.That(data.Relation.GetParent(grandchild), Is.EqualTo(child));
+            Assert.That(data.FamilyRelation.GetParent(child), Is.EqualTo(parent));
+            Assert.That(data.FamilyRelation.GetParent(grandchild), Is.EqualTo(child));
         });
     }
 
@@ -50,9 +50,9 @@ public sealed class FamilyRelationsTests
             var child = data.SSpawn(TestFamilyMemberId);
             var parent = data.SSpawn(TestFamilyMemberId);
 
-            data.Relation.MakeRelated(child, parent);
+            data.FamilyRelation.MakeRelated(child, parent);
 
-            var childComp = data.SComp<TestRelationComponent>(child);
+            var childComp = data.SComp<TestFamilyFamilyRelationComponent>(child);
 
             data.SDeleteNow(parent);
 
@@ -65,9 +65,9 @@ public sealed class FamilyRelationsTests
             var child = data.SSpawn(TestFamilyMemberId);
             var parent = data.SSpawn(TestFamilyMemberId);
 
-            data.Relation.MakeRelated(child, parent);
+            data.FamilyRelation.MakeRelated(child, parent);
 
-            var parentComp = data.SComp<TestRelationComponent>(parent);
+            var parentComp = data.SComp<TestFamilyFamilyRelationComponent>(parent);
 
             data.SDeleteNow(child);
 

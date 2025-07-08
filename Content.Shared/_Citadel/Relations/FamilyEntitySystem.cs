@@ -18,8 +18,8 @@ namespace Content.Shared._Citadel.Relations;
 ///     This base class has a non-empty initialize and as such base.Initialize() must be called.
 /// </remarks>
 public abstract class FamilyEntitySystem<TChild, TParent> : CitadelSystem
-    where TChild : IRelationChild, IComponent
-    where TParent : IRelationParent, IComponent
+    where TChild : IFamilyRelationChild, IComponent
+    where TParent : IFamilyRelationParent, IComponent
 {
     /// <summary>
     ///     Event fired when a child is seperated from its parent.
