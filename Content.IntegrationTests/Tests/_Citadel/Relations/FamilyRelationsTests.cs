@@ -19,8 +19,9 @@ public sealed class FamilyRelationsTests
         - type: entity
           id: {TestFamilyMemberId}
           components:
-            - type: TestRelation
+            - type: TestFamilyRelation
         """;
+
     public sealed class FamilyRelationData : GameTestData
     {
         [System(Side.Server)] public TestFamilyRelationSystem FamilyRelation = default!;
@@ -52,7 +53,7 @@ public sealed class FamilyRelationsTests
 
             data.FamilyRelation.MakeRelated(child, parent);
 
-            var childComp = data.SComp<TestFamilyFamilyRelationComponent>(child);
+            var childComp = data.SComp<TestFamilyRelationComponent>(child);
 
             data.SDeleteNow(parent);
 
@@ -67,7 +68,7 @@ public sealed class FamilyRelationsTests
 
             data.FamilyRelation.MakeRelated(child, parent);
 
-            var parentComp = data.SComp<TestFamilyFamilyRelationComponent>(parent);
+            var parentComp = data.SComp<TestFamilyRelationComponent>(parent);
 
             data.SDeleteNow(child);
 
@@ -75,5 +76,41 @@ public sealed class FamilyRelationsTests
 
             data.SDeleteNow(parent);
         }
+    }
+
+    [GameTest<FamilyRelationData>(RunOnSide = Side.Server)]
+    public void RecursionChecks(FamilyRelationData data)
+    {
+        var grandchild = data.SSpawn(TestFamilyMemberId);
+        var child = data.SSpawn(TestFamilyMemberId);
+        var parent = data.SSpawn(TestFamilyMemberId);
+
+        data.FamilyRelation.MakeRelated(child, parent);
+        data.FamilyRelation.MakeRelated(grandchild, child);
+
+        Assert.Throws<RecursionCheckedException>(() =>
+        {
+            data.FamilyRelation.MakeRelated(parent, grandchild);
+        });
+
+        Assert.That(data.FamilyRelation.AreDirectlyRelated(parent, grandchild), Is.False);
+    }
+
+    [GameTest<FamilyRelationData>(RunOnSide = Side.Server)]
+    public void BreakRelations(FamilyRelationData data)
+    {
+        var child = data.SSpawn(TestFamilyMemberId);
+        var parent = data.SSpawn(TestFamilyMemberId);
+
+        data.FamilyRelation.MakeRelated(child, parent);
+
+        Assert.That(data.FamilyRelation.TryRemoveRelation(child, parent), Is.True);
+
+        Assert.Throws<UnrelatedException>(() =>
+        {
+            data.FamilyRelation.RemoveRelation(child, parent); // Do it again!
+        });
+
+        Assert.That(data.FamilyRelation.TryGetParent(child, out _), Is.False);
     }
 }

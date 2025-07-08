@@ -40,9 +40,12 @@ public sealed class SmallRandomTests
         Assert.That(SmallRandom.TryFromStringAsSeed("gay!", out var myRandomNullable));
         var myRandom = myRandomNullable!.Value;
 
-        Assert.That(myRandom.Next() != myRandom.Next());
-        Assert.That(myRandom.Next() != myRandom.Next());
-        Assert.That(myRandom.Next() != myRandom.Next());
+        // deliberate as Next() is impure.
+#pragma warning disable NUnit2009
+        Assert.That(myRandom.Next(), Is.Not.EqualTo(myRandom.Next()));
+        Assert.That(myRandom.Next(), Is.Not.EqualTo(myRandom.Next()));
+        Assert.That(myRandom.Next(), Is.Not.EqualTo(myRandom.Next()));
+#pragma warning restore NUnit2009
     }
 
     [GameTest(Description = "Serializes a SmallRandom and then deserializes it again with YAML serialization, asserting that it remains the same over a round trip.")]

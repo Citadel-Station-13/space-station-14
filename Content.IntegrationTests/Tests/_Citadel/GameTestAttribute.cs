@@ -15,6 +15,8 @@ using Robust.UnitTesting;
 
 namespace Content.IntegrationTests.Tests._Citadel;
 
+// oh man some of this code spooky. :(
+
 /// <summary>
 ///     Marks a game test, that needs a client and server to run.
 /// </summary>
@@ -91,7 +93,7 @@ public sealed class GameTestAttribute<TData> : Attribute, ITestBuilder, IImplyFi
                     }
                 }
 
-                if (attribute.RunOnSide is { } side)
+                if (attribute.RunOnSide is { } side && side != Side.Neither)
                 {
                     RobustIntegrationTest.IntegrationInstance
                         instance = side == Side.Client ? data.Pair.Client : data.Pair.Server;
@@ -274,7 +276,7 @@ public sealed class GameTestAttribute : Attribute, ITestBuilder, IImplyFixture, 
                     }
                 }
 
-                if (attribute.RunOnSide is { } side)
+                if (attribute.RunOnSide is { } side && side != Side.Neither)
                 {
                     RobustIntegrationTest.IntegrationInstance
                         instance = side == Side.Client ? pair.Client : pair.Server;

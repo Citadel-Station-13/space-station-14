@@ -8,7 +8,7 @@
 namespace Content.Shared._Citadel.Relations.Testing;
 
 
-public sealed class TestFamilyRelationSystem : FamilyEntitySystem<TestFamilyFamilyRelationComponent, TestFamilyFamilyRelationComponent>
+public sealed class TestFamilyRelationSystem : FamilyEntitySystem<TestFamilyRelationComponent, TestFamilyRelationComponent>
 {
-
+    public override bool ExpensiveRecursionChecks => true;
 }
