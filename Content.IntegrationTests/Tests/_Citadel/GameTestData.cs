@@ -115,17 +115,24 @@ public class GameTestData
     {
         try
         {
-            foreach (var junk in _serverEntitiesToClean)
+            await Server.WaitAssertion(() =>
             {
-                if (!SEntMan.Deleted(junk))
-                    SEntMan.DeleteEntity(junk);
-            }
+                foreach (var junk in _serverEntitiesToClean)
+                {
+                    if (!SEntMan.Deleted(junk))
+                        SEntMan.DeleteEntity(junk);
+                }
+            });
 
-            foreach (var junk in _clientEntitiesToClean)
+
+            await Client.WaitAssertion(() =>
             {
-                if (!SEntMan.Deleted(junk))
-                    SEntMan.DeleteEntity(junk);
-            }
+                foreach (var junk in _clientEntitiesToClean)
+                {
+                    if (!CEntMan.Deleted(junk))
+                        CEntMan.DeleteEntity(junk);
+                }
+            });
         }
         catch (Exception e)
         {
