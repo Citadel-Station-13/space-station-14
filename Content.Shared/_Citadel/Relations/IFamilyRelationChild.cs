@@ -12,6 +12,9 @@ namespace Content.Shared._Citadel.Relations;
 /// </summary>
 public interface IFamilyRelationChild
 {
+    /// <summary>
+    ///     The parent of this entity in the relationship.
+    /// </summary>
     public EntityUid? Parent { get; set; }
 }
 
