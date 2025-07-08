@@ -28,6 +28,11 @@ public abstract partial class FamilyEntitySystem<TChild, TParent> : CitadelSyste
     public abstract bool ExpensiveRecursionChecks { get; }
 
     /// <summary>
+    ///     Whether to disallow having both TChild and TParent on the same entity.
+    /// </summary>
+    public virtual bool DisallowBothComponents => false;
+
+    /// <summary>
     ///     Event fired when a child is seperated from its parent.
     /// </summary>
     /// <remarks>
@@ -56,14 +61,35 @@ public abstract partial class FamilyEntitySystem<TChild, TParent> : CitadelSyste
     {
         base.Initialize();
         if (typeof(TChild) != typeof(TParent))
+        {
             SubscribeLocalEvent<TChild, ComponentShutdown>(OnChildShutdown);
-        if (typeof(TChild) != typeof(TParent))
             SubscribeLocalEvent<TParent, ComponentShutdown>(OnParentShutdown);
+        }
+
         if (typeof(TChild) == typeof(TParent))
             SubscribeLocalEvent<TChild, ComponentShutdown>(OnMixedShutdown);
 
+        if (DisallowBothComponents)
+        {
+            DebugTools.Assert(typeof(TChild) != typeof(TParent), "Disallowing both components when they're the same component is nonsensical.");
+            SubscribeLocalEvent<TChild, ComponentStartup>(OnChildStartup);
+            SubscribeLocalEvent<TParent, ComponentStartup>(OnParentStartup);
+        }
+
         ChildQuery = GetEntityQuery<TChild>();
         ParentQuery = GetEntityQuery<TParent>();
+    }
+
+    private void OnChildStartup(EntityUid uid, TChild component, ref ComponentStartup args)
+    {
+        if (HasComp<TParent>(uid))
+            throw new MixedParentChildDisallowedException(typeof(TChild), typeof(TParent));
+    }
+
+    private void OnParentStartup(EntityUid uid, TParent component, ref ComponentStartup args)
+    {
+        if (HasComp<TChild>(uid))
+            throw new MixedParentChildDisallowedException(typeof(TChild), typeof(TParent));
     }
 
     private void OnMixedShutdown(Entity<TChild> ent, ref ComponentShutdown args)
