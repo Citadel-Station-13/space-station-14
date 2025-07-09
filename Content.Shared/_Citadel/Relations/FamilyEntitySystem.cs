@@ -60,20 +60,24 @@ public abstract partial class FamilyEntitySystem<TChild, TParent> : CitadelSyste
     public override void Initialize()
     {
         base.Initialize();
+
         if (typeof(TChild) != typeof(TParent))
         {
             SubscribeLocalEvent<TChild, ComponentShutdown>(OnChildShutdown);
             SubscribeLocalEvent<TParent, ComponentShutdown>(OnParentShutdown);
-        }
 
-        if (typeof(TChild) == typeof(TParent))
+            SubscribeLocalEvent<TChild, ComponentStartup>(OnChildStartup);
+            SubscribeLocalEvent<TParent, ComponentStartup>(OnParentStartup);
+        }
+        else if (typeof(TChild) == typeof(TParent))
+        {
             SubscribeLocalEvent<TChild, ComponentShutdown>(OnMixedShutdown);
+
+            SubscribeLocalEvent<TChild, ComponentStartup>(OnMixedStartup);
+        }
 
         if (DisallowBothComponents)
             DebugTools.Assert(typeof(TChild) != typeof(TParent), "Disallowing both components when they're the same component is nonsensical.");
-
-        SubscribeLocalEvent<TChild, ComponentStartup>(OnChildStartup);
-        SubscribeLocalEvent<TParent, ComponentStartup>(OnParentStartup);
 
         ChildQuery = GetEntityQuery<TChild>();
         ParentQuery = GetEntityQuery<TParent>();
@@ -101,6 +105,17 @@ public abstract partial class FamilyEntitySystem<TChild, TParent> : CitadelSyste
     {
         if (DisallowBothComponents && HasComp<TChild>(uid))
             throw new MixedParentChildDisallowedException(typeof(TChild), typeof(TParent));
+    }
+
+    /// <summary>
+    ///     Event handler for mixed (TParent == TChild) startup.
+    /// </summary>
+    /// <remarks>
+    ///     This should run before your own startup code.
+    /// </remarks>
+    protected virtual void OnMixedStartup(EntityUid uid, TChild component, ref ComponentStartup args)
+    {
+        // .. do nothing, yet.
     }
 
     /// <summary>
@@ -209,8 +224,6 @@ public abstract partial class FamilyEntitySystem<TChild, TParent> : CitadelSyste
         DebugTools.Assert(success, "Relations broke :(");
 
         RaiseLocalEvent(child, new SeperatedEvent(child, parent));
-
-
         RaiseLocalEvent(parent, new SeperatedEvent(child, parent));
 
         return true;
