@@ -70,35 +70,58 @@ public abstract partial class FamilyEntitySystem<TChild, TParent> : CitadelSyste
             SubscribeLocalEvent<TChild, ComponentShutdown>(OnMixedShutdown);
 
         if (DisallowBothComponents)
-        {
             DebugTools.Assert(typeof(TChild) != typeof(TParent), "Disallowing both components when they're the same component is nonsensical.");
-            SubscribeLocalEvent<TChild, ComponentStartup>(OnChildStartup);
-            SubscribeLocalEvent<TParent, ComponentStartup>(OnParentStartup);
-        }
+
+        SubscribeLocalEvent<TChild, ComponentStartup>(OnChildStartup);
+        SubscribeLocalEvent<TParent, ComponentStartup>(OnParentStartup);
 
         ChildQuery = GetEntityQuery<TChild>();
         ParentQuery = GetEntityQuery<TParent>();
     }
 
-    private void OnChildStartup(EntityUid uid, TChild component, ref ComponentStartup args)
+    /// <summary>
+    ///     Event handler for child startup.
+    /// </summary>
+    /// <remarks>
+    ///     This should run before your own startup code.
+    /// </remarks>
+    protected virtual void OnChildStartup(EntityUid uid, TChild component, ref ComponentStartup args)
     {
-        if (HasComp<TParent>(uid))
+        if (DisallowBothComponents && HasComp<TParent>(uid))
             throw new MixedParentChildDisallowedException(typeof(TChild), typeof(TParent));
     }
 
-    private void OnParentStartup(EntityUid uid, TParent component, ref ComponentStartup args)
+    /// <summary>
+    ///     Event handler for parent startup.
+    /// </summary>
+    /// <remarks>
+    ///     This should run before your own startup code.
+    /// </remarks>
+    protected virtual void OnParentStartup(EntityUid uid, TParent component, ref ComponentStartup args)
     {
-        if (HasComp<TChild>(uid))
+        if (DisallowBothComponents && HasComp<TChild>(uid))
             throw new MixedParentChildDisallowedException(typeof(TChild), typeof(TParent));
     }
 
-    private void OnMixedShutdown(Entity<TChild> ent, ref ComponentShutdown args)
+    /// <summary>
+    ///     Event handler for mixed (TChild == TParent) shutdown.
+    /// </summary>
+    /// <remarks>
+    ///     This should run before your own shutdown code.
+    /// </remarks>
+    protected virtual void OnMixedShutdown(Entity<TChild> ent, ref ComponentShutdown args)
     {
         OnChildShutdown(ent, ref args);
         OnParentShutdown(new Entity<TParent>(ent, (TParent)(object)ent.Comp), ref args);
     }
 
-    private void OnParentShutdown(Entity<TParent> parent, ref ComponentShutdown args)
+    /// <summary>
+    ///     Event handler for parent shutdown.
+    /// </summary>
+    /// <remarks>
+    ///     This should run before your own shutdown code.
+    /// </remarks>
+    protected virtual void OnParentShutdown(Entity<TParent> parent, ref ComponentShutdown args)
     {
         if (parent.Comp.Children.Count == 0)
             return;
@@ -117,7 +140,13 @@ public abstract partial class FamilyEntitySystem<TChild, TParent> : CitadelSyste
         }
     }
 
-    private void OnChildShutdown(Entity<TChild> child, ref ComponentShutdown args)
+    /// <summary>
+    ///     Event handler for child shutdown.
+    /// </summary>
+    /// <remarks>
+    ///     This should run before your own shutdown code.
+    /// </remarks>
+    protected virtual void OnChildShutdown(Entity<TChild> child, ref ComponentShutdown args)
     {
         if (child.Comp.Parent is null)
             return;
