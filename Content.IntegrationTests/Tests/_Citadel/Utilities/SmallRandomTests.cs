@@ -22,11 +22,11 @@ public sealed class SmallRandomTests
     [Test]
     public void IsReproducable()
     {
-        Assert.That(SmallRandom.TryFromStringAsSeed("awawa", out var myRandom));
+        Assert.That(RngSeed.TryFromStringAsSeed("awawa", out var myRandom));
 
         var stringified = myRandom.ToString();
 
-        Assert.That(SmallRandom.TryFromStringAsSerialized(stringified, out var andBackAgain));
+        Assert.That(RngSeed.TryFromStringAsSerialized(stringified, out var andBackAgain));
 
         var andBackAgainV = andBackAgain!.Value;
 
@@ -37,8 +37,8 @@ public sealed class SmallRandomTests
     [Test]
     public void ReasonablyRandom()
     {
-        Assert.That(SmallRandom.TryFromStringAsSeed("gay!", out var myRandomNullable));
-        var myRandom = myRandomNullable!.Value;
+        Assert.That(RngSeed.TryFromStringAsSeed("gay!", out var myRandomNullable));
+        var myRandom = myRandomNullable!.Value.IntoRandomizer();
 
         // deliberate as Next() is impure.
 #pragma warning disable NUnit2009
@@ -51,8 +51,8 @@ public sealed class SmallRandomTests
     [GameTest(Description = "Serializes a SmallRandom and then deserializes it again with YAML serialization, asserting that it remains the same over a round trip.")]
     public void Serialize([SidedDependency(Side.Server)] ISerializationManager ser)
     {
-        Assert.That(SmallRandom.TryFromStringAsSeed("colon-three", out var myRandomNullable));
-        var myRandom = myRandomNullable!.Value;
+        Assert.That(RngSeed.TryFromStringAsSeed("colon-three", out var myRandomNullable));
+        var myRandom = myRandomNullable!.Value.IntoRandomizer();
 
         var node = (MappingDataNode)ser.WriteValue(new SmallRandomTestSer(myRandom));
         var document = new YamlStream {new(node.ToYaml())};
