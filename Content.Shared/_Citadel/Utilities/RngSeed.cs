@@ -35,6 +35,7 @@ public readonly struct RngSeed
     /// <summary>
     ///     Construct a SmallRandom from the given integer span.
     /// </summary>
+    [PublicAPI]
     public RngSeed(Span<uint> span)
     {
         DebugTools.AssertEqual(span.Length, 4);
@@ -45,9 +46,26 @@ public readonly struct RngSeed
     }
 
     /// <summary>
+    ///     Constructs an RngSeed using a SmallRandom as a basis.
+    /// </summary>
+    /// <param name="random">The randomizer to use.</param>
+    /// <remarks>
+    ///     This does <b>not</b> clone the randomizer, and calling Next() on this new randomizer is not equivalent to Next() on the old one.
+    /// </remarks>
+    [PublicAPI]
+    public RngSeed(ref SmallRandom random)
+    {
+        _s0 = (uint)random.Next();
+        _s1 = (uint)random.Next();
+        _s2 = (uint)random.Next();
+        _s3 = (uint)random.Next();
+    }
+
+    /// <summary>
     ///     Directly create a mutable randomizer from this seed.
     ///     Multiple randomizers made from this seed will all behave identically and output the same sequence.
     /// </summary>
+    [PublicAPI, Pure]
     public SmallRandom IntoRandomizer()
     {
         return new SmallRandom(_s0, _s1, _s2, _s3);
@@ -61,6 +79,7 @@ public readonly struct RngSeed
     /// <param name="level2">Arbitrary level number 2, something like your starsystem number or just zero.</param>
     /// <returns>A new rng seed for that coordinate, deterministically derived.</returns>
     /// <remarks>This isn't statistically sound or anything, just sufficient for procedural generation.</remarks>
+    [PublicAPI, Pure]
     public RngSeed SeedForCoordinate(Vector2i coordinates, int level1, int level2)
     {
         var joinedXy = (((ulong)coordinates.X + 314159) << 32) | (uint)(coordinates.Y - 314159);
@@ -87,6 +106,7 @@ public readonly struct RngSeed
     /// <param name="uuid">An object's UUID.</param>
     /// <returns>A new rng seed for that coordinate, deterministically derived.</returns>
     /// <remarks>This isn't statistically sound or anything, just sufficient for procedural generation.</remarks>
+    [PublicAPI, Pure]
     public RngSeed SeedForCoordinateAndUnique(Vector2i coordinates, Guid uuid)
     {
         DebugTools.Assert(uuid != Guid.Empty, "Empty UUIDs have poor statistical properties and should never be used for seed gen.");
@@ -133,6 +153,7 @@ public readonly struct RngSeed
     ///     Step does not have to be small, this code just takes extra steps to ensure decent rng spread.
     ///     As with <see cref="SeedForCoordinate"/>, this isn't proven statistically sound.
     /// </remarks>
+    [PublicAPI, Pure]
     public RngSeed SeedForStep(int step)
     {
         step += 314159;
@@ -157,6 +178,7 @@ public readonly struct RngSeed
     /// <remarks>
     ///     Input string must not be empty, and user input seeds are not particularly random seeds.
     /// </remarks>
+    [PublicAPI]
     public static bool TryFromStringAsSerialized(string seed, [NotNullWhen(true)] out RngSeed? rng)
     {
         DebugTools.Assert(seed.Length > 0);
@@ -176,6 +198,7 @@ public readonly struct RngSeed
     ///     Creates a SmallRandom using the given 32-character hex string.
     /// </summary>
     /// <returns>Whether the hex string was successfully parsed.</returns>
+    [PublicAPI]
     public static bool TryFromStringAsHex(string serialized, [NotNullWhen(true)] out RngSeed? rng)
     {
         if (serialized.Length != 32)
@@ -198,6 +221,7 @@ public readonly struct RngSeed
     ///     Creates a SmallRandom using the bytes of the given string as a seed, with a safety to prevent seed 0.
     /// </summary>
     /// <returns>Whether the seed was successfully used.</returns>
+    [PublicAPI]
     public static bool TryFromStringAsSeed(string seed, [NotNullWhen(true)] out RngSeed? rng)
     {
         if (seed.Length == 0)
@@ -231,6 +255,7 @@ public readonly struct RngSeed
     }
 
     [Pure]
+    [PublicAPI]
     public override string ToString()
     {
         return $"{_s0:X8}{_s1:X8}{_s2:X8}{_s3:X8}";

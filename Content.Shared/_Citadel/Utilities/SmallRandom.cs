@@ -29,9 +29,6 @@ As such, this work is under their and only their license, despite being derivati
 https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Random.Xoshiro128StarStarImpl.cs
 */
 
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Linq;
 using System.Numerics;
 using JetBrains.Annotations;
 using Robust.Shared.Random;
@@ -65,6 +62,7 @@ public struct SmallRandom : IRobustRandom
     /// <summary>
     ///     Construct a SmallRandom from the given integer span.
     /// </summary>
+    [PublicAPI]
     public SmallRandom(Span<uint> span)
     {
         DebugTools.AssertEqual(span.Length, 4);
@@ -78,6 +76,7 @@ public struct SmallRandom : IRobustRandom
     ///     Constructs a SmallRandom using another source of randomness (i.e. the global RNG) as a basis.
     /// </summary>
     /// <param name="otherRandom">The other randomizer to use.</param>
+    [PublicAPI]
     public SmallRandom(IRobustRandom otherRandom)
     {
         _s0 = (uint)otherRandom.Next();
@@ -95,6 +94,7 @@ public struct SmallRandom : IRobustRandom
     /// <remarks>
     ///     This does <b>not</b> clone the randomizer, and calling Next() on this new randomizer is not equivalent to Next() on the old one.
     /// </remarks>
+    [PublicAPI]
     public SmallRandom(ref SmallRandom otherRandom)
     {
         _s0 = (uint)otherRandom.Next();
@@ -276,12 +276,14 @@ public struct SmallRandom : IRobustRandom
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public float NextFloat()
     {
         return (NextUInt32() >> 8) * (1.0f / (1u << 24));
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public int Next()
     {
         while (true)
@@ -298,6 +300,7 @@ public struct SmallRandom : IRobustRandom
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public int Next(int maxValue)
     {
         DebugTools.Assert(maxValue >= 0, "maxValue must not be negative or zero.");
@@ -306,6 +309,7 @@ public struct SmallRandom : IRobustRandom
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public int Next(int minValue, int maxValue)
     {
         DebugTools.Assert(minValue <= maxValue, "The span must not be reversed.");
@@ -314,24 +318,28 @@ public struct SmallRandom : IRobustRandom
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public double NextDouble()
     {
         return (NextUInt64() >> 11) * (1.0 / (1ul << 53));
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public TimeSpan Next(TimeSpan maxTime)
     {
         return Next(TimeSpan.Zero, maxTime);
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public TimeSpan Next(TimeSpan minTime, TimeSpan maxTime)
     {
         return minTime + (maxTime - minTime) * NextDouble();
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public void NextBytes(byte[] buffer)
     {
         NextBytes(buffer.AsSpan());
@@ -341,6 +349,7 @@ public struct SmallRandom : IRobustRandom
     ///     Fills the given buffer with pseudo-random data.
     /// </summary>
     /// <param name="buffer">The span to modify.</param>
+    [PublicAPI]
     public void NextBytes(Span<byte> buffer)
     {
         // todo optimize
@@ -374,7 +383,7 @@ public struct SmallRandom : IRobustRandom
         return _s0 == other._s0 && _s1 == other._s1 && _s2 == other._s2 && _s3 == other._s3;
     }
 
-    [Pure]
+    [PublicAPI, Pure]
     public override string ToString()
     {
         return $"{_s0:X8}{_s1:X8}{_s2:X8}{_s3:X8}";
