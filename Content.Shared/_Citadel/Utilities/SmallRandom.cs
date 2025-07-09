@@ -29,9 +29,6 @@ As such, this work is under their and only their license, despite being derivati
 https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Random.Xoshiro128StarStarImpl.cs
 */
 
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Linq;
 using System.Numerics;
 using JetBrains.Annotations;
 using Robust.Shared.Random;
@@ -65,6 +62,7 @@ public struct SmallRandom : IRobustRandom
     /// <summary>
     ///     Construct a SmallRandom from the given integer span.
     /// </summary>
+    [PublicAPI]
     public SmallRandom(Span<uint> span)
     {
         DebugTools.AssertEqual(span.Length, 4);
@@ -75,87 +73,10 @@ public struct SmallRandom : IRobustRandom
     }
 
     /// <summary>
-    ///     Construct a SmallRandom from the given string seed, as it would be in YAML.
-    ///     This can be either a 128-bit number in hex, or a string that will be used byte-wise.
-    ///     Directly compatible with the serialized form of SmallRandom, and safe to use against user input.
-    /// </summary>
-    /// <remarks>
-    ///     Input string must not be empty, and user input seeds are not particularly random seeds.
-    /// </remarks>
-    public static bool TryFromStringAsSerialized(string seed, [NotNullWhen(true)] out SmallRandom? rng)
-    {
-        DebugTools.Assert(seed.Length > 0);
-
-        // Hex byte string.
-        if (seed.Length == 32 && seed.All(char.IsAsciiHexDigit))
-        {
-            return TryFromStringAsHex(seed, out rng);
-        }
-
-        DebugTools.Assert(EncodingHelpers.UTF8.GetByteCount(seed) <= 16, "Oversized seed is being truncated before usage.");
-
-        return TryFromStringAsSeed(seed, out rng);
-    }
-
-    /// <summary>
-    ///     Creates a SmallRandom using the given 32-character hex string.
-    /// </summary>
-    /// <param name="serialized"></param>
-    /// <param name="rng"></param>
-    /// <returns></returns>
-    public static bool TryFromStringAsHex(string serialized, [NotNullWhen(true)] out SmallRandom? rng)
-    {
-        if (serialized.Length != 32)
-        {
-            rng = null;
-            return false;
-        }
-
-        rng = new SmallRandom
-        {
-            _s0 = uint.Parse(serialized[0..8], NumberStyles.HexNumber),
-            _s1 = uint.Parse(serialized[8..16], NumberStyles.HexNumber),
-            _s2 = uint.Parse(serialized[16..24], NumberStyles.HexNumber),
-            _s3 = uint.Parse(serialized[24..32], NumberStyles.HexNumber),
-        };
-
-        return true;
-    }
-
-    /// <summary>
-    ///     Creates a SmallRandom using the bytes of the given string as a seed, with a safety to prevent seed 0.
-    /// </summary>
-    /// <param name="seed"></param>
-    /// <returns></returns>
-    public static bool TryFromStringAsSeed(string seed, [NotNullWhen(true)] out SmallRandom? rng)
-    {
-        if (seed.Length == 0)
-        {
-            rng = null;
-            return false;
-        }
-
-        var utf8 = new byte[16];
-
-        EncodingHelpers.UTF8.GetBytes(seed.AsSpan(), utf8.AsSpan());
-
-        rng = new SmallRandom
-        {
-            _s0 = BitConverter.ToUInt32(utf8[0..4]),
-            _s1 = BitConverter.ToUInt32(utf8[4..8]),
-            _s2 = BitConverter.ToUInt32(utf8[8..12]),
-            _s3 = BitConverter.ToUInt32(utf8[12..16]),
-        };
-
-        rng = rng.Value with { _s0 = rng.Value._s0 | 0x70000000 }; // Set high bits to prevent zero issues if we happen to be exactly 0.
-
-        return true;
-    }
-
-    /// <summary>
     ///     Constructs a SmallRandom using another source of randomness (i.e. the global RNG) as a basis.
     /// </summary>
     /// <param name="otherRandom">The other randomizer to use.</param>
+    [PublicAPI]
     public SmallRandom(IRobustRandom otherRandom)
     {
         _s0 = (uint)otherRandom.Next();
@@ -173,6 +94,7 @@ public struct SmallRandom : IRobustRandom
     /// <remarks>
     ///     This does <b>not</b> clone the randomizer, and calling Next() on this new randomizer is not equivalent to Next() on the old one.
     /// </remarks>
+    [PublicAPI]
     public SmallRandom(ref SmallRandom otherRandom)
     {
         _s0 = (uint)otherRandom.Next();
@@ -354,12 +276,14 @@ public struct SmallRandom : IRobustRandom
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public float NextFloat()
     {
         return (NextUInt32() >> 8) * (1.0f / (1u << 24));
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public int Next()
     {
         while (true)
@@ -376,6 +300,7 @@ public struct SmallRandom : IRobustRandom
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public int Next(int maxValue)
     {
         DebugTools.Assert(maxValue >= 0, "maxValue must not be negative or zero.");
@@ -384,6 +309,7 @@ public struct SmallRandom : IRobustRandom
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public int Next(int minValue, int maxValue)
     {
         DebugTools.Assert(minValue <= maxValue, "The span must not be reversed.");
@@ -392,24 +318,28 @@ public struct SmallRandom : IRobustRandom
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public double NextDouble()
     {
         return (NextUInt64() >> 11) * (1.0 / (1ul << 53));
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public TimeSpan Next(TimeSpan maxTime)
     {
         return Next(TimeSpan.Zero, maxTime);
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public TimeSpan Next(TimeSpan minTime, TimeSpan maxTime)
     {
         return minTime + (maxTime - minTime) * NextDouble();
     }
 
     /// <inheritdoc/>
+    [PublicAPI]
     public void NextBytes(byte[] buffer)
     {
         NextBytes(buffer.AsSpan());
@@ -419,6 +349,7 @@ public struct SmallRandom : IRobustRandom
     ///     Fills the given buffer with pseudo-random data.
     /// </summary>
     /// <param name="buffer">The span to modify.</param>
+    [PublicAPI]
     public void NextBytes(Span<byte> buffer)
     {
         // todo optimize
@@ -452,7 +383,7 @@ public struct SmallRandom : IRobustRandom
         return _s0 == other._s0 && _s1 == other._s1 && _s2 == other._s2 && _s3 == other._s3;
     }
 
-    [Pure]
+    [PublicAPI, Pure]
     public override string ToString()
     {
         return $"{_s0:X8}{_s1:X8}{_s2:X8}{_s3:X8}";
