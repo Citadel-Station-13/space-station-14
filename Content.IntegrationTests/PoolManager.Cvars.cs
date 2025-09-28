@@ -1,6 +1,9 @@
 #nullable enable
 using Content.Shared.CCVar;
 
+// Downstream change - needed for Age Gate
+using Content.Shared._Common.CCVar;
+
 namespace Content.IntegrationTests;
 
 // Partial class containing test cvars
@@ -33,5 +36,7 @@ public static partial class PoolManager
         (CCVars.InteractionRateLimitCount.Name, "9999999"),
         (CCVars.InteractionRateLimitPeriod.Name, "0.1"),
         (CCVars.MovementMobPushing.Name, "false"),
+        // Downstream change - needed for Age Gate
+        (PreJoinCCVars.PreJoinOrder.Name, ""),
     };
 }

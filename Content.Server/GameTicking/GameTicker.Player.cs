@@ -13,12 +13,18 @@ using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
+// Downstream change - needed for Age Gate
+using Content.Server._Common.PreJoin;
+
 namespace Content.Server.GameTicking
 {
     [UsedImplicitly]
     public sealed partial class GameTicker
     {
         [Dependency] private IPlayerManager _playerManager = default!;
+
+        // Downstream change - needed for Age Gate
+        [Dependency] private PreJoinManager _preJoinManager = default!;
 
         private void InitializePlayer()
         {
@@ -55,7 +61,7 @@ namespace Content.Server.GameTicking
 
                     // Make the player actually join the game.
                     // timer time must be > tick length
-                    Timer.Spawn(0, () => _playerManager.JoinGame(args.Session));
+                    Timer.Spawn(0, async () => await _preJoinManager.TryJoinGame(args.Session));
 
                     var record = await _db.GetPlayerRecordByUserId(args.Session.UserId);
                     var firstConnection = record != null &&
