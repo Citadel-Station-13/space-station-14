@@ -36,6 +36,7 @@ using Robust.Shared.Utility;
 
 // Downstream change - needed for Age Gate
 using Content.Server._Common.PreJoin;
+using Content.Server._Common.AgeGate;
 
 namespace Content.Server.Entry
 {
@@ -83,6 +84,7 @@ namespace Content.Server.Entry
 
         // Downstream change - needed for Age Gate
         [Dependency] private PreJoinManager _preJoinManager = default!;
+        [Dependency] private AgeGateManager _ageGateManager = default!;
 
         public override void PreInit()
         {
@@ -163,7 +165,6 @@ namespace Content.Server.Entry
 
             _admin.Initialize();
             _afk.Initialize();
-            _preJoinManager.Initialize();
             _rules.Initialize();
             _discordLink.Initialize();
             _discordChatLink.Initialize();
@@ -175,6 +176,10 @@ namespace Content.Server.Entry
             _multiServerKick.Initialize();
             _cvarCtrl.Initialize();
             _feedbackManager.Initialize();
+
+            // Downstream change - needed for Age Gate
+            _preJoinManager.Initialize();
+            _ageGateManager.Initialize();
         }
 
         public override void Update(ModUpdateLevel level, FrameEventArgs frameEventArgs)

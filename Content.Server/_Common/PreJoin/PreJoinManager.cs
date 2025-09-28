@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: Copyright (c) 2025 Space Wizards Federation
 // SPDX-License-Identifier: MIT
 
-using Content.Server.Info;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;

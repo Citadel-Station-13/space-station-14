@@ -61,6 +61,7 @@ namespace Content.Server.GameTicking
 
                     // Make the player actually join the game.
                     // timer time must be > tick length
+                    // Downstream change - needed for Age Gate: changed to call _preJoinManager.TryJoinGame instead
                     Timer.Spawn(0, async () => await _preJoinManager.TryJoinGame(args.Session));
 
                     var record = await _db.GetPlayerRecordByUserId(args.Session.UserId);

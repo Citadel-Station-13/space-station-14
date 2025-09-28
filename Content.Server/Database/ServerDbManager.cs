@@ -369,6 +369,14 @@ namespace Content.Server.Database
         Task CustomVoteLogCancel(int voteId);
 
         #endregion
+
+        // Downstream change - needed for Age Gate
+        #region Age Gate
+
+        Task<bool> HasPassedAgeGate(NetUserId player);
+        Task SetPassedAgeGate(NetUserId player, bool hasPassed);
+
+        #endregion
     }
 
     /// <summary>
@@ -824,6 +832,20 @@ namespace Content.Server.Database
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.SetLastReadRules(player, time));
         }
+
+        // Downstream change - needed for Age Gate
+        public Task<bool> HasPassedAgeGate(NetUserId player)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.HasPassedAgeGate(player));
+        }
+
+        public Task SetPassedAgeGate(NetUserId player, bool hasPassed)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetPassedAgeGate(player, hasPassed));
+        }
+        // (End of downstream change)
 
         public Task<int> AddAdminNote(int? roundId, Guid player, TimeSpan playtimeAtNote, string message, NoteSeverity severity, bool secret, Guid createdBy, DateTimeOffset createdAt, DateTimeOffset? expiryTime)
         {

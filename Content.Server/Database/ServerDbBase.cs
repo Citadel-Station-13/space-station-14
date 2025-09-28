@@ -1052,6 +1052,32 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             await db.DbContext.SaveChangesAsync();
         }
 
+        // Downstream change - needed for Age Gate
+        public async Task<bool> HasPassedAgeGate(NetUserId player)
+        {
+            await using var db = await GetDb();
+
+            return await db.DbContext.Player
+                .Where(dbPlayer => dbPlayer.UserId == player)
+                .Select(dbPlayer => dbPlayer.HasPassedAgeGate)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task SetPassedAgeGate(NetUserId player, bool hasPassed)
+        {
+            await using var db = await GetDb();
+
+            var dbPlayer = await db.DbContext.Player.Where(dbPlayer => dbPlayer.UserId == player).SingleOrDefaultAsync();
+            if (dbPlayer == null)
+            {
+                return;
+            }
+
+            dbPlayer.HasPassedAgeGate = hasPassed;
+            await db.DbContext.SaveChangesAsync();
+        }
+        // (End of downstream change)
+
         public async Task<bool> GetBlacklistStatusAsync(NetUserId player)
         {
             await using var db = await GetDb();

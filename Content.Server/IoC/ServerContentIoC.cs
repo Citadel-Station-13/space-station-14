@@ -1,3 +1,4 @@
+using Content.Server._Common.AgeGate;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -87,5 +88,6 @@ internal static class ServerContentIoC
 
         // Downstream change - needed for Age Gate
         deps.Register<PreJoinManager>();
+        deps.Register<AgeGateManager>();
     }
 }

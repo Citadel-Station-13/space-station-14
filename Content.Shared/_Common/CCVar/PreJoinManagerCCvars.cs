@@ -12,5 +12,5 @@ public sealed class PreJoinCCVars
     /// Comma-separated list of PreJoin actions to perform before the player is let into the game.
     /// </summary>
     public static readonly CVarDef<string> PreJoinOrder =
-        CVarDef.Create("prejoin.order", "Rules", CVar.SERVERONLY);
+        CVarDef.Create("prejoin.order", "AgeGate,Rules", CVar.SERVERONLY);
 }
