@@ -1,5 +1,6 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
+using Content.Server._Common.Consent;
 using Content.Server.Preferences.Managers;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -18,6 +19,7 @@ namespace Content.Server.Database;
 public sealed class UserDbDataManager : IPostInjectInit
 {
     [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private readonly IServerConsentManager _consent = default!;
 
     private readonly Dictionary<NetUserId, UserData> _users = new();
     private readonly List<OnLoadPlayer> _onLoadPlayer = [];
@@ -99,6 +101,9 @@ public sealed class UserDbDataManager : IPostInjectInit
             // We throw a OperationCanceledException so users of WaitLoadComplete() always see cancellation here.
             throw new OperationCanceledException("Load of user data cancelled due to unknown error");
         }
+        await Task.WhenAll(
+            _consent.LoadData(session, cancel) // TODO: use the new AddOnLoadPlayer instead, that was added in #28085
+        );
     }
 
     /// <summary>
