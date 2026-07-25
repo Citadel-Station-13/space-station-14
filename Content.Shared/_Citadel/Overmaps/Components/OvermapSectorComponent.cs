@@ -1,3 +1,4 @@
+using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._Citadel.Overmaps.Components;
@@ -25,4 +26,17 @@ public sealed partial class OvermapSectorComponent : Component
     /// </summary>
     [ViewVariables, AutoNetworkedField]
     public float influenceRange { get; set; } = 5.0f;
+
+    #warning how to do this
+    /// <summary>
+    /// Holds all the overmap entities currently in ourselves.
+    ///
+    /// This is nestable. A sector should however, not be allowed to join another sector
+    /// while things are inside it, as true map-merging is not yet implemented.
+    ///
+    /// Undefined behavior results if that happens.
+    /// This is server-side only.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadOnly)]
+    public Container EntityContainer = default!;
 }

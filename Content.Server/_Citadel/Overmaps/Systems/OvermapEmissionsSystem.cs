@@ -27,7 +27,7 @@ public sealed class OvermapEmissionsSystem : SharedOvermapEmissionsSystem
             return true;
         }
 
-        signals = [];
+        signals = Enumerable.Empty<OvermapSignal>();
         return true;
     }
 
