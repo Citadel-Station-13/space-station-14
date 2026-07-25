@@ -1,6 +1,6 @@
 ﻿using Robust.Shared.Utility;
 
-namespace Content.Server.Maps;
+namespace Content.Shared.Maps;
 
 public sealed partial class GameMapPrototype
 {
@@ -9,4 +9,6 @@ public sealed partial class GameMapPrototype
     /// </summary>
     [DataField]
     public ResPath? Patchfile = null;
+
+    // TODO: dead code?
 }
