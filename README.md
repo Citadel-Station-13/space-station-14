@@ -6,10 +6,10 @@ A roleplaying world-simulation fork of Space Station 14.
 
 <div class="header">
 
-Website - Under Construction!
-Discord - <https://discord.gg/zVd9F6fjZh>
-Forum - Under Construction!
-Patreon - Under Construction!
+* Website - Under Construction!
+* Discord - <https://discord.gg/zVd9F6fjZh>
+* Forum - Under Construction!
+* Patreon - Under Construction!
 
 </div>
 
