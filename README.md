@@ -4,9 +4,12 @@ A roleplaying world-simulation fork of Space Station 14.
 
 ## Links
 
-<div class="header" align="center">  
+<div class="header">  
 
-Website (Under Construction!) | Discord ([Link]([https://discord.gg/zVd9F6fjZh](https://discord.gg/zVd9F6fjZh))) | Forum (Under Construction!) | Patreon (Under Construction!) 
+Website - Under Construction!
+Discord - <https://discord.gg/zVd9F6fjZh>
+Forum - Under Construction!
+Patreon - Under Construction!
 
 </div>
 
