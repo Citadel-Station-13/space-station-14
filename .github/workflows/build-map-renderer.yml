@@ -2,11 +2,11 @@
 
 on:
   push:
-    branches: [ take2, staging, trying ]
+    branches: [ main ]
   merge_group:
   pull_request:
     types: [ opened, reopened, synchronize, ready_for_review ]
-    branches: [ take2 ]
+    branches: [ main ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.ref }}
