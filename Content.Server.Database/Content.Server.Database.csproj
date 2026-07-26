@@ -28,5 +28,12 @@
     <ProjectReference Include="..\Content.Shared.Database\Content.Shared.Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\Postgres\" />
+    <Folder Include="Migrations\Sqlite\" />
+    <Folder Include="Migrations\_Citadel\Postgres\" />
+    <Folder Include="Model\" />
+  </ItemGroup>
+
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
 </Project>

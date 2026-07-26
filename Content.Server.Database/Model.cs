@@ -15,6 +15,8 @@ namespace Content.Server.Database
 {
     public abstract class ServerDbContext : DbContext
     {
+        public const string DEFAULT_SCHEMA = "ss14";
+
         protected ServerDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -49,6 +51,8 @@ namespace Content.Server.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema(DEFAULT_SCHEMA);
+
             modelBuilder.Entity<Preference>()
                 .HasIndex(p => p.UserId)
                 .IsUnique();

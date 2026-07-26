@@ -96,7 +96,7 @@ namespace Content.Server.Database
             return AdminLog.Count();
         }
 
-        private static string InetToString(IPAddress address, int mask) {
+        public static string InetToString(IPAddress address, int mask) {
             if (address.IsIPv4MappedToIPv6)
             {
                 // Fix IPv6-mapped IPv4 addresses
@@ -107,7 +107,7 @@ namespace Content.Server.Database
             return $"{address}/{mask}";
         }
 
-        private static NpgsqlInet StringToInet(string inet) {
+        public static NpgsqlInet StringToInet(string inet) {
             var idx = inet.IndexOf('/', StringComparison.Ordinal);
             return new NpgsqlInet(
                 IPAddress.Parse(inet.AsSpan(0, idx)),
@@ -115,7 +115,7 @@ namespace Content.Server.Database
             );
         }
 
-        private static string JsonDocumentToString(JsonDocument document)
+        public static string JsonDocumentToString(JsonDocument document)
         {
             using var stream = new MemoryStream();
             using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions {Indented = false});
@@ -126,12 +126,12 @@ namespace Content.Server.Database
             return Encoding.UTF8.GetString(stream.ToArray());
         }
 
-        private static JsonDocument StringToJsonDocument(string str)
+        public static JsonDocument StringToJsonDocument(string str)
         {
             return JsonDocument.Parse(str);
         }
 
-        private static byte[] JsonDocumentToByteArray(JsonDocument? document)
+        public static byte[] JsonDocumentToByteArray(JsonDocument? document)
         {
             if (document == null)
             {
@@ -147,7 +147,7 @@ namespace Content.Server.Database
             return stream.ToArray();
         }
 
-        private static JsonDocument ByteArrayToJsonDocument(byte[] str)
+        public static JsonDocument ByteArrayToJsonDocument(byte[] str)
         {
             return JsonDocument.Parse(str);
         }

@@ -7,3 +7,5 @@ fi
 
 dotnet ef migrations add --context SqliteServerDbContext -o Migrations/Sqlite "$1"
 dotnet ef migrations add --context PostgresServerDbContext -o Migrations/Postgres "$1"
+dotnet ef migrations add --context CitadelSqliteContext -o Migrations/_Citadel/Sqlite "$1"
+dotnet ef migrations add --context CitadelPostgresContext -o Migrations/_Citadel/Postgres "$1"
