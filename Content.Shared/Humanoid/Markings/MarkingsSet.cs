@@ -51,8 +51,18 @@ public sealed partial class MarkingSet
     [DataField("points")]
     public Dictionary<MarkingCategories, MarkingPoints> Points = new();
 
+
+    /// <summary>
+    ///     Citadel-specific change
+    ///     This keeps track of the actual layering of markings, enabling arbitrary
+    ///     layering of markings, just like the OG MarkingSet, just like chargen in
+    ///     most furry SS13 servers
+    /// </summary>
+    [DataField("anarchiclayers")]
+    public List<Marking> AnarchicLayers = new();
+
     public MarkingSet()
-    {}
+    { }
 
     /// <summary>
     ///     Construct a MarkingSet using a list of markings, and a points
@@ -343,6 +353,9 @@ public sealed partial class MarkingSet
         }
 
         markings.Insert(0, marking);
+
+        // Citadel change - anarchic layer orders for SS13 chargen parity
+        AnarchicLayers.Insert(0, marking);
     }
 
     /// <summary>
@@ -370,6 +383,9 @@ public sealed partial class MarkingSet
 
 
         markings.Add(marking);
+
+        // Citadel change - anarchic layer orders for SS13 chargen parity
+        AnarchicLayers.Add(marking);
     }
 
     /// <summary>
@@ -398,6 +414,8 @@ public sealed partial class MarkingSet
             return;
         }
 
+        AnarchicLayers[AnarchicLayers.IndexOf(markings[index])] = marking; // Citadel change - anarchic layer ordering
+
         markings[index] = marking;
     }
 
@@ -425,6 +443,8 @@ public sealed partial class MarkingSet
             {
                 points.Points++;
             }
+
+            AnarchicLayers.Remove(markings[i]); // Citadel change - anarchic layer ordering
 
             markings.RemoveAt(i);
             return true;
@@ -456,6 +476,8 @@ public sealed partial class MarkingSet
             points.Points++;
         }
 
+        AnarchicLayers.Remove(markings[idx]); // Citadel change - anarchic layer ordering
+
         markings.RemoveAt(idx);
     }
 
@@ -482,6 +504,11 @@ public sealed partial class MarkingSet
 
                 points.Points++;
             }
+        }
+
+        foreach (var marking in Markings[category])
+        {
+            AnarchicLayers.Remove(marking);
         }
 
         Markings.Remove(category);
@@ -633,18 +660,40 @@ public sealed partial class MarkingSet
     }
 
     /// <summary>
+    ///     Shifts the rank according to the anarchic layer shifting rules
+    ///     Citadel specific proc
+    /// </summary>
+    public void ShiftRankAnarchic(int shift, Marking marking)
+    {
+        var idx = AnarchicLayers.IndexOf(marking);
+        if (idx == -1)
+        {
+            return;
+        }
+
+        var targetpos = idx + shift;
+        if (targetpos < 0 || targetpos >= AnarchicLayers.Count)
+        {
+            return;
+        }
+        (AnarchicLayers[idx + shift], AnarchicLayers[idx]) = (AnarchicLayers[idx], AnarchicLayers[idx + shift]);
+    }
+
+    /// <summary>
     ///     Gets all markings in this set as an enumerator. Lists will be organized, but categories may be in any order.
     /// </summary>
     /// <returns>An enumerator of <see cref="Marking"/>s.</returns>
     public ForwardMarkingEnumerator GetForwardEnumerator()
     {
-        var markings = new List<Marking>();
+        return new ForwardMarkingEnumerator(AnarchicLayers);
+
+        /*var markings = new List<Marking>();
         foreach (var (_, list) in Markings)
         {
             markings.AddRange(list);
         }
 
-        return new ForwardMarkingEnumerator(markings);
+        return new ForwardMarkingEnumerator(markings);*/
     }
 
     /// <summary>
@@ -669,13 +718,15 @@ public sealed partial class MarkingSet
     /// <returns>An enumerator of <see cref="Marking"/>s in reverse.</returns>
     public ReverseMarkingEnumerator GetReverseEnumerator()
     {
-        var markings = new List<Marking>();
+        return new ReverseMarkingEnumerator(AnarchicLayers);
+
+        /*var markings = new List<Marking>();
         foreach (var (_, list) in Markings)
         {
             markings.AddRange(list);
         }
 
-        return new ReverseMarkingEnumerator(markings);
+        return new ReverseMarkingEnumerator(markings);*/
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._Citadel.CCVar;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
@@ -8,6 +9,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Client.Utility;
+using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
@@ -20,6 +22,7 @@ public sealed partial class MarkingPicker : Control
     [Dependency] private readonly MarkingManager _markingManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly IConfigurationManager _configManager = default!;
 
     private readonly SpriteSystem _sprite;
 
@@ -248,8 +251,20 @@ public sealed partial class MarkingPicker : Control
             _currentMarkings.EnsureSpecies(_currentSpecies, null, _markingManager);
         }
 
+        IEnumerable<Marking> markingList;
+        if (_configManager.GetCVar(CitCVars.ChargenAnarchicLayering))
+        {
+            markingList = _currentMarkings.AnarchicLayers;
+        }
+        else
+        {
+            markingList = _currentMarkings.GetReverseEnumerator(_selectedMarkingCategory);
+        }
+        //var markingList = _currentMarkings.GetReverseEnumerator();
+
         // walk backwards through the list for visual purposes
-        foreach (var marking in _currentMarkings.GetReverseEnumerator(_selectedMarkingCategory))
+        //foreach (var marking in _currentMarkings.GetReverseEnumerator(_selectedMarkingCategory))
+        foreach (var marking in markingList)
         {
             if (!_markingManager.TryGetMarking(marking, out var newMarking))
             {
@@ -314,6 +329,12 @@ public sealed partial class MarkingPicker : Control
         var visualTemp = CMarkingsUsed[visualDest];
         CMarkingsUsed[visualDest] = CMarkingsUsed[src];
         CMarkingsUsed[src] = visualTemp;
+
+        if (_configManager.GetCVar(CitCVars.ChargenAnarchicLayering))
+        {
+            _currentMarkings.ShiftRankAnarchic(places, _currentMarkings.AnarchicLayers[src]);
+            return true;
+        }
 
         switch (places)
         {
@@ -422,9 +443,19 @@ public sealed partial class MarkingPicker : Control
             colorContainer.AddChild(new Label { Text = $"{stateNames[i]} color:" });
             colorContainer.AddChild(colorSelector);
 
-            var listing = _currentMarkings.Markings[_selectedMarkingCategory];
+            Marking targetmarking;
+            if (_configManager.GetCVar(CitCVars.ChargenAnarchicLayering))
+            {
+                targetmarking = _currentMarkings.AnarchicLayers[item.ItemIndex];
+            }
+            else
+            {
+                var listing = _currentMarkings.Markings[_selectedMarkingCategory];
+                targetmarking = listing[listing.Count - 1 - item.ItemIndex];
+            }
+            //var listing = _currentMarkings.Markings[_selectedMarkingCategory];
 
-            var color = listing[listing.Count - 1 - item.ItemIndex].MarkingColors[i];
+            var color = targetmarking.MarkingColors[i];
             var currentColor = new Color(
                 color.RByte,
                 color.GByte,
@@ -456,7 +487,17 @@ public sealed partial class MarkingPicker : Control
 
         _selectedMarking.IconModulate = _currentMarkingColors[colorIndex];
 
-        var marking = new Marking(_currentMarkings.Markings[_selectedMarkingCategory][markingIndex]);
+        List<Marking> listing;
+        if (_configManager.GetCVar(CitCVars.ChargenAnarchicLayering))
+        {
+            listing = _currentMarkings.AnarchicLayers;
+        }
+        else
+        {
+            listing = _currentMarkings.Markings[_selectedMarkingCategory];
+        }
+
+        var marking = new Marking(listing[markingIndex]);
         marking.SetColor(colorIndex, _currentMarkingColors[colorIndex]);
         _currentMarkings.Replace(_selectedMarkingCategory, markingIndex, marking);
 
@@ -535,7 +576,7 @@ public sealed partial class MarkingPicker : Control
 
         var marking = (MarkingPrototype) _selectedMarking.Metadata!;
 
-        _currentMarkings.Remove(_selectedMarkingCategory, marking.ID);
+        _currentMarkings.Remove(marking.MarkingCategory, marking.ID);
 
         UpdatePoints();
 
