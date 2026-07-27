@@ -4,19 +4,19 @@
   Nanotrasen employs a variety of sapient species.
 
   <Box>
-  <GuideEntityEmbed Entity="MobArachnid" Caption="Vasilissan"/>
-  <GuideEntityEmbed Entity="MobDiona" Caption="Diona"/>
-  <GuideEntityEmbed Entity="MobDwarf" Caption="Human (Grav-Adapted)"/>
-  <GuideEntityEmbed Entity="MobHuman" Caption="Human"/>
+  <GuideEntityEmbed Entity="AppearanceArachnid" Caption="Vasilissan"/>
+  <GuideEntityEmbed Entity="AppearanceDiona" Caption="Diona"/>
+  <GuideEntityEmbed Entity="AppearanceDwarf" Caption="Human (Grav-Adapted)"/>
+  <GuideEntityEmbed Entity="AppearanceHuman" Caption="Human"/>
   </Box>
   <Box>
-  <GuideEntityEmbed Entity="MobMoth" Caption="Dnin-Nepid"/>
-  <GuideEntityEmbed Entity="MobReptilian" Caption="Unathi"/>
-  <GuideEntityEmbed Entity="MobSlimePerson" Caption="Promethean"/>
-  <GuideEntityEmbed Entity="MobVox" Caption="Vox"/>
+  <GuideEntityEmbed Entity="AppearanceMoth" Caption="Dnin-Nepid"/>
+  <GuideEntityEmbed Entity="AppearanceReptilian" Caption="Unathi"/>
+  <GuideEntityEmbed Entity="AppearanceSlimePerson" Caption="Promethean"/>
+  <GuideEntityEmbed Entity="AppearanceVox" Caption="Vox"/>
   </Box>
   <Box>
-    <GuideEntityEmbed Entity="MobVulpkanin" Caption="Vulpkanin"/>
+    <GuideEntityEmbed Entity="AppearanceVulpkanin" Caption="Vulpkanin"/>
   </Box>
 
 </Document>

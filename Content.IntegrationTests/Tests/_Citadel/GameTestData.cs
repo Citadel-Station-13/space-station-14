@@ -23,7 +23,7 @@ namespace Content.IntegrationTests.Tests._Citadel;
 ///     Can also be used in lieu of a parent class if you don't need much.
 /// </summary>
 [Virtual]
-[PublicAPI]
+// [PublicAPI]
 public class GameTestData
 {
     private bool _pairDirty;
@@ -134,7 +134,7 @@ public class GameTestData
                 }
             });
         }
-        catch (Exception e)
+        catch (Exception)
         {
             _pairDirty = true;
             throw;

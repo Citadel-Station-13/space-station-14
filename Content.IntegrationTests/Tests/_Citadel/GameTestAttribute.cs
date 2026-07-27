@@ -21,8 +21,8 @@ namespace Content.IntegrationTests.Tests._Citadel;
 ///     Marks a game test, that needs a client and server to run.
 /// </summary>
 /// <typeparam name="TData">The GameTestData inheriter to use.</typeparam>
-[MeansImplicitUse]
-[PublicAPI]
+// [MeansImplicitUse]
+// [PublicAPI]
 public sealed class GameTestAttribute<TData> : Attribute, ITestBuilder, IImplyFixture, IApplyToTest
     where TData: GameTestData, new()
 {
@@ -169,8 +169,8 @@ public sealed class DirtyFlag
 /// <summary>
 ///     A simpler version of the generic GameTestAttribute that allows you to specify what you need with just arguments.
 /// </summary>
-[MeansImplicitUse]
-[PublicAPI]
+// [MeansImplicitUse]
+// [PublicAPI]
 public sealed class GameTestAttribute : Attribute, ITestBuilder, IImplyFixture, IApplyToTest
 {
     /// <summary>
