@@ -134,7 +134,7 @@ public class GameTestData
                 }
             });
         }
-        catch (Exception e)
+        catch (Exception)
         {
             _pairDirty = true;
             throw;
