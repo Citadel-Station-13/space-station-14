@@ -7,11 +7,11 @@ using Content.Shared.Info;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
-using Robust.Shared.Player;
-using System.Threading.Tasks;
 
 // Downstream change - needed for Age Gate
 using Content.Server._Common.PreJoin;
+using System.Threading.Tasks;
+using Robust.Shared.Player;
 
 namespace Content.Server.Info;
 
@@ -80,6 +80,8 @@ public sealed partial class RulesManager : IPreJoinAction
     {
         var date = DateTime.UtcNow;
         await _dbManager.SetLastReadRules(message.MsgChannel.UserId, date);
+
+        // Downstream change - needed for Age Gate
         var session = _player.GetSessionByChannel(message.MsgChannel);
 
         if (message.FuckRules)

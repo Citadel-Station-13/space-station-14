@@ -1,4 +1,3 @@
-using Content.Server._Common.AgeGate;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -34,6 +33,7 @@ using Content.Shared.Players.RateLimiting;
 
 // Downstream change - needed for Age Gate
 using Content.Server._Common.PreJoin;
+using Content.Server._Common.AgeGate;
 
 namespace Content.Server.IoC;
 
