@@ -15,7 +15,7 @@ namespace Content.Server._Common.PreJoin;
 /// IPreJoinAction has been sucessfully performed (for example, showing the rules popup and waiting for the player to
 /// accept).
 /// </summary>
-public sealed class PreJoinManager
+public sealed partial class PreJoinManager
 {
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;

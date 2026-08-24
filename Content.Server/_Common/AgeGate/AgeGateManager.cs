@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Content.Server._Common.AgeGate;
 
-public sealed class AgeGateManager : IPreJoinAction
+public sealed partial class AgeGateManager : IPreJoinAction
 {
     [Dependency] private IServerDbManager _dbManager = default!;
     [Dependency] private INetManager _netManager = default!;

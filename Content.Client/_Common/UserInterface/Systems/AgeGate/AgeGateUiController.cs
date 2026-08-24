@@ -15,11 +15,10 @@ namespace Content.Client._Common.UserInterface.Systems.AgeGate;
 /// This controller is responsible for showing the Age Gate UI when the client recieves the ShowAgeGateMessage,
 /// and for sending the AgeGateSubmittedMessage when the player clicks the Submit button.
 /// </summary>
-public sealed class AgeGateUiController : UIController
+public sealed partial class AgeGateUiController : UIController
 {
-    [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
-    [Dependency] private readonly INetManager _netManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IClientConsoleHost _consoleHost = default!;
+    [Dependency] private INetManager _netManager = default!;
 
     private AgeGatePopup? _ageGatePopup;
 
