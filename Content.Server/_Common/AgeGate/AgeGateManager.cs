@@ -14,12 +14,11 @@ namespace Content.Server._Common.AgeGate;
 
 public sealed class AgeGateManager : IPreJoinAction
 {
-    [Dependency] private readonly IServerDbManager _dbManager = default!;
-    [Dependency] private readonly INetManager _netManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
-    [Dependency] private readonly IBanManager _banManager = default!;
-    [Dependency] private readonly PreJoinManager _preJoinManager = default!;
+    [Dependency] private IServerDbManager _dbManager = default!;
+    [Dependency] private INetManager _netManager = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
+    [Dependency] private IBanManager _banManager = default!;
+    [Dependency] private PreJoinManager _preJoinManager = default!;
 
     private static DateTime LastValidReadTime => DateTime.UtcNow - TimeSpan.FromDays(60);
 

@@ -17,9 +17,9 @@ namespace Content.Server._Common.PreJoin;
 /// </summary>
 public sealed class PreJoinManager
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
 
