@@ -51,16 +51,11 @@ public sealed partial class AgeGateManager : IPreJoinAction
         }
         else
         {
-            _banManager.CreateServerBan(
-                message.MsgChannel.UserData.UserId,
-                null,
-                null,
-                null,
-                null,
-                null, // Perma ban
-                Shared.Database.NoteSeverity.High,
-                Loc.GetString("agegate-ban-reason")
-            );
+            var banInfo = new CreateServerBanInfo(Loc.GetString("agegate-ban-reason"));
+            banInfo.AddUser(message.MsgChannel.UserData.UserId, message.MsgChannel.UserData.UserName);
+            banInfo.WithSeverity(Shared.Database.NoteSeverity.High);
+
+            _banManager.CreateServerBan(banInfo);
         }
     }
 }
