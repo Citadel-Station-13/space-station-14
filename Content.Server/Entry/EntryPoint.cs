@@ -34,6 +34,10 @@ using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
+// Downstream change - needed for Age Gate
+using Content.Server._Common.PreJoin;
+using Content.Server._Common.AgeGate;
+
 namespace Content.Server.Entry
 {
     public sealed partial class EntryPoint : GameServer
@@ -77,6 +81,10 @@ namespace Content.Server.Entry
         [Dependency] private ServerInfoManager _serverInfo = default!;
         [Dependency] private ServerUpdateManager _updateManager = default!;
         [Dependency] private ServerFeedbackManager _feedbackManager = null!;
+
+        // Downstream change - needed for Age Gate
+        [Dependency] private PreJoinManager _preJoinManager = default!;
+        [Dependency] private AgeGateManager _ageGateManager = default!;
 
         public override void PreInit()
         {
@@ -168,6 +176,10 @@ namespace Content.Server.Entry
             _multiServerKick.Initialize();
             _cvarCtrl.Initialize();
             _feedbackManager.Initialize();
+
+            // Downstream change - needed for Age Gate
+            _preJoinManager.Initialize();
+            _ageGateManager.Initialize();
         }
 
         public override void Update(ModUpdateLevel level, FrameEventArgs frameEventArgs)

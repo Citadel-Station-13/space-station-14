@@ -1024,6 +1024,10 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("first_seen_time");
 
+                    b.Property<bool>("HasPassedAgeGate")
+                        .HasColumnType("boolean")
+                        .HasColumnName("has_passed_age_gate");
+
                     b.Property<DateTime?>("LastReadRules")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_read_rules");

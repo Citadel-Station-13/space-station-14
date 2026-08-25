@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Preferences.Managers;
 using Robust.Shared.Network;
@@ -44,11 +44,16 @@ public sealed partial class UserDbDataManager : IPostInjectInit
     public void ClientDisconnected(ICommonSession session)
     {
         _users.Remove(session.UserId, out var data);
-        if (data == null)
-            throw new InvalidOperationException("Did not have cached data in ClientDisconnect!");
-
-        data.Cancel.Cancel();
-        data.Cancel.Dispose();
+        // Downstream change - fix needed for Age Gate
+        // Previous code would throw if it was null,
+        // but that's a normal case that can occur if a client disconnects very early, before the data has a chance to load.
+        // This could probably be upstreamed.
+        if (data is not null)
+        {
+            data.Cancel.Cancel();
+            data.Cancel.Dispose();
+        }
+        // (End of downstream change)
 
         foreach (var onDisconnect in _onPlayerDisconnect)
         {

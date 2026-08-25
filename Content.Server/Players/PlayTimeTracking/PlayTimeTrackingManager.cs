@@ -289,9 +289,17 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
 
     private async Task DoSaveSessionAsync(ICommonSession session)
     {
-        var log = new List<PlayTimeUpdate>();
+        // Downstream change - fix needed for Age Gate
+        // This could probably be upstreamed.
+        if (!_playTimeData.TryGetValue(session, out var data))
+        {
+            // This can happen if the client disconnects right after connecting, before LoadData has a chance to fire.
+            // In that case there is no data that needs to be saved, so we just return.
+            return;
+        }
 
-        var data = _playTimeData[session];
+        var log = new List<PlayTimeUpdate>();
+        // (End of downstream change)
 
         foreach (var tracker in data.DbTrackersDirty)
         {

@@ -523,6 +523,9 @@ namespace Content.Server.Database
         public List<Ban> AdminServerBansCreated { get; set; } = null!;
         public List<Ban> AdminServerBansLastEdited { get; set; } = null!;
         public List<RoleWhitelist> JobWhitelists { get; set; } = null!;
+
+        // Downstream change - needed for Age Gate
+        public bool HasPassedAgeGate { get; set; } = false;
     }
 
     [Table("whitelist")]

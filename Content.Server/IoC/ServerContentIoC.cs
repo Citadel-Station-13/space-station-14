@@ -31,6 +31,10 @@ using Content.Shared.IoC;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Players.RateLimiting;
 
+// Downstream change - needed for Age Gate
+using Content.Server._Common.PreJoin;
+using Content.Server._Common.AgeGate;
+
 namespace Content.Server.IoC;
 
 internal static class ServerContentIoC
@@ -81,5 +85,9 @@ internal static class ServerContentIoC
         deps.Register<DiscordChatLink>();
         deps.Register<ServerFeedbackManager>();
         deps.Register<ISharedFeedbackManager, ServerFeedbackManager>();
+
+        // Downstream change - needed for Age Gate
+        deps.Register<PreJoinManager>();
+        deps.Register<AgeGateManager>();
     }
 }
